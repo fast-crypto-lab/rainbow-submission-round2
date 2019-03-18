@@ -75,6 +75,7 @@ uint8_t _gf16v_get_ele( const uint8_t *a , unsigned i ) {
 }
 
 
+
 #if 0
 /// slower
 void gf16mat_prod_sse( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * b ) {
@@ -90,12 +91,12 @@ void gf16mat_prod_sse( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byt
 /// faster
 void gf16mat_prod_sse( uint8_t * c , const uint8_t * mat_a , unsigned a_h_byte , unsigned a_w , const uint8_t * b ) {
 	assert( a_w <= 224 );
-	assert( a_h_byte <= 112 );
+	assert( a_h_byte <= 512 );
 
 	__m128i mask_f = _mm_set1_epi8(0xf);
 
-	__m128i r0[7];
-	__m128i r1[7];
+	__m128i r0[32];
+	__m128i r1[32];
 	unsigned n_xmm = ((a_h_byte+15)>>4);
 	for(unsigned i=0;i<n_xmm;i++) r0[i] = _mm_setzero_si128();
 	for(unsigned i=0;i<n_xmm;i++) r1[i] = _mm_setzero_si128();
@@ -268,55 +269,101 @@ unsigned gf16mat_solve_linear_eq_sse( uint8_t * sol , const uint8_t * inp_mat , 
 
 
 /// XXX: un-tested.
-void gf256mat_prod_multab_sse( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * multab ) {
-	assert( n_A_width <= 192 );
-	assert( n_A_width > 0 );
-	assert( n_A_vec_byte <= 192 );
-
+static
+void gf256mat_prod_add_multab_sse( __m128i * r , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * multab ) {
 	__m128i mask_f = _mm_set1_epi8(0xf);
-	__m128i r[12];
 	unsigned n_xmm = ((n_A_vec_byte + 15)>>4);
-	for(unsigned i=0;i<n_xmm;i++) r[i] = _mm_setzero_si128();
 
-	for(unsigned i=0;i<n_A_width-1;i++) {
-		__m128i ml = _mm_load_si128( (__m128i*)( multab + i*32) );
-		__m128i mh = _mm_load_si128( (__m128i*)( multab + i*32+16) );
+	for(unsigned i=n_A_width;i>0;i--) {
+		__m128i ml = _mm_load_si128( (__m128i*)( multab ) );
+		__m128i mh = _mm_load_si128( (__m128i*)( multab + 16) );
 		for(unsigned j=0;j<n_xmm;j++) {
 			__m128i inp = _mm_loadu_si128( (__m128i*)(matA+j*16) );
 			r[j] ^= linear_transform_8x8_128b( ml , mh , inp , mask_f );
 		}
+		multab += 32;
 		matA += n_A_vec_byte;
 	}
+}
+
+
+void gf256mat_prod_multab_sse( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * multab ) {
+	assert( n_A_vec_byte <= 48*48 );
+
+	__m128i mask_f = _mm_set1_epi8(0xf);
+	__m128i r[48*48/16];
+	unsigned n_xmm = ((n_A_vec_byte + 15)>>4);
+	for(unsigned i=0;i<n_xmm;i++) r[i] = _mm_setzero_si128();
+	if(0 == n_A_width ) return;
+	if(1 < n_A_width) gf256mat_prod_add_multab_sse( (__m128i*) c , matA, n_A_vec_byte , n_A_width - 1 , multab );
+
+	/// last column
 	unsigned n_16 = (n_A_vec_byte>>4);
 	unsigned n_16_rem = n_A_vec_byte&0xf;
-	{
-		/// last column
-		unsigned i=n_A_width-1;
-		__m128i ml = _mm_load_si128( (__m128i*)( multab + i*32) );
-		__m128i mh = _mm_load_si128( (__m128i*)( multab + i*32+16) );
-		for(unsigned j=0;j<n_16;j++) {
-			__m128i inp = _mm_loadu_si128( (__m128i*)(matA+j*16) );
-			r[j] ^= linear_transform_8x8_128b( ml , mh , inp , mask_f );
-		}
-		if( n_16_rem ) {
-			__m128i inp = _load_xmm( matA + n_16*16 , n_16_rem );
-			r[n_16] ^= linear_transform_8x8_128b( ml , mh , inp , mask_f );
-		}
+	unsigned i=n_A_width-1;
+	__m128i ml = _mm_load_si128( (__m128i*)( multab + i*32) );
+	__m128i mh = _mm_load_si128( (__m128i*)( multab + i*32+16) );
+	matA += i*n_A_vec_byte;
+	for(unsigned j=0;j<n_16;j++) {
+		__m128i inp = _mm_loadu_si128( (__m128i*)(matA+j*16) );
+		r[j] ^= linear_transform_8x8_128b( ml , mh , inp , mask_f );
+	}
+	if( n_16_rem ) {
+		__m128i inp = _load_xmm( matA + n_16*16 , n_16_rem );
+		r[n_16] ^= linear_transform_8x8_128b( ml , mh , inp , mask_f );
 	}
 	for(unsigned i=0;i<n_16;i++) _mm_storeu_si128( (__m128i*)(c + i*16) , r[i] );
 	if( n_16_rem ) _store_xmm( c + n_16*16 , n_16_rem , r[n_16] );
 }
 
 
+static
+void gf256mat_prod_add_sse( __m128i * r , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * b ) {
+
+	uint8_t multab[16*16*2] __attribute__((aligned(32)));
+	while( 16 < n_A_width ){
+		gf256v_generate_multab_sse( multab , b , 16 );
+		gf256mat_prod_add_multab_sse( r , matA , n_A_vec_byte , 16 , multab );
+		matA += n_A_vec_byte*16;
+		b += 16;
+		n_A_width -= 16;
+	}
+	/// last 16 column
+	gf256v_generate_multab_sse( multab , b , 16 );
+	if(0 == n_A_width ) return;
+	if(1 < n_A_width) gf256mat_prod_add_multab_sse( r , matA, n_A_vec_byte , n_A_width - 1 , multab );
+	/// last column
+	__m128i mask_f = _mm_set1_epi8(0xf);
+	unsigned n_16 = (n_A_vec_byte>>4);
+	unsigned n_16_rem = n_A_vec_byte&0xf;
+	unsigned i=n_A_width-1;
+	__m128i ml = _mm_load_si128( (__m128i*)( multab + i*32) );
+	__m128i mh = _mm_load_si128( (__m128i*)( multab + i*32+16) );
+	matA += i*n_A_vec_byte;
+	for(unsigned j=0;j<n_16;j++) {
+		__m128i inp = _mm_loadu_si128( (__m128i*)(matA+j*16) );
+		r[j] ^= linear_transform_8x8_128b( ml , mh , inp , mask_f );
+	}
+	if( n_16_rem ) {
+		__m128i inp = _load_xmm( matA + n_16*16 , n_16_rem );
+		r[n_16] ^= linear_transform_8x8_128b( ml , mh , inp , mask_f );
+	}
+}
+
 
 void gf256mat_prod_sse( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * b ) {
-	assert( n_A_width <= 192 );
-	assert( n_A_vec_byte <= 192 );
+	assert( n_A_vec_byte <= 48*48 );
 
-	uint8_t multab[192*16*2] __attribute__((aligned(32)));
-	gf256v_generate_multab_sse( multab , b , n_A_width );
+	__m128i r[48*48/16];
+	unsigned n_xmm = ((n_A_vec_byte + 15)>>4);
+	for(unsigned i=0;i<n_xmm;i++) r[i] = _mm_setzero_si128();
 
-	gf256mat_prod_multab_sse( c , matA , n_A_vec_byte , n_A_width , multab );
+	gf256mat_prod_add_sse( r , matA , n_A_vec_byte , n_A_width , b );
+
+	unsigned n_16 = (n_A_vec_byte>>4);
+	unsigned n_16_rem = n_A_vec_byte&0xf;
+	for(unsigned i=0;i<n_16;i++) _mm_storeu_si128( (__m128i*)(c + i*16) , r[i] );
+	if( n_16_rem ) _store_xmm( c + n_16*16 , n_16_rem , r[n_16] );
 }
 
 

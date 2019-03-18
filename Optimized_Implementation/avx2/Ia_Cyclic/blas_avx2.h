@@ -95,8 +95,6 @@ void gf256v_add_avx2( uint8_t * accu_b, const uint8_t * a , unsigned _num_byte )
 
 
 
-#define _AVX2_USE_TOOL_FUNCS_
-
 
 
 static inline
@@ -107,33 +105,7 @@ void gf16v_mul_scalar_avx2( uint8_t * a, uint8_t gf16_b , unsigned _num_byte ) {
 	__m256i mh = _mm256_permute2x128_si256( m_tab , m_tab , 0x11 );
 	__m256i mask = _mm256_load_si256( (__m256i*) __mask_low );
 
-#ifdef _AVX2_USE_TOOL_FUNCS_
 	linearmap_8x8_ymm( a , ml , mh , mask , _num_byte );
-#else
-	unsigned n_32 = _num_byte>>5;
-	for(unsigned i=0;i<n_32;i++) {
-		__m256i inp = _mm256_loadu_si256( (__m256i*)(a+i*32) );
-		__m256i r0 = _mm256_shuffle_epi8(ml, inp&mask );
-		__m256i r1 = _mm256_shuffle_epi8(mh, _mm256_srli_epi16(_mm256_andnot_si256(mask,inp),4) );
-		r0 ^= r1;
-		_mm256_storeu_si256( (__m256i*)(a+i*32) , r0 );
-	}
-
-	unsigned rem = _num_byte&31;
-	if( rem ) {
-		a += (n_32<<5);
-		uint8_t temp[32] __attribute__((aligned(32)));
-		for(unsigned i=0;i<rem;i++) temp[i] = a[i];
-		__m256i inp = _mm256_load_si256( (__m256i*)(temp) );
-
-		__m256i r0 = _mm256_shuffle_epi8(ml, inp&mask );
-		__m256i r1 = _mm256_shuffle_epi8(mh, _mm256_srli_epi16(_mm256_andnot_si256(mask,inp),4) );
-		r0 ^= r1;
-
-		_mm256_store_si256( (__m256i*)(temp) , r0 );
-		for(unsigned i=0;i<rem;i++) a[i] = temp[i];
-	}
-#endif
 }
 
 
@@ -146,37 +118,18 @@ void gf16v_madd_avx2( uint8_t * accu_c, const uint8_t * a , uint8_t gf16_b, unsi
 	__m256i mh = _mm256_permute2x128_si256( m_tab , m_tab , 0x11 );
 	__m256i mask = _mm256_load_si256( (__m256i*) __mask_low );
 
-#ifdef _AVX2_USE_TOOL_FUNCS_
 	linearmap_8x8_accu_ymm( accu_c , a , ml , mh , mask , _num_byte );
-#else
-	unsigned n_32 = _num_byte>>5;
-	for(unsigned i=0;i<n_32;i++) {
-		__m256i inp = _mm256_loadu_si256( (__m256i*)(a+i*32) );
-		__m256i out = _mm256_loadu_si256( (__m256i*)(accu_c+i*32) );
-		__m256i r0 = _mm256_shuffle_epi8(ml, inp&mask );
-		__m256i r1 = _mm256_shuffle_epi8(mh, _mm256_srli_epi16(_mm256_andnot_si256(mask,inp),4) );
-		r0 ^= r1^out;
-		_mm256_storeu_si256( (__m256i*)(accu_c+i*32) , r0 );
-	}
+}
 
-	unsigned rem = _num_byte&31;
-	if( rem ) {
-		a += (n_32<<5);
-		accu_c += (n_32<<5);
-		uint8_t temp[32] __attribute__((aligned(32)));
-		for(unsigned i=0;i<rem;i++) temp[i] = a[i];
-		__m256i inp = _mm256_load_si256( (__m256i*)(temp) );
-		for(unsigned i=0;i<rem;i++) temp[i] = accu_c[i];
-		__m256i out = _mm256_load_si256( (__m256i*)(temp) );
+static inline
+void gf16v_madd_multab_avx2( uint8_t * accu_c, const uint8_t * a , const uint8_t * multab , unsigned _num_byte ) {
+	__m128i ml_16 = _mm_load_si128( (__m128i*) multab );
+	__m128i mh_16 = _mm_slli_epi16( ml_16 , 4 );
+	__m256i ml = _mm256_inserti128_si256( _mm256_castsi128_si256(ml_16), ml_16, 1);
+	__m256i mh = _mm256_inserti128_si256( _mm256_castsi128_si256(mh_16), mh_16, 1);
+	__m256i mask = _mm256_load_si256( (__m256i*) __mask_low );
 
-		__m256i r0 = _mm256_shuffle_epi8(ml, inp&mask );
-		__m256i r1 = _mm256_shuffle_epi8(mh, _mm256_srli_epi16(_mm256_andnot_si256(mask,inp),4) );
-		r0 ^= r1^out;
-
-		_mm256_store_si256( (__m256i*)(temp) , r0 );
-		for(unsigned i=0;i<rem;i++) accu_c[i] = temp[i];
-	}
-#endif
+	linearmap_8x8_accu_ymm( accu_c , a , ml , mh , mask , _num_byte );
 }
 
 
@@ -191,33 +144,18 @@ void gf256v_mul_scalar_avx2( uint8_t * a, uint8_t _b , unsigned _num_byte ) {
 	__m256i mh = _mm256_permute2x128_si256( m_tab , m_tab , 0x11 );
 	__m256i mask = _mm256_load_si256( (__m256i*) __mask_low );
 
-#ifdef _AVX2_USE_TOOL_FUNCS_
 	linearmap_8x8_ymm( a , ml , mh , mask , _num_byte );
-#else
-	unsigned n_32 = _num_byte>>5;
-	for(unsigned i=0;i<n_32;i++) {
-		__m256i inp = _mm256_loadu_si256( (__m256i*)(a+i*32) );
-		__m256i r0 = _mm256_shuffle_epi8(ml, inp&mask );
-		__m256i r1 = _mm256_shuffle_epi8(mh, _mm256_srli_epi16(_mm256_andnot_si256(mask,inp),4) );
-		r0 ^= r1;
-		_mm256_storeu_si256( (__m256i*)(a+i*32) , r0 );
-	}
+}
 
-	unsigned rem = _num_byte&31;
-	if( rem ) {
-		a += (n_32<<5);
-		uint8_t temp[32] __attribute__((aligned(32)));
-		for(unsigned i=0;i<rem;i++) temp[i] = a[i];
-		__m256i inp = _mm256_load_si256( (__m256i*)(temp) );
 
-		__m256i r0 = _mm256_shuffle_epi8(ml, inp&mask );
-		__m256i r1 = _mm256_shuffle_epi8(mh, _mm256_srli_epi16(_mm256_andnot_si256(mask,inp),4) );
-		r0 ^= r1;
+static inline
+void gf256v_madd_multab_avx2( uint8_t * accu_c, const uint8_t * a , const uint8_t * multab, unsigned _num_byte ) {
+	__m256i m_tab = _mm256_load_si256( (__m256i*) (multab) );
+	__m256i ml = _mm256_permute2x128_si256( m_tab , m_tab , 0 );
+	__m256i mh = _mm256_permute2x128_si256( m_tab , m_tab , 0x11 );
+	__m256i mask = _mm256_load_si256( (__m256i*) __mask_low );
 
-		_mm256_store_si256( (__m256i*)(temp) , r0 );
-		for(unsigned i=0;i<rem;i++) a[i] = temp[i];
-	}
-#endif
+	linearmap_8x8_accu_ymm( accu_c , a , ml , mh , mask , _num_byte );
 }
 
 
@@ -230,38 +168,9 @@ void gf256v_madd_avx2( uint8_t * accu_c, const uint8_t * a , uint8_t _b, unsigne
 	__m256i mh = _mm256_permute2x128_si256( m_tab , m_tab , 0x11 );
 	__m256i mask = _mm256_load_si256( (__m256i*) __mask_low );
 
-#ifdef _AVX2_USE_TOOL_FUNCS_
 	linearmap_8x8_accu_ymm( accu_c , a , ml , mh , mask , _num_byte );
-#else
-	unsigned n_32 = _num_byte>>5;
-	for(unsigned i=0;i<n_32;i++) {
-		__m256i inp = _mm256_loadu_si256( (__m256i*)(a+i*32) );
-		__m256i out = _mm256_loadu_si256( (__m256i*)(accu_c+i*32) );
-		__m256i r0 = _mm256_shuffle_epi8(ml, inp&mask );
-		__m256i r1 = _mm256_shuffle_epi8(mh, _mm256_srli_epi16(_mm256_andnot_si256(mask,inp),4) );
-		r0 ^= r1^out;
-		_mm256_storeu_si256( (__m256i*)(accu_c+i*32) , r0 );
-	}
-
-	unsigned rem = _num_byte&31;
-	if( rem ) {
-		a += (n_32<<5);
-		accu_c += (n_32<<5);
-		uint8_t temp[32] __attribute__((aligned(32)));
-		for(unsigned i=0;i<rem;i++) temp[i] = a[i];
-		__m256i inp = _mm256_load_si256( (__m256i*)(temp) );
-		for(unsigned i=0;i<rem;i++) temp[i] = accu_c[i];
-		__m256i out = _mm256_load_si256( (__m256i*)(temp) );
-
-		__m256i r0 = _mm256_shuffle_epi8(ml, inp&mask );
-		__m256i r1 = _mm256_shuffle_epi8(mh, _mm256_srli_epi16(_mm256_andnot_si256(mask,inp),4) );
-		r0 ^= r1^out;
-		_mm256_store_si256( (__m256i*)(temp) , r0 );
-
-		for(unsigned i=0;i<rem;i++) accu_c[i] = temp[i];
-	}
-#endif
 }
+
 
 
 

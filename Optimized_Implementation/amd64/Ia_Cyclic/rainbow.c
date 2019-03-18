@@ -80,14 +80,15 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
 
     //// line 7 - 14
     uint8_t _z[_PUB_M_BYTE];
+    uint8_t * x_v1 = vinegar;
+    uint8_t x_o1[_O1_BYTE];
+    uint8_t x_o2[_O1_BYTE];
     uint8_t y[_PUB_M_BYTE];
-    uint8_t x[_PUB_N_BYTE + 32];
     uint8_t digest_salt[_HASH_LEN + _SALT_BYTE];
     memcpy( digest_salt , _digest , _HASH_LEN );
     uint8_t * salt = digest_salt + _HASH_LEN;
 
     uint8_t temp_o[_MAX_O_BYTE + 32]  = {0};
-    memcpy( x , vinegar , _V1_BYTE );
     unsigned succ = 0;
     while( !succ ) {
         if( MAX_ATTEMPT_FRMAT <= n_attempt ) break;
@@ -101,7 +102,6 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
         gf256v_add(y, temp_o, _O1_BYTE);
 
         /// layer 1. calculate o1
-        uint8_t * x_o1 = x + _V1_BYTE;
         memcpy( temp_o , r_l1_F1 , _O1_BYTE );
         gf256v_add( temp_o , y , _O1_BYTE );
         gfmat_prod( x_o1 , mat_l1, _O1_BYTE , _O1 , temp_o );
@@ -119,19 +119,22 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
         gf256v_add( mat_l2 , mat_l2_F3 , _O2*_O2_BYTE);    /// F3
         succ = gfmat_inv( mat_l2 , mat_l2 , _O2 , mat_buffer );
         /// solve l2 eqs
-        gfmat_prod( x+_V2_BYTE , mat_l2 , _O2_BYTE , _O2 , temp_o );
+        gfmat_prod( x_o2 , mat_l2 , _O2_BYTE , _O2 , temp_o );
 
         n_attempt ++;
     };
     uint8_t w[_PUB_N_BYTE];
-    memcpy(w, x , _PUB_N_BYTE );   /// identity part of matrix
-    gfmat_prod(y, sk->t1, _V1_BYTE , _O1 , x+_V1_BYTE);
+    //memcpy(w, x , _PUB_N_BYTE );   /// identity part of matrix
+    memcpy( w , x_v1 , _V1_BYTE );
+    memcpy( w + _V1_BYTE , x_o1 , _O1_BYTE );
+    memcpy( w + _V2_BYTE , x_o2 , _O2_BYTE );
+    gfmat_prod(y, sk->t1, _V1_BYTE , _O1 , x_o1 );
     gf256v_add(w, y, _V1_BYTE );
 
-    gfmat_prod(y, sk->t4, _V1_BYTE , _O2 , x+_V2_BYTE);
+    gfmat_prod(y, sk->t4, _V1_BYTE , _O2 , x_o2 );
     gf256v_add(w, y, _V1_BYTE );
 
-    gfmat_prod(y, sk->t3, _O1_BYTE , _O2 , x+_V2_BYTE);
+    gfmat_prod(y, sk->t3, _O1_BYTE , _O2 , x_o2 );
     gf256v_add(w+_V1_BYTE, y, _O1_BYTE );
 
     memset( signature , 0 , _SIGNATURE_BYTE );
@@ -148,7 +151,8 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
     memset( mat_l2_F2 , 0 , _O1*_O2_BYTE + 32 );  free( mat_l2_F2 );
     memset( _z , 0 , _PUB_M_BYTE );
     memset( y , 0 , _PUB_M_BYTE );
-    memset( x , 0 , _PUB_N_BYTE + 32 );
+    memset( x_o1 , 0 , _O1_BYTE );
+    memset( x_o2 , 0 , _O2_BYTE );
     memset( temp_o , 0 , _MAX_O_BYTE +32 );
 
     // return time;

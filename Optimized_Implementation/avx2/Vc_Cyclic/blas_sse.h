@@ -46,17 +46,18 @@ void _store_xmm( uint8_t *a , unsigned _num_byte , __m128i data ) {
 static inline
 void linearmap_8x8_sse( uint8_t * a , __m128i ml , __m128i mh , __m128i mask , unsigned _num_byte ) {
 	unsigned n_16 = _num_byte>>4;
-	for(unsigned i=0;i<n_16;i++) {
-		__m128i inp = _mm_loadu_si128( (__m128i*)(a+i*16) );
+	for(unsigned i=n_16;i>0;i--) {
+		__m128i inp = _mm_loadu_si128( (__m128i*)(a) );
 		__m128i r0 = linear_transform_8x8_128b( ml , mh , inp , mask );
-		_mm_storeu_si128( (__m128i*)(a+i*16) , r0 );
+		_mm_storeu_si128( (__m128i*)(a) , r0 );
+		a += 16;
 	}
 
 	unsigned rem = _num_byte&15;
 	if( rem ) {
-		__m128i inp = _load_xmm( a + n_16*16 , rem );
+		__m128i inp = _load_xmm( a , rem );
 		__m128i r0 = linear_transform_8x8_128b( ml , mh , inp , mask );
-		_store_xmm( a + n_16*16 , rem , r0 );
+		_store_xmm( a , rem , r0 );
 	}
 }
 
@@ -64,20 +65,22 @@ void linearmap_8x8_sse( uint8_t * a , __m128i ml , __m128i mh , __m128i mask , u
 static inline
 void linearmap_8x8_accu_sse( uint8_t * accu_c, const uint8_t * a , __m128i ml , __m128i mh , __m128i mask , unsigned _num_byte ) {
 	unsigned n_16 = _num_byte>>4;
-	for(unsigned i=0;i<n_16;i++) {
-		__m128i inp = _mm_loadu_si128( (__m128i*)(a+i*16) );
-		__m128i out = _mm_loadu_si128( (__m128i*)(accu_c+i*16) );
+	for(unsigned i=n_16;i>0;i--) {
+		__m128i inp = _mm_loadu_si128( (__m128i*)(a) );
+		__m128i out = _mm_loadu_si128( (__m128i*)(accu_c) );
 		__m128i r0 = linear_transform_8x8_128b( ml , mh , inp , mask );
 		r0 ^= out;
-		_mm_storeu_si128( (__m128i*)(accu_c+i*16) , r0 );
+		_mm_storeu_si128( (__m128i*)(accu_c) , r0 );
+		a += 16;
+		accu_c += 16;
 	}
 	unsigned rem = _num_byte&15;
 	if( rem ) {
-		__m128i inp = _load_xmm( a + n_16*16 , rem );
-		__m128i out = _load_xmm( accu_c + n_16*16 , rem );
+		__m128i inp = _load_xmm( a , rem );
+		__m128i out = _load_xmm( accu_c , rem );
 		__m128i r0 = linear_transform_8x8_128b( ml , mh , inp , mask );
 		r0 ^= out;
-		_store_xmm( accu_c + n_16*16 , rem , r0 );
+		_store_xmm( accu_c , rem , r0 );
 	}
 }
 
@@ -94,15 +97,17 @@ static inline
 void gf256v_add_sse( uint8_t * accu_b, const uint8_t * a , unsigned _num_byte ) {
 	//uint8_t temp[32] __attribute__((aligned(32)));
 	unsigned n_xmm = (_num_byte)>>4;
-	for(unsigned i=0;i<n_xmm;i++) {
-		__m128i inp = _mm_loadu_si128( (__m128i*) (a+i*16) );
-		__m128i out = _mm_loadu_si128( (__m128i*) (accu_b+i*16) );
+	for(unsigned i=n_xmm;i>0;i--) {
+		__m128i inp = _mm_loadu_si128( (__m128i*) (a) );
+		__m128i out = _mm_loadu_si128( (__m128i*) (accu_b) );
 		out ^= inp;
-		_mm_storeu_si128( (__m128i*) (accu_b+i*16) , out );
+		_mm_storeu_si128( (__m128i*) (accu_b) , out );
+		a += 16;
+		accu_b += 16;
 	}
 	if( 0 == (_num_byte&0xf) ) return;
 	for(unsigned j=0;j<(_num_byte&0xf);j++) {
-		accu_b[n_xmm*16+j] ^= a[n_xmm*16+j];
+		accu_b[j] ^= a[j];
 	}
 }
 
@@ -132,6 +137,16 @@ void gf16v_mul_scalar_sse( uint8_t * a, uint8_t gf16_b , unsigned _num_byte ) {
 
 
 static inline
+void gf16v_madd_multab_sse( uint8_t * accu_c, const uint8_t * a , const uint8_t * multab , unsigned _num_byte ) {
+	__m128i ml = _mm_load_si128( (__m128i*) multab );
+	__m128i mh = _mm_slli_epi16( ml , 4 );
+	__m128i mask = _mm_set1_epi8(0xf);
+
+	linearmap_8x8_accu_sse( accu_c , a , ml , mh , mask , _num_byte );
+}
+
+
+static inline
 void gf16v_madd_sse( uint8_t * accu_c, const uint8_t * a , uint8_t gf16_b, unsigned _num_byte ) {
 	unsigned b = gf16_b&0xf;
 	__m128i ml = _mm_load_si128( (__m128i*) (__gf16_mul + 32*b) );
@@ -150,6 +165,16 @@ void gf256v_mul_scalar_sse( uint8_t * a, uint8_t _b , unsigned _num_byte ) {
 	__m128i mask = _mm_set1_epi8(0xf);
 
 	linearmap_8x8_sse( a, ml , mh , mask , _num_byte );
+}
+
+
+static inline
+void gf256v_madd_multab_sse( uint8_t * accu_c, const uint8_t * a , const uint8_t * multab , unsigned _num_byte ) {
+	__m128i ml = _mm_load_si128( (__m128i*) multab );
+	__m128i mh = _mm_load_si128( (__m128i*) (multab+16) );
+	__m128i mask = _mm_set1_epi8(0xf);
+
+	linearmap_8x8_accu_sse( accu_c , a , ml , mh , mask , _num_byte );
 }
 
 static inline

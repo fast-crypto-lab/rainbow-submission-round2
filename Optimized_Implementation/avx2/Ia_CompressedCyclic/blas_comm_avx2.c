@@ -19,18 +19,18 @@
 
 void gf16mat_prod_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * multab ) {
 	assert( n_A_width <= 256 );
-	assert( n_A_vec_byte <= 128 );
+	assert( n_A_vec_byte <= 512 );
 	if( 16 >= n_A_vec_byte ) { return gf16mat_prod_multab_sse(c,matA,n_A_vec_byte,n_A_width,multab); }
 
 	__m256i mask_f = _mm256_load_si256( (__m256i*)__mask_low);
 
-	__m256i r0[4];
-	__m256i r1[4];
+	__m256i r0[16];
+	__m256i r1[16];
 	unsigned n_ymm = ((n_A_vec_byte + 31)>>5);
 	for(unsigned i=0;i<n_ymm;i++) r0[i] = _mm256_setzero_si256();
 	for(unsigned i=0;i<n_ymm;i++) r1[i] = _mm256_setzero_si256();
 
-	for(unsigned i=0;i<n_A_width;i++) {
+	for(unsigned i=0;i<n_A_width-1;i++) {
 		__m128i ml = _mm_load_si128( (__m128i*)( multab + i*16) );
 		__m256i mt = _mm256_inserti128_si256(_mm256_castsi128_si256(ml),ml,1);
 		for(unsigned j=0;j<n_ymm;j++) {
@@ -40,9 +40,29 @@ void gf16mat_prod_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A
 		}
 		matA += n_A_vec_byte;
 	}
-	uint8_t temp[128] __attribute__((aligned(32)));
-	for(unsigned i=0;i<n_ymm;i++) _mm256_store_si256( (__m256i*)(temp + i*32) , r0[i]^_mm256_slli_epi16(r1[i],4) );
-	for(unsigned i=0;i<n_A_vec_byte;i++) c[i] = temp[i];
+	unsigned n_32 = (n_A_vec_byte>>5);
+	unsigned n_32_rem = n_A_vec_byte&0x1f;
+	{
+		/// last column
+		unsigned i=n_A_width-1;
+		__m128i ml = _mm_load_si128( (__m128i*)( multab + i*16) );
+		__m256i mt = _mm256_inserti128_si256(_mm256_castsi128_si256(ml),ml,1);
+
+		for(unsigned j=0;j<n_32;j++) {
+			__m256i inp = _mm256_loadu_si256( (__m256i*)(matA+j*32) );
+			r0[j] ^= _mm256_shuffle_epi8( mt , inp&mask_f );
+			r1[j] ^= _mm256_shuffle_epi8( mt , _mm256_srli_epi16(inp,4)&mask_f );
+		}
+		if( n_32_rem ) {
+			unsigned j = n_32;
+			__m256i inp = _load_ymm( matA+j*32 , n_32_rem );
+			r0[j] ^= _mm256_shuffle_epi8( mt , inp&mask_f );
+			r1[j] ^= _mm256_shuffle_epi8( mt , _mm256_srli_epi16(inp,4)&mask_f );
+		}
+	}
+
+	for(unsigned i=0;i<n_32;i++) _mm256_storeu_si256( (__m256i*)(c + i*32) , r0[i]^_mm256_slli_epi16(r1[i],4) );
+	if( n_32_rem ) _store_ymm( c + n_32*32 , n_32_rem , r0[n_32]^_mm256_slli_epi16(r1[n_32],4) );
 }
 
 #if 0
@@ -213,7 +233,7 @@ void gf256mat_prod_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_
 
 	__m256i mask_f = _mm256_load_si256((__m256i const *) __mask_low);
 
-	__m256i r[72];   /// 48*48/32
+	__m256i r[48*48/32];
 	unsigned n_ymm = ((n_A_vec_byte + 31)>>5);
 	for(unsigned i=0;i<n_ymm;i++) r[i] = _mm256_setzero_si256();
 
@@ -228,9 +248,11 @@ void gf256mat_prod_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_
 		}
 		matA += n_A_vec_byte;
 	}
-	uint8_t r8[256] __attribute__((aligned(32)));
-	for(unsigned i=0;i<n_ymm;i++) _mm256_store_si256( (__m256i*)(r8 + i*32) , r[i] );
-	for(unsigned i=0;i<n_A_vec_byte;i++) c[i] = r8[i];
+
+	unsigned n_32 = (n_A_vec_byte>>5);
+	unsigned n_32_rem = n_A_vec_byte&0x1f;
+	for(unsigned i=0;i<n_32;i++) _mm256_storeu_si256( (__m256i*)(c + i*32) , r[i] );
+	if( n_32_rem ) _store_ymm( c + n_32*32 , n_32_rem , r[n_32] );
 }
 
 
