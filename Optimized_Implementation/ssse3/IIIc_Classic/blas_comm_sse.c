@@ -15,7 +15,7 @@
 
 #include "blas_comm.h"
 
-
+#include "blas_comm_sse.h"
 
 
 
@@ -269,7 +269,6 @@ unsigned gf16mat_solve_linear_eq_sse( uint8_t * sol , const uint8_t * inp_mat , 
 
 
 
-static
 void gf256mat_prod_add_multab_sse( __m128i * r , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * multab ) {
 	__m128i mask_f = _mm_set1_epi8(0xf);
 	unsigned n_xmm = ((n_A_vec_byte + 15)>>4);
@@ -318,7 +317,6 @@ void gf256mat_prod_multab_sse( uint8_t * c , const uint8_t * matA , unsigned n_A
 }
 
 
-static
 void gf256mat_prod_add_sse( __m128i * r , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * b ) {
 
 	uint8_t multab[16*16*2] __attribute__((aligned(32)));

@@ -43,9 +43,9 @@ void gf256v_polymul(uint8_t *c, const uint8_t *a, const uint8_t *b, unsigned _nu
 
 /// matrix-vector
 
-void _gf16mat_prod(uint8_t *c, const uint8_t *matA, unsigned n_A_vec_byte, unsigned n_A_width, const uint8_t *b);
+void gf16mat_prod(uint8_t *c, const uint8_t *matA, unsigned n_A_vec_byte, unsigned n_A_width, const uint8_t *b);
 
-void _gf256mat_prod(uint8_t *c, const uint8_t *matA, unsigned n_A_vec_byte, unsigned n_A_width, const uint8_t *b);
+void gf256mat_prod(uint8_t *c, const uint8_t *matA, unsigned n_A_vec_byte, unsigned n_A_width, const uint8_t *b);
 
 /// matrix-matrix
 
@@ -55,13 +55,13 @@ void gf256mat_mul(uint8_t *c, const uint8_t *a, const uint8_t *b, unsigned len_v
 
 /////////////////   algorithms:  gaussian elim  //////////////////
 
-unsigned _gf16mat_gauss_elim(uint8_t *mat, unsigned h, unsigned w);
+unsigned gf16mat_gauss_elim(uint8_t *mat, unsigned h, unsigned w);
 
-unsigned _gf16mat_solve_linear_eq(uint8_t *sol, const uint8_t *inp_mat, const uint8_t *c_terms, unsigned n);
+unsigned gf16mat_solve_linear_eq(uint8_t *sol, const uint8_t *inp_mat, const uint8_t *c_terms, unsigned n);
 
-unsigned _gf256mat_gauss_elim(uint8_t *mat, unsigned h, unsigned w);
+unsigned gf256mat_gauss_elim(uint8_t *mat, unsigned h, unsigned w);
 
-unsigned _gf256mat_solve_linear_eq(uint8_t *sol, const uint8_t *inp_mat, const uint8_t *c_terms, unsigned n);
+unsigned gf256mat_solve_linear_eq(uint8_t *sol, const uint8_t *inp_mat, const uint8_t *c_terms, unsigned n);
 
 ////////////////  rand for matrices   //////////////////////////
 

@@ -6,9 +6,9 @@
 
 
 #if (!defined(_RAINBOW16_32_32_32))&&(!defined(_RAINBOW256_68_36_36))&&(!defined(_RAINBOW256_92_48_48))
-//#define _RAINBOW16_32_32_32
-//#define _RAINBOW256_68_36_36
 #define _RAINBOW16_32_32_32
+//#define _RAINBOW256_68_36_36
+//#define _RAINBOW256_92_48_48
 #endif
 
 

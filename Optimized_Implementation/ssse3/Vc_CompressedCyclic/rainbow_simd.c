@@ -34,7 +34,6 @@
 
 
 
-/// algorithm 7
 int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _digest )
 {
     //const sk_t * sk = (const sk_t *)_sk;
@@ -180,13 +179,11 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
 
 
 
-
-/// algorithm 8
 int rainbow_verify( const uint8_t * digest , const uint8_t * signature , const pk_t * pk )
 {
     unsigned char digest_ck[_PUB_M_BYTE];
     //public_map( digest_ck , pk , signature );
-    batch_quad_trimat_eval( digest_ck , pk->pk , signature , _PUB_N , _PUB_M_BYTE );
+    batch_quad_trimat_eval_simd( digest_ck , pk->pk , signature , _PUB_N , _PUB_M_BYTE );
 
     unsigned char correct[_PUB_M_BYTE];
     unsigned char digest_salt[_HASH_LEN + _SALT_BYTE];

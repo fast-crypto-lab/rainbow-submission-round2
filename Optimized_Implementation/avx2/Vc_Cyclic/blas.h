@@ -27,14 +27,6 @@
 #define gf256v_madd        gf256v_madd_avx2
 #define gf256v_madd_multab gf256v_madd_multab_avx2
 
-#define gf16mat_prod              gf16mat_prod_avx2
-#define gf16mat_gauss_elim        gf16mat_gauss_elim_sse
-#define gf16mat_solve_linear_eq   gf16mat_solve_linear_eq_avx2
-
-#define gf256mat_prod             gf256mat_prod_avx2
-#define gf256mat_gauss_elim       gf256mat_gauss_elim_sse
-#define gf256mat_solve_linear_eq  gf256mat_solve_linear_eq_sse
-
 
 #include "blas_u64.h"
 #define gf256v_predicated_add	_gf256v_predicated_add_u64

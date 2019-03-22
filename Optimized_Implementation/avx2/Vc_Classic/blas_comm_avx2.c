@@ -13,11 +13,41 @@
 
 #include "assert.h"
 
+#include "blas_comm.h"
+
+#include "blas_comm_sse.h"
+
+#include "blas_comm_avx2.h"
+
+
+
+void gf16mat_prod_16_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_width , const uint8_t * multab ) {
+	assert( 0 == (n_A_width&1) );
+	__m256i mask_f = _mm256_set1_epi8( 0xf );
+
+	__m256i rl = _mm256_setzero_si256();
+	__m256i rh = _mm256_setzero_si256();
+
+	while(n_A_width) {
+		__m256i mt = _mm256_load_si256( (__m256i*) multab );
+		multab += 32;
+		__m256i inp = _mm256_loadu_si256( (__m256i*) matA );
+		matA += 32;
+		rl ^= _mm256_shuffle_epi8( mt , inp&mask_f );
+		rh ^= _mm256_shuffle_epi8( mt , _mm256_srli_epi16(_mm256_andnot_si256(mask_f,inp),4) );
+		n_A_width -= 2;
+	}
+	__m256i r = rl ^ _mm256_slli_epi16( rh , 4 );
+	__m128i r0 = _mm256_castsi256_si128( r );
+	__m128i r1 = _mm256_extracti128_si256( r , 1 );
+	_mm_storeu_si128( (__m128i*)c , r0^r1  );
+}
 
 
 
 
 void gf16mat_prod_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * multab ) {
+	if( 16 == n_A_vec_byte && (0==(n_A_width&1)) ) { return gf16mat_prod_16_multab_avx2(c,matA,n_A_width,multab); }
 	assert( n_A_width <= 256 );
 	assert( n_A_vec_byte <= 512 );
 	if( 16 >= n_A_vec_byte ) { return gf16mat_prod_multab_sse(c,matA,n_A_vec_byte,n_A_width,multab); }
@@ -207,6 +237,65 @@ unsigned _linear_solver_32x32_avx2( uint8_t * r , const uint8_t * mat_32x32 , co
 
 
 
+
+
+static inline
+unsigned _gf16mat_gauss_elim_h32xw64_avx2( const uint8_t * mat )
+{
+	__m256i mask_f = _mm256_set1_epi8( 0xf );
+
+	uint8_t temp[32] __attribute__((aligned(32)));
+	uint8_t pivots[32] __attribute__((aligned(32)));
+
+	uint8_t rr8 = 1;
+	for(unsigned i=0;i<32;i++) {
+		if( i&1 ) { for(unsigned j=0;j<32;j++) pivots[j] = mat[j*32+(i>>1)]>>4; }
+		else { for(unsigned j=0;j<32;j++) pivots[j] = mat[j*32+(i>>1)]&0xf; }
+
+		__m256i rowi = _mm256_load_si256( (__m256i*)(mat+i*32) );
+		for(unsigned j=i+1;j<32;j++) {
+			temp[0] = _if_zero_then_0xf( pivots[i] );
+			__m256i mask_zero = _mm256_broadcastb_epi8(_mm_load_si128((__m128i*)temp));
+
+			__m256i rowj = _mm256_load_si256( (__m256i*)(mat+j*32) );
+			rowi ^= mask_zero&rowj;
+			//rowi ^= predicate_zero&(*(__m256i*)(mat+j*32));
+			pivots[i] ^= temp[0]&pivots[j];
+		}
+		uint8_t is_pi_nz = _if_zero_then_0xf(pivots[i]);
+		is_pi_nz = ~is_pi_nz;
+		rr8 &= is_pi_nz;
+
+		temp[0] = pivots[i];
+		__m128i inv_rowi = tbl_gf16_inv( _mm_load_si128((__m128i*)temp) );
+		pivots[i] = _mm_extract_epi8( inv_rowi , 0 );
+
+		__m256i log_pivots = tbl32_gf16_log( _mm256_load_si256( (__m256i*)pivots ) );
+		_mm256_store_si256( (__m256i*)pivots , log_pivots );
+
+		temp[0] = pivots[i];
+		__m256i logpi = _mm256_broadcastb_epi8( _mm_load_si128((__m128i*)temp) );
+		rowi = tbl32_gf16_mulx2_log( rowi , logpi , mask_f );
+		__m256i log_rowi0 = tbl32_gf16_log( rowi&mask_f );
+		__m256i log_rowi1 = tbl32_gf16_log( _mm256_srli_epi16(_mm256_andnot_si256(mask_f,rowi),4) );
+		for(unsigned j=0;j<32;j++) {
+			if(i==j) {
+				_mm256_store_si256( (__m256i*)(mat+j*32) , rowi );
+				continue;
+			}
+			__m256i rowj = _mm256_load_si256( (__m256i*)(mat+j*32) );
+			temp[0] = pivots[j];
+			__m256i logpj = _mm256_broadcastb_epi8( _mm_load_si128((__m128i*)temp) );
+			rowj ^= tbl32_gf16_mul_log_log( log_rowi0 , logpj , mask_f );
+			rowj ^= _mm256_slli_epi16( tbl32_gf16_mul_log_log( log_rowi1 , logpj , mask_f ) , 4 );
+			_mm256_store_si256( (__m256i*)(mat+j*32) , rowj );
+		}
+	}
+	return rr8;
+}
+
+
+
 unsigned gf16mat_solve_linear_eq_avx2( uint8_t * sol , const uint8_t * inp_mat , const uint8_t * c_terms , unsigned n )
 {
 	if( 32 == n ) {
@@ -214,6 +303,15 @@ unsigned gf16mat_solve_linear_eq_avx2( uint8_t * sol , const uint8_t * inp_mat ,
 	} else  {
 		return gf16mat_solve_linear_eq_sse( sol , inp_mat , c_terms , n );
 	}
+}
+
+
+
+
+unsigned gf16mat_gauss_elim_avx2( uint8_t * mat , unsigned h , unsigned w )
+{
+	if(32==h && 64==w) { return _gf16mat_gauss_elim_h32xw64_avx2( mat ); }
+	return gf16mat_gauss_elim_sse( mat , h , w );
 }
 
 
@@ -328,5 +426,16 @@ void gf256mat_prod_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_b
 #endif
 
 
+
+
+unsigned gf256mat_gauss_elim_avx2( uint8_t * mat , unsigned h , unsigned w )
+{
+	return gf256mat_gauss_elim_sse( mat , h , w );
+}
+
+unsigned gf256mat_solve_linear_eq_avx2( uint8_t * sol , const uint8_t * inp_mat , const uint8_t * c_terms, unsigned n )
+{
+	return gf256mat_solve_linear_eq_sse( sol , inp_mat , c_terms , n );
+}
 
 

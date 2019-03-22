@@ -62,6 +62,13 @@ static inline __m256i tbl32_gf16_mul_log( __m256i a , __m256i logb , __m256i mas
 	return tbl32_gf16_exp( _mm256_sub_epi8(la_lb, mask_f&_mm256_cmpgt_epi8(la_lb,mask_f) ) );
 }
 
+static inline __m256i tbl32_gf16_mulx2_log( __m256i a , __m256i logb , __m256i mask_f )
+{
+	__m256i a_lo = a&mask_f;
+	__m256i a_hi = _mm256_srli_epi16( _mm256_andnot_si256( mask_f , a ) , 4 );
+	return tbl32_gf16_mul_log( a_lo , logb , mask_f ) ^ _mm256_slli_epi16( tbl32_gf16_mul_log( a_hi , logb , mask_f ) , 4 );
+}
+
 static inline __m256i tbl32_gf16_mul_log_log( __m256i loga , __m256i logb , __m256i mask_f )
 {
 	__m256i la_lb = _mm256_add_epi8(loga,logb);

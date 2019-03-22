@@ -34,12 +34,36 @@ __m128i _load_xmm( const uint8_t *a , unsigned _num_byte ) {
 }
 
 static inline
+void loadu_xmm( __m128i *xmm_a, const uint8_t *a, unsigned _num_byte ) {
+	unsigned n_16 = (_num_byte>>4);
+	unsigned n_16_rem = _num_byte&0xf;
+	while( n_16-- ) {
+		xmm_a[0] = _mm_loadu_si128( (__m128i*)(a) );
+		xmm_a++;
+		a += 16;
+	}
+	if( n_16_rem ) xmm_a[0] = _load_xmm( a , n_16_rem );
+}
+
+static inline
 void _store_xmm( uint8_t *a , unsigned _num_byte , __m128i data ) {
 	uint8_t temp[32] __attribute__((aligned(32)));
 	assert( 16 >= _num_byte );
 	assert( 0 < _num_byte );
 	_mm_store_si128((__m128i*)temp,data);
 	for(unsigned i=0;i<_num_byte;i++) a[i] = temp[i];
+}
+
+static inline
+void storeu_xmm( uint8_t *a , unsigned _num_byte , __m128i *xmm_a ) {
+	unsigned n_16 = (_num_byte>>4);
+	unsigned n_16_rem = _num_byte&0xf;
+	while( n_16-- ) {
+		_mm_storeu_si128( (__m128i*)a , xmm_a[0] );
+		xmm_a++;
+		a += 16;
+	}
+	if( n_16_rem ) _store_xmm( a , n_16_rem , xmm_a[0] );
 }
 
 

@@ -42,8 +42,8 @@ void gf256v_polymul(uint8_t *c, const uint8_t *a, const uint8_t *b, unsigned _nu
 
 ///////////  matrix-vector
 
-
-void _gf16mat_prod(uint8_t *c, const uint8_t *matA, unsigned n_A_vec_byte, unsigned n_A_width, const uint8_t *b) {
+static
+void gf16mat_prod_ref(uint8_t *c, const uint8_t *matA, unsigned n_A_vec_byte, unsigned n_A_width, const uint8_t *b) {
     gf256v_set_zero(c, n_A_vec_byte);
     for (unsigned i = 0; i < n_A_width; i++) {
         uint8_t bb = gf16v_get_ele(b, i);
@@ -52,7 +52,8 @@ void _gf16mat_prod(uint8_t *c, const uint8_t *matA, unsigned n_A_vec_byte, unsig
     }
 }
 
-void _gf256mat_prod(uint8_t *c, const uint8_t *matA, unsigned n_A_vec_byte, unsigned n_A_width, const uint8_t *b) {
+static
+void gf256mat_prod_ref(uint8_t *c, const uint8_t *matA, unsigned n_A_vec_byte, unsigned n_A_width, const uint8_t *b) {
     gf256v_set_zero(c, n_A_vec_byte);
     for (unsigned i = 0; i < n_A_width; i++) {
         gf256v_madd(c, matA, b[i], n_A_vec_byte);
@@ -90,7 +91,8 @@ void gf256mat_mul(uint8_t *c, const uint8_t *a, const uint8_t *b, unsigned len_v
 
 /////////////////   algorithms:  gaussian elim  //////////////////
 
-unsigned _gf16mat_gauss_elim(uint8_t *mat, unsigned h, unsigned w) {
+static
+unsigned gf16mat_gauss_elim_ref(uint8_t *mat, unsigned h, unsigned w) {
     /// assert( 0==(w&1) );  w must be even !!!
     unsigned n_w_byte = (w + 1) / 2;
     unsigned r8 = 1;
@@ -115,7 +117,8 @@ unsigned _gf16mat_gauss_elim(uint8_t *mat, unsigned h, unsigned w) {
     return r8;
 }
 
-unsigned _gf16mat_solve_linear_eq(uint8_t *sol, const uint8_t *inp_mat, const uint8_t *c_terms, unsigned n) {
+static
+unsigned gf16mat_solve_linear_eq_ref(uint8_t *sol, const uint8_t *inp_mat, const uint8_t *c_terms, unsigned n) {
     assert(64 >= n);
     uint8_t mat[64 * 33];
     unsigned n_byte = (n + 1) >> 1;
@@ -157,8 +160,8 @@ unsigned gf16mat_inv(uint8_t *inv_a, const uint8_t *a, unsigned H, uint8_t *buff
 
 /////////////////////////////////////////////////
 
-
-unsigned _gf256mat_gauss_elim( uint8_t * mat , unsigned h , unsigned w )
+static
+unsigned gf256mat_gauss_elim_ref( uint8_t * mat , unsigned h , unsigned w )
 {
     unsigned r8 = 1;
 
@@ -169,7 +172,7 @@ unsigned _gf256mat_gauss_elim( uint8_t * mat , unsigned h , unsigned w )
         for(unsigned j=i+1;j<h;j++) {
             uint8_t * aj = mat + w*j;
 //            gf256v_predicated_add( ai + i , !gf256_is_nonzero(ai[i]) , aj + i , w-i );
-            gf256v_predicated_add( ai + skip_len_align4 , !gf256_is_nonzero(ai[i]) , aj , w - skip_len_align4 );
+            gf256v_predicated_add( ai + skip_len_align4 , !gf256_is_nonzero(ai[i]) , aj + skip_len_align4 , w - skip_len_align4 );
         }
         r8 &= gf256_is_nonzero(ai[i]);
         uint8_t pivot = ai[i];
@@ -187,8 +190,8 @@ unsigned _gf256mat_gauss_elim( uint8_t * mat , unsigned h , unsigned w )
     return r8;
 }
 
-
-unsigned _gf256mat_solve_linear_eq( uint8_t * sol , const uint8_t * inp_mat , const uint8_t * c_terms , unsigned n )
+static
+unsigned gf256mat_solve_linear_eq_ref( uint8_t * sol , const uint8_t * inp_mat , const uint8_t * c_terms , unsigned n )
 {
     assert( 63 >= n );
     uint8_t mat[ 64*64 ];
@@ -227,3 +230,80 @@ unsigned gf256mat_inv( uint8_t * inv_a , const uint8_t * a , unsigned H , uint8_
 }
 
 
+
+
+
+////////////////////////////////////////////////////
+
+
+
+
+
+#if defined( _BLAS_AVX2_ )
+
+#include "blas_comm_avx2.h"
+#define gf16mat_prod_impl             gf16mat_prod_avx2
+#define gf16mat_gauss_elim_impl       gf16mat_gauss_elim_avx2
+#define gf16mat_solve_linear_eq_impl  gf16mat_solve_linear_eq_avx2
+#define gf256mat_prod_impl            gf256mat_prod_avx2
+#define gf256mat_gauss_elim_impl      gf256mat_gauss_elim_avx2
+#define gf256mat_solve_linear_eq_impl gf256mat_solve_linear_eq_avx2
+
+#elif defined( _BLAS_SSE_ )
+
+#include "blas_comm_sse.h"
+#define gf16mat_prod_impl             gf16mat_prod_sse
+#define gf16mat_gauss_elim_impl       gf16mat_gauss_elim_sse
+#define gf16mat_solve_linear_eq_impl  gf16mat_solve_linear_eq_sse
+#define gf256mat_prod_impl            gf256mat_prod_sse
+#define gf256mat_gauss_elim_impl      gf256mat_gauss_elim_sse
+#define gf256mat_solve_linear_eq_impl gf256mat_solve_linear_eq_sse
+
+#else
+
+#define gf16mat_prod_impl             gf16mat_prod_ref
+#define gf16mat_gauss_elim_impl       gf16mat_gauss_elim_ref
+#define gf16mat_solve_linear_eq_impl  gf16mat_solve_linear_eq_ref
+#define gf256mat_prod_impl            gf256mat_prod_ref
+#define gf256mat_gauss_elim_impl      gf256mat_gauss_elim_ref
+#define gf256mat_solve_linear_eq_impl gf256mat_solve_linear_eq_ref
+
+#endif
+
+
+
+
+
+
+void gf16mat_prod(uint8_t *c, const uint8_t *matA, unsigned n_A_vec_byte, unsigned n_A_width, const uint8_t *b)
+{
+    gf16mat_prod_impl( c, matA, n_A_vec_byte, n_A_width, b);
+}
+
+
+unsigned gf16mat_gauss_elim(uint8_t *mat, unsigned h, unsigned w)
+{
+    return gf16mat_gauss_elim_impl( mat, h, w);
+}
+
+unsigned gf16mat_solve_linear_eq( uint8_t * sol , const uint8_t * inp_mat , const uint8_t * c_terms , unsigned n )
+{
+    return gf16mat_solve_linear_eq_impl( sol , inp_mat , c_terms , n );
+}
+
+
+void gf256mat_prod(uint8_t *c, const uint8_t *matA, unsigned n_A_vec_byte, unsigned n_A_width, const uint8_t *b)
+{
+    gf256mat_prod_impl( c, matA, n_A_vec_byte, n_A_width, b);
+}
+
+unsigned gf256mat_gauss_elim( uint8_t * mat , unsigned h , unsigned w )
+{
+    return gf256mat_gauss_elim_impl( mat , h , w );
+}
+
+
+unsigned gf256mat_solve_linear_eq( uint8_t * sol , const uint8_t * inp_mat , const uint8_t * c_terms , unsigned n )
+{
+    return gf256mat_solve_linear_eq_impl( sol , inp_mat , c_terms , n );
+}
