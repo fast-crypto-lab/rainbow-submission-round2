@@ -1,10 +1,10 @@
-
-//
-//  PQCgenKAT_sign.c
-//
-//  Created by Bassham, Lawrence E (Fed) on 8/29/17.
-//  Copyright © 2017 Bassham, Lawrence E (Fed). All rights reserved.
-//
+///
+///  @file PQCgenKAT_sign.c
+///  @brief A command-line tool for generating KAT.
+///
+///  Created by Bassham, Lawrence E (Fed) on 8/29/17.
+///  Copyright © 2017 Bassham, Lawrence E (Fed). All rights reserved.
+///
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

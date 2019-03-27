@@ -1,3 +1,7 @@
+/// @file utils.h
+/// @brief Utilities for IO.
+///
+///
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
@@ -29,5 +33,6 @@ int byte_read_file( unsigned char ** msg , unsigned long long * len , const char
 
 
 
-#endif
+#endif // _UTILS_H_
+
 

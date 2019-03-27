@@ -1,3 +1,6 @@
+///  @file rainbow-genkey.c
+///  @brief A command-line tool for generating key pairs.
+///
 
 #include <stdio.h>
 #include <stdint.h>
@@ -24,7 +27,7 @@ int main( int argc , char ** argv )
 		return -1;
 	}
 
-	/// set random seed
+	// set random seed
 	unsigned char rnd_seed[48] = {0};
 	int rr = byte_from_binfile( rnd_seed , 48 , (4==argc)? argv[3] : "/dev/random" );
 	if( 0 != rr ) printf("read seed file fail.\n");

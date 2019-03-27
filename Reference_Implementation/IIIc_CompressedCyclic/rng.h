@@ -1,9 +1,12 @@
-//
-//  rng.h
-//
-//  Created by Bassham, Lawrence E (Fed) on 8/29/17.
-//  Copyright © 2017 Bassham, Lawrence E (Fed). All rights reserved.
-//
+///
+///  @file rng.h
+///  @brief An AES256 CTR DRBG
+///
+///  Created by Bassham, Lawrence E (Fed) on 8/29/17.
+///  Copyright © 2017 Bassham, Lawrence E (Fed). All rights reserved.
+///
+///  An AES256 CTR DRBG
+///
 
 #ifndef rng_h
 #define rng_h

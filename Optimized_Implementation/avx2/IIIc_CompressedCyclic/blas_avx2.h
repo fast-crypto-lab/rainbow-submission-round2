@@ -1,3 +1,7 @@
+/// @file blas_avx2.h
+/// @brief Inlined functions for implementing basic linear algebra functions for AVX2 arch.
+///
+
 #ifndef _BLAS_AVX2_H_
 #define _BLAS_AVX2_H_
 
@@ -244,4 +248,5 @@ unsigned gf16mat_solve_linear_eq_avx2( uint8_t * sol , const uint8_t * inp_mat ,
 
 
 
-#endif
+#endif // _BLAS_AVX2_H_
+

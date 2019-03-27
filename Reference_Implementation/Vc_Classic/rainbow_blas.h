@@ -1,3 +1,8 @@
+/// @file rainbow_blas.h
+/// @brief Defining the functions used in rainbow.c acconding to the definitions in rainbow_config.h
+///
+///  Defining the functions used in rainbow.c acconding to the definitions in rainbow_config.h
+
 #ifndef _RAINBOW_BLAS_H_
 #define _RAINBOW_BLAS_H_
 
@@ -48,4 +53,5 @@
 #endif
 
 
-#endif
+#endif  // _RAINBOW_BLAS_H_
+

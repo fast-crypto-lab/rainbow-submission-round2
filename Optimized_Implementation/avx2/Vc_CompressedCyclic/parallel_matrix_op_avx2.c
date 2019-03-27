@@ -1,9 +1,12 @@
+///  @file parallel_matrix_op_avx2.c
+///  @brief the AVX2 implementations for functions in parallel_matrix_op_avx2.h
+///
+///
 
 #include "blas_comm.h"
 #include "blas.h"
 
 #include "parallel_matrix_op.h"
-#include "parallel_matrix_op_sse.h"
 #include "parallel_matrix_op_avx2.h"
 
 
@@ -16,11 +19,10 @@
 
 
 
-///  bC += btriA * B
 void batch_trimat_madd_multab_gf16_avx2( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void) size_Bcolvec; /// unused
+    (void) size_Bcolvec; // unused
     unsigned Awidth = Bheight;
     unsigned Aheight = Awidth;
     for(unsigned i=0;i<Aheight;i++) {
@@ -38,7 +40,7 @@ void batch_trimat_madd_multab_gf16_avx2( unsigned char * bC , const unsigned cha
 void batch_trimat_madd_multab_gf256_avx2( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void) size_Bcolvec; /// unused
+    (void) size_Bcolvec; // unused
     unsigned Awidth = Bheight;
     unsigned Aheight = Awidth;
     for(unsigned i=0;i<Aheight;i++) {
@@ -59,11 +61,10 @@ void batch_trimat_madd_multab_gf256_avx2( unsigned char * bC , const unsigned ch
 
 
 
-///  bC += btriA^Tr * B
 void batch_trimatTr_madd_multab_gf16_avx2( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void) size_Bcolvec; /// unused
+    (void) size_Bcolvec; // unused
     unsigned Aheight = Bheight;
     for(unsigned i=0;i<Aheight;i++) {
         for(unsigned j=0;j<Bwidth;j++) {
@@ -79,7 +80,7 @@ void batch_trimatTr_madd_multab_gf16_avx2( unsigned char * bC , const unsigned c
 void batch_trimatTr_madd_multab_gf256_avx2( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void) size_Bcolvec; /// unused
+    (void) size_Bcolvec; // unused
     unsigned Aheight = Bheight;
     for(unsigned i=0;i<Aheight;i++) {
         for(unsigned j=0;j<Bwidth;j++) {
@@ -96,11 +97,10 @@ void batch_trimatTr_madd_multab_gf256_avx2( unsigned char * bC , const unsigned 
 
 
 
-///  bC +=  (btriA + btriA^Tr) *B
 void batch_2trimat_madd_multab_gf16_avx2( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void) size_Bcolvec; /// unused
+    (void) size_Bcolvec; // unused
     unsigned Aheight = Bheight;
     for(unsigned i=0;i<Aheight;i++) {
         for(unsigned j=0;j<Bwidth;j++) {
@@ -116,7 +116,7 @@ void batch_2trimat_madd_multab_gf16_avx2( unsigned char * bC , const unsigned ch
 void batch_2trimat_madd_multab_gf256_avx2( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void) size_Bcolvec; /// unused
+    (void) size_Bcolvec; // unused
     unsigned Aheight = Bheight;
     for(unsigned i=0;i<Aheight;i++) {
         for(unsigned j=0;j<Bwidth;j++) {
@@ -132,11 +132,10 @@ void batch_2trimat_madd_multab_gf256_avx2( unsigned char * bC , const unsigned c
 
 
 
-/// bC += A^Tr * bB
 void batch_matTr_madd_multab_gf16_avx2( unsigned char * bC , const unsigned char* A_to_tr , unsigned Aheight, unsigned size_Acolvec, unsigned Awidth,
         const unsigned char* bB, unsigned Bwidth, unsigned size_batch )
 {
-    (void) size_Acolvec; /// unused
+    (void) size_Acolvec; // unused
     unsigned Atr_height = Awidth;
     unsigned Atr_width  = Aheight;
     for(unsigned i=0;i<Atr_height;i++) {
@@ -150,7 +149,7 @@ void batch_matTr_madd_multab_gf16_avx2( unsigned char * bC , const unsigned char
 void batch_matTr_madd_multab_gf256_avx2( unsigned char * bC , const unsigned char* A_to_tr , unsigned Aheight, unsigned size_Acolvec, unsigned Awidth,
         const unsigned char* bB, unsigned Bwidth, unsigned size_batch )
 {
-    (void) size_Acolvec; /// unused
+    (void) size_Acolvec; // unused
     unsigned Atr_height = Awidth;
     unsigned Atr_width  = Aheight;
     for(unsigned i=0;i<Atr_height;i++) {
@@ -164,11 +163,10 @@ void batch_matTr_madd_multab_gf256_avx2( unsigned char * bC , const unsigned cha
 
 
 
-///  bC += bA^Tr * B
 void batch_bmatTr_madd_multab_gf16_avx2( unsigned char *bC , const unsigned char *bA_to_tr, unsigned Awidth_before_tr,
         const unsigned char *B, unsigned Bheight, unsigned size_Bcolvec, unsigned Bwidth, unsigned size_batch )
 {
-    (void) size_Bcolvec; /// unused
+    (void) size_Bcolvec; // unused
     const unsigned char *bA = bA_to_tr;
     unsigned Aheight = Awidth_before_tr;
     for(unsigned i=0;i<Aheight;i++) {
@@ -184,7 +182,7 @@ void batch_bmatTr_madd_multab_gf16_avx2( unsigned char *bC , const unsigned char
 void batch_bmatTr_madd_multab_gf256_avx2( unsigned char *bC , const unsigned char *bA_to_tr, unsigned Awidth_before_tr,
         const unsigned char *B, unsigned Bheight, unsigned size_Bcolvec, unsigned Bwidth, unsigned size_batch )
 {
-    (void) size_Bcolvec; /// unused
+    (void) size_Bcolvec; // unused
     const unsigned char *bA = bA_to_tr;
     unsigned Aheight = Awidth_before_tr;
     for(unsigned i=0;i<Aheight;i++) {
@@ -201,11 +199,10 @@ void batch_bmatTr_madd_multab_gf256_avx2( unsigned char *bC , const unsigned cha
 
 
 
-///  bC += bA * B
 void batch_mat_madd_multab_gf16_avx2( unsigned char * bC , const unsigned char* bA , unsigned Aheight,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void) size_Bcolvec; /// unused
+    (void) size_Bcolvec; // unused
     unsigned Awidth = Bheight;
     for(unsigned i=0;i<Aheight;i++) {
         for(unsigned j=0;j<Bwidth;j++) {
@@ -221,7 +218,7 @@ void batch_mat_madd_multab_gf16_avx2( unsigned char * bC , const unsigned char* 
 void batch_mat_madd_multab_gf256_avx2( unsigned char * bC , const unsigned char* bA , unsigned Aheight,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void) size_Bcolvec; /// unused
+    (void) size_Bcolvec; // unused
     unsigned Awidth = Bheight;
     for(unsigned i=0;i<Aheight;i++) {
         for(unsigned j=0;j<Bwidth;j++) {
@@ -299,7 +296,6 @@ void mq_gf16_n96_m64_vartime_avx2_unalign( uint8_t * z , const uint8_t * pk_mat 
 
 
 
-///  y =  x^Tr * trimat * x
 
 void batch_quad_trimat_eval_gf16_avx2( unsigned char * y, const unsigned char * trimat, const unsigned char * x, unsigned dim , unsigned size_batch )
 {
@@ -311,7 +307,6 @@ void batch_quad_trimat_eval_gf16_avx2( unsigned char * y, const unsigned char * 
 
 
 
-///  y =  x^Tr * trimat * x
 
 void batch_quad_trimat_eval_multab_gf16_avx2( unsigned char * y, const unsigned char * trimat, const unsigned char * x_multab, unsigned dim , unsigned size_batch )
 {
@@ -326,6 +321,152 @@ void batch_quad_trimat_eval_multab_gf16_avx2( unsigned char * y, const unsigned 
         gf16v_madd_multab_avx2( y , tmp , x_multab+16*i , size_batch );
     }
 }
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+static
+void mq_gf256_n140_m72_vartime_avx2_unalign( uint8_t * z , const uint8_t * pk_mat , const uint8_t * w )
+{
+
+    __m256i mask_f = _mm256_set1_epi8( 0xf );
+
+    __m256i r0 = _mm256_setzero_si256();
+    __m256i r1 = _mm256_setzero_si256();
+    __m256i r2 = _mm256_setzero_si256();
+    for(unsigned i=0;i<139;i++) {
+        if( 0 == w[i] ) {
+            pk_mat += 72*(140-i);
+            continue;
+        }
+        __m256i temp0 = _mm256_setzero_si256();
+        __m256i temp1 = _mm256_setzero_si256();
+        __m256i temp2 = _mm256_setzero_si256();
+
+        for(unsigned j=i;j<140;j++) {
+            unsigned b0 = w[j];
+            __m256i tab = _mm256_load_si256((__m256i const *) (__gf256_mul+  b0*32 ));
+            __m256i tab_l = _mm256_permute2x128_si256( tab , tab , 0 );
+            __m256i tab_h = _mm256_permute2x128_si256( tab , tab , 0x11 );
+
+            __m256i inp0 = _mm256_loadu_si256( (__m256i*)pk_mat ); pk_mat += 32;
+            __m256i inp1 = _mm256_loadu_si256( (__m256i*)pk_mat ); pk_mat += 32;
+            __m256i inp2 = _mm256_loadu_si256( (__m256i*)pk_mat ); pk_mat += 8;
+
+            temp0 ^= linear_transform_8x8_256b( tab_l , tab_h , inp0 , mask_f );
+            temp1 ^= linear_transform_8x8_256b( tab_l , tab_h , inp1 , mask_f );
+            temp2 ^= linear_transform_8x8_256b( tab_l , tab_h , inp2 , mask_f );
+        }
+        unsigned b1 = w[i];
+        __m256i tab = _mm256_load_si256((__m256i const *) (__gf256_mul+  b1*32 ));
+        __m256i tab_l = _mm256_permute2x128_si256( tab , tab , 0 );
+        __m256i tab_h = _mm256_permute2x128_si256( tab , tab , 0x11 );
+
+        r0 ^= linear_transform_8x8_256b( tab_l , tab_h , temp0 , mask_f );
+        r1 ^= linear_transform_8x8_256b( tab_l , tab_h , temp1 , mask_f );
+        r2 ^= linear_transform_8x8_256b( tab_l , tab_h , temp2 , mask_f );
+    }
+
+    // last column
+    uint8_t temp[32] __attribute__((aligned(32)));
+
+    unsigned b2 = w[139];
+    __m256i tab = _mm256_load_si256((__m256i const *) (__gf256_mul+  b2*32 ));
+    __m256i tab_l = _mm256_permute2x128_si256( tab , tab , 0 );
+    __m256i tab_h = _mm256_permute2x128_si256( tab , tab , 0x11 );
+
+    __m256i inp0 = _mm256_loadu_si256( (__m256i*)pk_mat ); pk_mat += 32;
+    __m256i inp1 = _mm256_loadu_si256( (__m256i*)pk_mat ); pk_mat += 32;
+    for(int i=0;i<8;i++) temp[i] = pk_mat[i];
+    __m256i inp2 = _mm256_load_si256( (__m256i*)temp );
+
+    inp0 = linear_transform_8x8_256b( tab_l , tab_h , inp0 , mask_f );
+    inp1 = linear_transform_8x8_256b( tab_l , tab_h , inp1 , mask_f );
+    inp2 = linear_transform_8x8_256b( tab_l , tab_h , inp2 , mask_f );
+    r0 ^= linear_transform_8x8_256b( tab_l , tab_h , inp0 , mask_f );
+    r1 ^= linear_transform_8x8_256b( tab_l , tab_h , inp1 , mask_f );
+    r2 ^= linear_transform_8x8_256b( tab_l , tab_h , inp2 , mask_f );
+
+
+    _mm256_storeu_si256( (__m256i*)z , r0 );
+    _mm256_storeu_si256( (__m256i*)(z+32) , r1 );
+
+    _mm256_store_si256( (__m256i*)temp , r2 );
+    for(int i=0;i<8;i++) z[64+i] = temp[i];
+}
+
+
+
+
+
+static
+void mq_gf256_n188_m96_vartime_avx2_unalign( uint8_t * z , const uint8_t * pk_mat , const uint8_t * w )
+{
+
+    __m256i mask_f = _mm256_set1_epi8( 0xf );
+
+    __m256i r0 = _mm256_setzero_si256();
+    __m256i r1 = _mm256_setzero_si256();
+    __m256i r2 = _mm256_setzero_si256();
+    for(unsigned i=0;i<188;i++) {
+        if( 0 == w[i] ) {
+            pk_mat += 96*(188-i);
+            continue;
+        }
+        __m256i temp0 = _mm256_setzero_si256();
+        __m256i temp1 = _mm256_setzero_si256();
+        __m256i temp2 = _mm256_setzero_si256();
+
+        for(unsigned j=i;j<188;j++) {
+            unsigned b0 = w[j];
+            __m256i tab = _mm256_load_si256((__m256i const *) (__gf256_mul+  b0*32 ));
+            __m256i tab_l = _mm256_permute2x128_si256( tab , tab , 0 );
+            __m256i tab_h = _mm256_permute2x128_si256( tab , tab , 0x11 );
+
+            __m256i inp0 = _mm256_loadu_si256( (__m256i*)pk_mat ); pk_mat += 32;
+            __m256i inp1 = _mm256_loadu_si256( (__m256i*)pk_mat ); pk_mat += 32;
+            __m256i inp2 = _mm256_loadu_si256( (__m256i*)pk_mat ); pk_mat += 32;
+
+            temp0 ^= linear_transform_8x8_256b( tab_l , tab_h , inp0 , mask_f );
+            temp1 ^= linear_transform_8x8_256b( tab_l , tab_h , inp1 , mask_f );
+            temp2 ^= linear_transform_8x8_256b( tab_l , tab_h , inp2 , mask_f );
+        }
+        unsigned b1 = w[i];
+        __m256i tab = _mm256_load_si256((__m256i const *) (__gf256_mul+  b1*32 ));
+        __m256i tab_l = _mm256_permute2x128_si256( tab , tab , 0 );
+        __m256i tab_h = _mm256_permute2x128_si256( tab , tab , 0x11 );
+
+        r0 ^= linear_transform_8x8_256b( tab_l , tab_h , temp0 , mask_f );
+        r1 ^= linear_transform_8x8_256b( tab_l , tab_h , temp1 , mask_f );
+        r2 ^= linear_transform_8x8_256b( tab_l , tab_h , temp2 , mask_f );
+    }
+
+    _mm256_storeu_si256( (__m256i*)z , r0 );
+    _mm256_storeu_si256( (__m256i*)(z+32) , r1 );
+    _mm256_storeu_si256( (__m256i*)(z+64) , r2 );
+}
+
+
+
+
+
+void batch_quad_trimat_eval_gf256_avx2( unsigned char * y, const unsigned char * trimat, const unsigned char * x, unsigned dim , unsigned size_batch )
+{
+    if( 140==dim && 72==size_batch ) { return mq_gf256_n140_m72_vartime_avx2_unalign( y, trimat , x); }
+    if( 188==dim && 96==size_batch ) { return mq_gf256_n188_m96_vartime_avx2_unalign( y, trimat , x); }
+    batch_quad_trimat_eval_gf256( y , trimat , x , dim , size_batch );
+}
+
+
+
+
 
 void batch_quad_trimat_eval_multab_gf256_avx2( unsigned char * y, const unsigned char * trimat, const unsigned char * x_multab, unsigned dim , unsigned size_batch )
 {

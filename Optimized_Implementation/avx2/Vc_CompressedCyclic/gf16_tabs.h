@@ -1,3 +1,7 @@
+/// @file gf16_tabs.h
+/// @brief Defining the constant tables for performing GF arithmetics.
+///
+
 #ifndef _GF16_TABS_H_
 #define _GF16_TABS_H_
 
@@ -27,4 +31,4 @@ extern const unsigned char __gf16_mulx2[];
 
 
 
-#endif
+#endif // _GF16_TABS_H_

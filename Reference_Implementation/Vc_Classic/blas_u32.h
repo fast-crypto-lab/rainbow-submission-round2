@@ -1,3 +1,7 @@
+/// @file blas_u32.h
+/// @brief Inlined functions for implementing basic linear algebra functions for uint32 arch.
+///
+
 #ifndef _BLAS_U32_H_
 #define _BLAS_U32_H_
 
@@ -128,4 +132,5 @@ static inline uint8_t _gf16v_dot_u32(const uint8_t *a, const uint8_t *b, unsigne
     return gf16v_reduce_u32(r);
 }
 
-#endif
+#endif // _BLAS_U32_H_
+

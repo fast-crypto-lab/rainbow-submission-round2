@@ -1,3 +1,7 @@
+/// @file blas_comm.c
+/// @brief The standard implementations for blas_comm.h
+///
+
 #include "blas_comm.h"
 #include "blas.h"
 
@@ -25,7 +29,6 @@ void gf256v_set_zero(uint8_t *b, unsigned _num_byte) {
 
 unsigned gf256v_is_zero(const uint8_t *a, unsigned _num_byte) {
     uint8_t r = 0;
-    //for (unsigned i = 0; i < _num_byte; i++) r |= a[i];
     while( _num_byte-- ) { r |= a[0]; a++; }
     return (0 == r);
 }
@@ -236,7 +239,7 @@ unsigned gf256mat_inv( uint8_t * inv_a , const uint8_t * a , unsigned H , uint8_
 ////////////////////////////////////////////////////
 
 
-
+// choosing the implementations depends on the macros _BLAS_AVX2_ and _BLAS_SSE_
 
 
 #if defined( _BLAS_AVX2_ )

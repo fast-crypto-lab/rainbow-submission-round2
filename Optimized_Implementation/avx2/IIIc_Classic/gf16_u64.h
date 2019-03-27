@@ -1,3 +1,7 @@
+/// @file gf16_u64.h
+/// @brief Inlined functions for implementing GF arithmetics for uint64 arch.
+///
+
 #ifndef _GF16_U64_H_
 #define _GF16_U64_H_
 
@@ -186,4 +190,5 @@ static inline uint64_t gf256v_mul_gf16_u64( uint64_t a , unsigned char gf16_b )
 #endif
 
 
-#endif
+#endif // _GF16_U64_H_
+

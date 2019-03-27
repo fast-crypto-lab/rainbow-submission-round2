@@ -1,3 +1,6 @@
+/// @file blas_comm_avx2.c
+/// @brief Implementations for blas_comm_avx2.h
+///
 
 #include "gf16.h"
 
@@ -73,7 +76,7 @@ void gf16mat_prod_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A
 	unsigned n_32 = (n_A_vec_byte>>5);
 	unsigned n_32_rem = n_A_vec_byte&0x1f;
 	{
-		/// last column
+		// last column
 		unsigned i=n_A_width-1;
 		__m128i ml = _mm_load_si128( (__m128i*)( multab + i*16) );
 		__m256i mt = _mm256_inserti128_si256(_mm256_castsi128_si256(ml),ml,1);
@@ -139,7 +142,7 @@ void gf16mat_prod_avx2( uint8_t * c , const uint8_t * mat_a , unsigned a_h_byte 
 	unsigned n_32 = (a_h_byte>>5);
 	unsigned n_32_rem = a_h_byte&0x1f;
 	{
-		/// last column
+		// last column
 		unsigned i=a_w-1;
 		_x[0] = _x[i];
 		__m256i ml = _mm256_broadcastb_epi8( _mm_load_si128((__m128i*)_x) );

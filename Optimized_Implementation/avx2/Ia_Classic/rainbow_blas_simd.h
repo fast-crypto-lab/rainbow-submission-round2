@@ -1,3 +1,6 @@
+/// @file rainbow_blas_simd.h
+///
+///
 #ifndef _RAINBOW_BLAS_SIMD_H_
 #define _RAINBOW_BLAS_SIMD_H_
 
@@ -37,7 +40,7 @@ error here.
 #define gfmat_prod_multab              gf256mat_prod_multab_avx2
 #define batch_quad_trimat_eval_multab  batch_quad_trimat_eval_multab_gf256_avx2
 
-#define batch_quad_trimat_eval_simd         batch_quad_trimat_eval_gf256
+#define batch_quad_trimat_eval_simd         batch_quad_trimat_eval_gf256_avx2
 
 #define batch_trimat_madd_multab    batch_trimat_madd_multab_gf256_avx2
 #define batch_trimatTr_madd_multab  batch_trimatTr_madd_multab_gf256_avx2
@@ -49,5 +52,6 @@ error here.
 #endif
 
 
-#endif
+#endif // _RAINBOW_BLAS_SIMD_H_
+
 

@@ -1,3 +1,7 @@
+/// @file blas_sse.h
+/// @brief Inlined functions for implementing basic linear algebra functions for SSSE3 arch.
+///
+
 #ifndef _BLAS_SSE_H_
 #define _BLAS_SSE_H_
 
@@ -551,4 +555,5 @@ unsigned gf256mat_solve_linear_eq_sse( uint8_t * sol , const uint8_t * inp_mat ,
 
 
 
-#endif
+#endif // _BLAS_SSE_H_
+

@@ -1,3 +1,7 @@
+///  @file parallel_matrix_op_sse.c
+///  @brief the SSSE3 implementations for functions in parallel_matrix_op_sse.h
+///
+///
 
 #include "blas_comm.h"
 #include "blas.h"
@@ -12,11 +16,10 @@
 
 
 
-///  bC += btriA * B
 void batch_trimat_madd_multab_gf16_sse( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void)(size_Bcolvec);  /// unused
+    (void)(size_Bcolvec);  // unused
     unsigned Awidth = Bheight;
     unsigned Aheight = Awidth;
     for(unsigned i=0;i<Aheight;i++) {
@@ -34,7 +37,7 @@ void batch_trimat_madd_multab_gf16_sse( unsigned char * bC , const unsigned char
 void batch_trimat_madd_multab_gf256_sse( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void)(size_Bcolvec);  /// unused
+    (void)(size_Bcolvec);  // unused
     unsigned Awidth = Bheight;
     unsigned Aheight = Awidth;
     for(unsigned i=0;i<Aheight;i++) {
@@ -55,11 +58,10 @@ void batch_trimat_madd_multab_gf256_sse( unsigned char * bC , const unsigned cha
 
 
 
-///  bC += btriA^Tr * B
 void batch_trimatTr_madd_multab_gf16_sse( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void)(size_Bcolvec);  /// unused
+    (void)(size_Bcolvec);  // unused
     unsigned Aheight = Bheight;
     for(unsigned i=0;i<Aheight;i++) {
         for(unsigned j=0;j<Bwidth;j++) {
@@ -75,7 +77,7 @@ void batch_trimatTr_madd_multab_gf16_sse( unsigned char * bC , const unsigned ch
 void batch_trimatTr_madd_multab_gf256_sse( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void)(size_Bcolvec);  /// unused
+    (void)(size_Bcolvec);  // unused
     unsigned Aheight = Bheight;
     for(unsigned i=0;i<Aheight;i++) {
         for(unsigned j=0;j<Bwidth;j++) {
@@ -92,11 +94,10 @@ void batch_trimatTr_madd_multab_gf256_sse( unsigned char * bC , const unsigned c
 
 
 
-///  bC +=  (btriA + btriA^Tr) *B
 void batch_2trimat_madd_multab_gf16_sse( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void)(size_Bcolvec);  /// unused
+    (void)(size_Bcolvec);  // unused
     unsigned Aheight = Bheight;
     for(unsigned i=0;i<Aheight;i++) {
         for(unsigned j=0;j<Bwidth;j++) {
@@ -112,7 +113,7 @@ void batch_2trimat_madd_multab_gf16_sse( unsigned char * bC , const unsigned cha
 void batch_2trimat_madd_multab_gf256_sse( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void)(size_Bcolvec);  /// unused
+    (void)(size_Bcolvec);  // unused
     unsigned Aheight = Bheight;
     for(unsigned i=0;i<Aheight;i++) {
         for(unsigned j=0;j<Bwidth;j++) {
@@ -128,11 +129,10 @@ void batch_2trimat_madd_multab_gf256_sse( unsigned char * bC , const unsigned ch
 
 
 
-/// bC += A^Tr * bB
 void batch_matTr_madd_multab_gf16_sse( unsigned char * bC , const unsigned char* A_to_tr , unsigned Aheight, unsigned size_Acolvec, unsigned Awidth,
         const unsigned char* bB, unsigned Bwidth, unsigned size_batch )
 {
-    (void)(size_Acolvec);  /// unused
+    (void)(size_Acolvec);  // unused
     unsigned Atr_height = Awidth;
     unsigned Atr_width  = Aheight;
     for(unsigned i=0;i<Atr_height;i++) {
@@ -146,7 +146,7 @@ void batch_matTr_madd_multab_gf16_sse( unsigned char * bC , const unsigned char*
 void batch_matTr_madd_multab_gf256_sse( unsigned char * bC , const unsigned char* A_to_tr , unsigned Aheight, unsigned size_Acolvec, unsigned Awidth,
         const unsigned char* bB, unsigned Bwidth, unsigned size_batch )
 {
-    (void)(size_Acolvec);  /// unused
+    (void)(size_Acolvec);  // unused
     unsigned Atr_height = Awidth;
     unsigned Atr_width  = Aheight;
     for(unsigned i=0;i<Atr_height;i++) {
@@ -160,11 +160,10 @@ void batch_matTr_madd_multab_gf256_sse( unsigned char * bC , const unsigned char
 
 
 
-///  bC += bA^Tr * B
 void batch_bmatTr_madd_multab_gf16_sse( unsigned char *bC , const unsigned char *bA_to_tr, unsigned Awidth_before_tr,
         const unsigned char *B, unsigned Bheight, unsigned size_Bcolvec, unsigned Bwidth, unsigned size_batch )
 {
-    (void)(size_Bcolvec);  /// unused
+    (void)(size_Bcolvec);  // unused
     const unsigned char *bA = bA_to_tr;
     unsigned Aheight = Awidth_before_tr;
     for(unsigned i=0;i<Aheight;i++) {
@@ -180,7 +179,7 @@ void batch_bmatTr_madd_multab_gf16_sse( unsigned char *bC , const unsigned char 
 void batch_bmatTr_madd_multab_gf256_sse( unsigned char *bC , const unsigned char *bA_to_tr, unsigned Awidth_before_tr,
         const unsigned char *B, unsigned Bheight, unsigned size_Bcolvec, unsigned Bwidth, unsigned size_batch )
 {
-    (void)(size_Bcolvec);  /// unused
+    (void)(size_Bcolvec);  // unused
     const unsigned char *bA = bA_to_tr;
     unsigned Aheight = Awidth_before_tr;
     for(unsigned i=0;i<Aheight;i++) {
@@ -197,11 +196,10 @@ void batch_bmatTr_madd_multab_gf256_sse( unsigned char *bC , const unsigned char
 
 
 
-///  bC += bA * B
 void batch_mat_madd_multab_gf16_sse( unsigned char * bC , const unsigned char* bA , unsigned Aheight,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void)(size_Bcolvec);  /// unused
+    (void)(size_Bcolvec);  // unused
     unsigned Awidth = Bheight;
     for(unsigned i=0;i<Aheight;i++) {
         for(unsigned j=0;j<Bwidth;j++) {
@@ -217,7 +215,7 @@ void batch_mat_madd_multab_gf16_sse( unsigned char * bC , const unsigned char* b
 void batch_mat_madd_multab_gf256_sse( unsigned char * bC , const unsigned char* bA , unsigned Aheight,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
-    (void)(size_Bcolvec);  /// unused
+    (void)(size_Bcolvec);  // unused
     unsigned Awidth = Bheight;
     for(unsigned i=0;i<Aheight;i++) {
         for(unsigned j=0;j<Bwidth;j++) {
@@ -235,7 +233,8 @@ void batch_mat_madd_multab_gf256_sse( unsigned char * bC , const unsigned char* 
 
 ////////////////////  "quadratric" matrix evaluation  ///////////////////////////////
 
-///  y =  x^Tr * trimat * x
+
+
 
 void batch_quad_trimat_eval_multab_gf16_sse( unsigned char * y, const unsigned char * trimat, const unsigned char * x_multab, unsigned dim , unsigned size_batch )
 {

@@ -1,3 +1,7 @@
+/// @file gf16.h
+/// @brief Library for arithmetics in GF(16) and GF(256)
+///
+
 #ifndef _GF16_H_
 #define _GF16_H_
 
@@ -272,4 +276,5 @@ static inline uint32_t gf256v_mul_gf16_u32(uint32_t a, uint8_t gf16_b) {
     return gf16v_mul_u32(a, gf16_b);
 }
 
-#endif
+#endif // _GF16_H_
+

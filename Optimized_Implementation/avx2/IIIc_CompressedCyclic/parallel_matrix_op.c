@@ -1,3 +1,8 @@
+///  @file parallel_matrix_op.c
+///  @brief the standard implementations for functions in parallel_matrix_op.h
+///
+///  the standard implementations for functions in parallel_matrix_op.h
+///
 
 #include "blas_comm.h"
 #include "blas.h"
@@ -5,12 +10,7 @@
 #include "parallel_matrix_op.h"
 
 
-/////////////////////////////////////////////////
-////  libs for batched matrix operations
-////////////////////////////////////////////////
-
-
-////////////////    triangle matrix <-> rectangle matrix   ///////////////////////////////////
+////////////////    Section: triangle matrix <-> rectangle matrix   ///////////////////////////////////
 
 
 void UpperTrianglize( unsigned char * btriC , const unsigned char * bA , unsigned Awidth, unsigned size_batch )
@@ -28,30 +28,12 @@ void UpperTrianglize( unsigned char * btriC , const unsigned char * bA , unsigne
 }
 
 
-/*
-void trimat_to_recmat( unsigned char * bC , const unsigned char * btriA , const unsigned char* identity_dummy , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
-{
-    unsigned Awidth = Bheight;
-    unsigned Aheight = Awidth;
-    for(unsigned i=0;i<Aheight;i++) {
-        for(unsigned j=0;j<Awidth;j++) {
-            for(unsigned k=0;k<size_batch;k++) bC[k]=0;
-            if(j>=i) for(unsigned k=0;k<size_batch;k++) bC[k] = btriA[(j-i)*size_batch+k];
 
-            bC += size_batch;
-        }
-        btriA += (Aheight-i)*size_batch;
-    }
-}
-*/
+
+/////////////////  Section: matrix multiplications  ///////////////////////////////
 
 
 
-////////////////////  matrix multiplications  ///////////////////////////////
-
-
-
-///  bC += btriA * B
 void batch_trimat_madd_gf16( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
@@ -90,9 +72,6 @@ void batch_trimat_madd_gf256( unsigned char * bC , const unsigned char* btriA ,
 
 
 
-
-
-///  bC += btriA^Tr * B
 void batch_trimatTr_madd_gf16( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
@@ -126,8 +105,6 @@ void batch_trimatTr_madd_gf256( unsigned char * bC , const unsigned char* btriA 
 
 
 
-
-///  bC +=  (btriA + btriA^Tr) *B
 void batch_2trimat_madd_gf16( unsigned char * bC , const unsigned char* btriA ,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
@@ -161,7 +138,6 @@ void batch_2trimat_madd_gf256( unsigned char * bC , const unsigned char* btriA ,
 
 
 
-/// bC += A^Tr * bB
 void batch_matTr_madd_gf16( unsigned char * bC , const unsigned char* A_to_tr , unsigned Aheight, unsigned size_Acolvec, unsigned Awidth,
         const unsigned char* bB, unsigned Bwidth, unsigned size_batch )
 {
@@ -191,7 +167,6 @@ void batch_matTr_madd_gf256( unsigned char * bC , const unsigned char* A_to_tr ,
 
 
 
-///  bC += bA^Tr * B
 void batch_bmatTr_madd_gf16( unsigned char *bC , const unsigned char *bA_to_tr, unsigned Awidth_before_tr,
         const unsigned char *B, unsigned Bheight, unsigned size_Bcolvec, unsigned Bwidth, unsigned size_batch )
 {
@@ -226,7 +201,6 @@ void batch_bmatTr_madd_gf256( unsigned char *bC , const unsigned char *bA_to_tr,
 
 
 
-///  bC += bA * B
 void batch_mat_madd_gf16( unsigned char * bC , const unsigned char* bA , unsigned Aheight,
         const unsigned char* B , unsigned Bheight, unsigned size_Bcolvec , unsigned Bwidth, unsigned size_batch )
 {
@@ -260,14 +234,14 @@ void batch_mat_madd_gf256( unsigned char * bC , const unsigned char* bA , unsign
 
 
 
-////////////////////  "quadratric" matrix evaluation  ///////////////////////////////
+////////////////////  Section: "quadratric" matrix evaluation  ///////////////////////////////
 
 
 
-///  y =  x^Tr * trimat * x
 
 void batch_quad_trimat_eval_gf16( unsigned char * y, const unsigned char * trimat, const unsigned char * x, unsigned dim , unsigned size_batch )
 {
+///
 ///    assert( dim <= 128 );
 ///    assert( size_batch <= 128 );
     unsigned char tmp[256];
@@ -288,8 +262,9 @@ void batch_quad_trimat_eval_gf16( unsigned char * y, const unsigned char * trima
 
 void batch_quad_trimat_eval_gf256( unsigned char * y, const unsigned char * trimat, const unsigned char * x, unsigned dim , unsigned size_batch )
 {
-///    assert( dim <= 128 );
-///    assert( size_batch <= 128 );
+///
+///    assert( dim <= 256 );
+///    assert( size_batch <= 256 );
     unsigned char tmp[256];
 
     unsigned char _x[256];
@@ -311,11 +286,11 @@ void batch_quad_trimat_eval_gf256( unsigned char * y, const unsigned char * trim
 
 
 
-///  z = y^Tr * mat * x
 
 void batch_quad_recmat_eval_gf16( unsigned char * z, const unsigned char * y, unsigned dim_y, const unsigned char * mat,
         const unsigned char * x, unsigned dim_x , unsigned size_batch )
 {
+///
 ///    assert( dim_x <= 128 );
 ///    assert( dim_y <= 128 );
 ///    assert( size_batch <= 128 );
@@ -341,6 +316,7 @@ void batch_quad_recmat_eval_gf16( unsigned char * z, const unsigned char * y, un
 void batch_quad_recmat_eval_gf256( unsigned char * z, const unsigned char * y, unsigned dim_y, const unsigned char * mat,
         const unsigned char * x, unsigned dim_x , unsigned size_batch )
 {
+///
 ///    assert( dim_x <= 128 );
 ///    assert( dim_y <= 128 );
 ///    assert( size_batch <= 128 );
@@ -363,9 +339,4 @@ void batch_quad_recmat_eval_gf256( unsigned char * z, const unsigned char * y, u
 }
 
 
-
-
-////////////////////////////////////////////////////////
-//////  end of lib of matrix ops
-////////////////////////////////////////////////////////
 

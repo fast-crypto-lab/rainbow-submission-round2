@@ -1,12 +1,13 @@
-//
-//  api.h
-//
-//  Created by Bassham, Lawrence E (Fed) on 9/6/17.
-//  Copyright © 2017 Bassham, Lawrence E (Fed). All rights reserved.
-//
-
-
-//   This is a sample 'api.h' for use 'sign.c'
+///
+///  @file api.h
+///
+///  Created by Bassham, Lawrence E (Fed) on 9/6/17.
+///  Copyright © 2017 Bassham, Lawrence E (Fed). All rights reserved.
+///
+///
+///
+///   @brief This is a sample 'api.h' for use 'sign.c'
+///
 
 #ifndef api_h
 #define api_h

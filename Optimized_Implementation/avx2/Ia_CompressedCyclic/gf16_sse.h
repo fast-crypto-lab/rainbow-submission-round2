@@ -1,10 +1,14 @@
+/// @file gf16_sse.h
+/// @brief Inlined functions for implementing GF arithmetics for SSSE3 instruction sets.
+///
+
 #ifndef _GF16_SSE_H_
 #define _GF16_SSE_H_
 
 
 #include "gf16_tabs.h"
 
-
+// tables:
 //extern const unsigned char __mask_low[];
 //extern const unsigned char __mask_16[];
 //extern const unsigned char __gf16_exp[];
@@ -14,11 +18,11 @@
 //extern const unsigned char __gf16_mulx2[];
 
 
-/// SSE2
-#include "emmintrin.h"
+// SSE2
+#include <emmintrin.h>
 
-/// SSSE3
-#include "tmmintrin.h"
+// SSSE3
+#include <tmmintrin.h>
 
 
 
@@ -244,4 +248,5 @@ static inline unsigned char tbl_gf256_get_1st_value( __m128i a ) { return (_mm_e
 
 
 
-#endif
+#endif // _GF16_SSE_H_
+

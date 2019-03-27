@@ -1,3 +1,6 @@
+/// @file gf16_avx2.h
+/// @brief Inlined functions for implementing GF arithmetics for AVX2 instruction sets.
+///
 #ifndef _GF16_AVX2_H_
 #define _GF16_AVX2_H_
 
@@ -15,8 +18,8 @@
 //extern const unsigned char __gf16_mulx2[];
 
 
-/// AVX2
-#include "immintrin.h"
+// AVX2
+#include <immintrin.h>
 
 
 
@@ -131,4 +134,5 @@ static inline __m256i tbl32_gf256_mul( __m256i a , __m256i b )
 
 
 
-#endif
+#endif // _GF16_AVX2_H_
+

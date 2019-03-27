@@ -1,3 +1,6 @@
+///  @file rainbow-sign.c
+///  @brief A command-line tool for signing a file.
+///
 
 #include <stdio.h>
 #include <stdint.h>

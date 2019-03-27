@@ -1,3 +1,7 @@
+/// @file blas_config.h
+/// @brief Defining the machine architecture for blas implementations.
+///
+
 #ifndef _BLASH_CONFIG_H_
 #define _BLASH_CONFIG_H_
 
@@ -8,4 +12,4 @@
 #define NDEBUG
 
 
-#endif
+#endif // _BLAS_CONFIG_H_

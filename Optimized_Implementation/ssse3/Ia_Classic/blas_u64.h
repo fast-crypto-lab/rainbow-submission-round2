@@ -1,3 +1,7 @@
+/// @file blas_u64.h
+/// @brief Inlined functions for implementing basic linear algebra functions for uint64 arch.
+///
+
 #ifndef _BLAS_U64_H_
 #define _BLAS_U64_H_
 
@@ -161,5 +165,6 @@ uint8_t _gf16v_dot_u64( const uint8_t * a, const uint8_t * b , unsigned _num_byt
 
 
 
-#endif
+#endif // _BLAS_U64_H_
+
 

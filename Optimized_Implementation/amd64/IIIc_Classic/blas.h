@@ -1,3 +1,7 @@
+/// @file blas.h
+/// @brief Defining the implementations for linear algebra functions depending on the machine architecture.
+///
+
 #ifndef _BLAS_H_
 #define _BLAS_H_
 
@@ -35,7 +39,5 @@ error here.
 #include "blas_comm.h"
 
 
-
-
-#endif
+#endif // _BLAS_H_
 

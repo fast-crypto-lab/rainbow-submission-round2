@@ -1,3 +1,6 @@
+///  @file rainbow-verify.c
+///  @brief A command-line tool for verifying a signature.
+///
 
 #include <stdio.h>
 #include <string.h>

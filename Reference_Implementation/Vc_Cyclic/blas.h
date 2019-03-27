@@ -1,3 +1,7 @@
+/// @file blas.h
+/// @brief Defining the implementations for linear algebra functions depending on the machine architecture.
+///
+
 #ifndef _BLAS_H_
 #define _BLAS_H_
 
@@ -15,4 +19,5 @@
 #define gf16v_dot _gf16v_dot_u32
 
 
-#endif
+#endif // _BLAS_H_
+
