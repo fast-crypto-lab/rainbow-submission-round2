@@ -1,12 +1,15 @@
+.:
+Alternative_Implementation
 file_description
+Optimized_Implementation
 README.txt
+Reference_Implementation
 
-Optimized_Implementation:
-amd64
+./Alternative_Implementation:
 avx2
 ssse3
 
-Optimized_Implementation/amd64:
+./Alternative_Implementation/avx2:
 genKATs.sh		-- Shell script for generating KATs.
 Ia_Classic
 Ia_CompressedCyclic
@@ -25,28 +28,43 @@ Vc_Classic
 Vc_CompressedCyclic
 Vc_Cyclic
 
-Optimized_Implementation/amd64/Ia_Classic:
+./Alternative_Implementation/avx2/Ia_Classic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
+blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
+blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
+blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
+blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
+blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
+blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
+gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
+gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
+gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
+gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
+parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
+parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow.c		-- code for signing and verifying.
+rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
+rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
+rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
+rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -57,28 +75,43 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/amd64/Ia_CompressedCyclic:
+./Alternative_Implementation/avx2/Ia_CompressedCyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
+blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
+blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
+blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
+blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
+blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
+blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
+gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
+gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
+gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
+gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
+parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
+parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow.c		-- code for signing and verifying.
+rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
+rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
+rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
+rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -89,28 +122,43 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/amd64/Ia_Cyclic:
+./Alternative_Implementation/avx2/Ia_Cyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
+blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
+blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
+blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
+blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
+blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
+blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
+gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
+gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
+gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
+gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
+parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
+parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow.c		-- code for signing and verifying.
+rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
+rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
+rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
+rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -121,28 +169,43 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/amd64/IIIc_Classic:
+./Alternative_Implementation/avx2/IIIc_Classic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
+blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
+blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
+blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
+blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
+blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
+blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
+gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
+gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
+gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
+gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
+parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
+parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow.c		-- code for signing and verifying.
+rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
+rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
+rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
+rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -153,28 +216,43 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/amd64/IIIc_CompressedCyclic:
+./Alternative_Implementation/avx2/IIIc_CompressedCyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
+blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
+blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
+blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
+blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
+blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
+blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
+gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
+gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
+gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
+gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
+parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
+parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow.c		-- code for signing and verifying.
+rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
+rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
+rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
+rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -185,28 +263,43 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/amd64/IIIc_Cyclic:
+./Alternative_Implementation/avx2/IIIc_Cyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
+blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
+blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
+blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
+blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
+blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
+blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
+gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
+gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
+gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
+gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
+parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
+parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow.c		-- code for signing and verifying.
+rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
+rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
+rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
+rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -217,28 +310,43 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/amd64/Vc_Classic:
+./Alternative_Implementation/avx2/Vc_Classic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
+blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
+blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
+blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
+blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
+blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
+blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
+gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
+gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
+gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
+gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
+parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
+parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow.c		-- code for signing and verifying.
+rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
+rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
+rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
+rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -249,28 +357,43 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/amd64/Vc_CompressedCyclic:
+./Alternative_Implementation/avx2/Vc_CompressedCyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
+blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
+blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
+blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
+blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
+blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
+blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
+gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
+gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
+gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
+gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
+parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
+parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow.c		-- code for signing and verifying.
+rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
+rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
+rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
+rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -281,28 +404,43 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/amd64/Vc_Cyclic:
+./Alternative_Implementation/avx2/Vc_Cyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
+blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
+blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
+blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
+blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
+blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
+blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
+gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
+gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
+gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
+gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
+parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
+parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow.c		-- code for signing and verifying.
+rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
+rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
+rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
+rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -313,7 +451,7 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/avx2:
+./Alternative_Implementation/ssse3:
 genKATs.sh		-- Shell script for generating KATs.
 Ia_Classic
 Ia_CompressedCyclic
@@ -332,12 +470,9 @@ Vc_Classic
 Vc_CompressedCyclic
 Vc_Cyclic
 
-Optimized_Implementation/avx2/Ia_Classic:
+./Alternative_Implementation/ssse3/Ia_Classic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
-blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
-blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
-blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
@@ -347,17 +482,16 @@ blas.h		-- Basic Linear Algebra functions.
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
 gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
 gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
-parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
-parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
+parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
+parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
 rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
@@ -379,12 +513,9 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/avx2/Ia_CompressedCyclic:
+./Alternative_Implementation/ssse3/Ia_CompressedCyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
-blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
-blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
-blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
@@ -394,17 +525,16 @@ blas.h		-- Basic Linear Algebra functions.
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
 gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
 gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
-parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
-parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
+parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
+parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
 rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
@@ -426,12 +556,9 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/avx2/Ia_Cyclic:
+./Alternative_Implementation/ssse3/Ia_Cyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
-blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
-blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
-blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
@@ -441,17 +568,16 @@ blas.h		-- Basic Linear Algebra functions.
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
 gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
 gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
-parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
-parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
+parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
+parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
 rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
@@ -473,12 +599,9 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/avx2/IIIc_Classic:
+./Alternative_Implementation/ssse3/IIIc_Classic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
-blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
-blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
-blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
@@ -488,17 +611,16 @@ blas.h		-- Basic Linear Algebra functions.
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
 gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
 gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
-parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
-parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
+parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
+parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
 rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
@@ -520,12 +642,9 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/avx2/IIIc_CompressedCyclic:
+./Alternative_Implementation/ssse3/IIIc_CompressedCyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
-blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
-blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
-blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
@@ -535,17 +654,16 @@ blas.h		-- Basic Linear Algebra functions.
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
 gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
 gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
-parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
-parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
+parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
+parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
 rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
@@ -567,12 +685,9 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/avx2/IIIc_Cyclic:
+./Alternative_Implementation/ssse3/IIIc_Cyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
-blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
-blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
-blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
@@ -582,17 +697,16 @@ blas.h		-- Basic Linear Algebra functions.
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
 gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
 gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
-parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
-parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
+parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
+parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
 rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
@@ -614,12 +728,9 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/avx2/Vc_Classic:
+./Alternative_Implementation/ssse3/Vc_Classic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
-blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
-blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
-blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
@@ -629,17 +740,16 @@ blas.h		-- Basic Linear Algebra functions.
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
 gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
 gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
-parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
-parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
+parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
+parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
 rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
@@ -661,12 +771,9 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/avx2/Vc_CompressedCyclic:
+./Alternative_Implementation/ssse3/Vc_CompressedCyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
-blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
-blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
-blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
@@ -676,17 +783,16 @@ blas.h		-- Basic Linear Algebra functions.
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
 gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
 gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
-parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
-parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
+parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
+parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
 rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
@@ -708,12 +814,9 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/avx2/Vc_Cyclic:
+./Alternative_Implementation/ssse3/Vc_Cyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
-blas_avx2.h		-- Basic Linear Algebra functions, for avx2 instruction set.
-blas_comm_avx2.c		-- Functions for basic linear algebra. avx2 instruction set.
-blas_comm_avx2.h		-- Functions for basic linear algebra. avx2 instruction set.
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
@@ -723,17 +826,16 @@ blas.h		-- Basic Linear Algebra functions.
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16_avx2.h		-- Library for arithmetics in GF(16) and GF(256), for avx2 instruction set.
 gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
 gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
-parallel_matrix_op_avx2.c		-- Parallel matrix multiplications, for avx2 instruction set.
-parallel_matrix_op_avx2.h		-- Parallel matrix multiplications, for avx2 instruction set.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
+parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
+parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
 rainbow_blas_simd.h		-- Macros for BLAS functions used.
 rainbow_config.h		-- Settings for the rainbow.
@@ -755,7 +857,10 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/ssse3:
+./Optimized_Implementation:
+amd64
+
+./Optimized_Implementation/amd64:
 genKATs.sh		-- Shell script for generating KATs.
 Ia_Classic
 Ia_CompressedCyclic
@@ -774,39 +879,28 @@ Vc_Classic
 Vc_CompressedCyclic
 Vc_Cyclic
 
-Optimized_Implementation/ssse3/Ia_Classic:
+./Optimized_Implementation/amd64/Ia_Classic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
-blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
-blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
-blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
-gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
-gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
-parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
-parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow_blas_simd.h		-- Macros for BLAS functions used.
+rainbow.c		-- code for signing and verifying.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
-rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
-rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
-rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -817,39 +911,28 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/ssse3/Ia_CompressedCyclic:
+./Optimized_Implementation/amd64/Ia_CompressedCyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
-blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
-blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
-blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
-gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
-gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
-parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
-parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow_blas_simd.h		-- Macros for BLAS functions used.
+rainbow.c		-- code for signing and verifying.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
-rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
-rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
-rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -860,39 +943,28 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/ssse3/Ia_Cyclic:
+./Optimized_Implementation/amd64/Ia_Cyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
-blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
-blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
-blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
-gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
-gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
-parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
-parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow_blas_simd.h		-- Macros for BLAS functions used.
+rainbow.c		-- code for signing and verifying.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
-rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
-rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
-rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -903,39 +975,28 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/ssse3/IIIc_Classic:
+./Optimized_Implementation/amd64/IIIc_Classic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
-blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
-blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
-blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
-gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
-gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
-parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
-parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow_blas_simd.h		-- Macros for BLAS functions used.
+rainbow.c		-- code for signing and verifying.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
-rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
-rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
-rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -946,39 +1007,28 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/ssse3/IIIc_CompressedCyclic:
+./Optimized_Implementation/amd64/IIIc_CompressedCyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
-blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
-blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
-blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
-gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
-gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
-parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
-parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow_blas_simd.h		-- Macros for BLAS functions used.
+rainbow.c		-- code for signing and verifying.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
-rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
-rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
-rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -989,39 +1039,28 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/ssse3/IIIc_Cyclic:
+./Optimized_Implementation/amd64/IIIc_Cyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
-blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
-blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
-blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
-gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
-gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
-parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
-parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow_blas_simd.h		-- Macros for BLAS functions used.
+rainbow.c		-- code for signing and verifying.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
-rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
-rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
-rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -1032,39 +1071,28 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/ssse3/Vc_Classic:
+./Optimized_Implementation/amd64/Vc_Classic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
-blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
-blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
-blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
-gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
-gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
-parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
-parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow_blas_simd.h		-- Macros for BLAS functions used.
+rainbow.c		-- code for signing and verifying.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
-rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
-rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
-rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -1075,39 +1103,28 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/ssse3/Vc_CompressedCyclic:
+./Optimized_Implementation/amd64/Vc_CompressedCyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
-blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
-blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
-blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
-gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
-gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
-parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
-parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow_blas_simd.h		-- Macros for BLAS functions used.
+rainbow.c		-- code for signing and verifying.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
-rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
-rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
-rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -1118,39 +1135,28 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Optimized_Implementation/ssse3/Vc_Cyclic:
+./Optimized_Implementation/amd64/Vc_Cyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
 blas_comm.h		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
-blas_comm_sse.c		-- Functions for basic linear algebra. ssse3 instruction set.
-blas_comm_sse.h		-- Functions for basic linear algebra. ssse3 instruction set.
 blas_config.h		-- Configure file for choosing instruction set of BLAS functions.
 blas.h		-- Basic Linear Algebra functions.
-blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
-gf16.c		-- Data for arithmetic in GF(16) and GF(256).
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
-gf16_sse.h		-- Library for arithmetics in GF(16) and GF(256), for ssse3 instruction set.
-gf16_tabs.h		-- Tables for Library of arithmetics in GF(16) and GF(256)
 gf16_u64.h		-- Library for arithmetics in GF(16) and GF(256), for amd64
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
 parallel_matrix_op.c		-- the standard implementations for functions in parallel_matrix_op.h
 parallel_matrix_op.h		-- Librarys for operations of batched matrixes.
-parallel_matrix_op_sse.c		-- Parallel matrix multiplications, for ssse3 instruction set.
-parallel_matrix_op_sse.h		-- Parallel matrix multiplications, for ssse3 instruction set.
 rainbow_blas.h		-- Macros for BLAS functions used.
-rainbow_blas_simd.h		-- Macros for BLAS functions used.
+rainbow.c		-- code for signing and verifying.
 rainbow_config.h		-- Settings for the rainbow.
 rainbow.h		-- API for singing and verifying.
 rainbow_keypair.c		-- Implementations for funcitons in rainbow_keypair.h.
 rainbow_keypair_computation.c		-- Implementations for funcitons in rainbow_keypair_computation.h.
 rainbow_keypair_computation.h		-- Functions for computations of keypairs.
-rainbow_keypair_computation_simd.c		-- Functions for computations of keypairs, for SIMD instruction set.
-rainbow_keypair_computation_simd.h		-- Functions for computations of keypairs, for SIMD instruction set.
 rainbow_keypair.h		-- Formats of key pairs and functions for generating key pairs.
-rainbow_simd.c		-- code for signing and verifying, for SIMD instruction set.
 rng.c		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 rng.h		-- DRBG(AES256 CTR) from the example files of NIST PQ submissions.
 sign.c		-- Implementations for functions defined in api.h.
@@ -1161,7 +1167,7 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Reference_Implementation:
+./Reference_Implementation:
 genKATs.sh		-- Shell script for generating KATs.
 Ia_Classic
 Ia_CompressedCyclic
@@ -1180,7 +1186,7 @@ Vc_Classic
 Vc_CompressedCyclic
 Vc_Cyclic
 
-Reference_Implementation/Ia_Classic:
+./Reference_Implementation/Ia_Classic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
@@ -1209,7 +1215,7 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Reference_Implementation/Ia_CompressedCyclic:
+./Reference_Implementation/Ia_CompressedCyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
@@ -1238,7 +1244,7 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Reference_Implementation/Ia_Cyclic:
+./Reference_Implementation/Ia_Cyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
@@ -1267,7 +1273,7 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Reference_Implementation/IIIc_Classic:
+./Reference_Implementation/IIIc_Classic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
@@ -1296,7 +1302,7 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Reference_Implementation/IIIc_CompressedCyclic:
+./Reference_Implementation/IIIc_CompressedCyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
@@ -1325,7 +1331,7 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Reference_Implementation/IIIc_Cyclic:
+./Reference_Implementation/IIIc_Cyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
@@ -1354,7 +1360,7 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Reference_Implementation/Vc_Classic:
+./Reference_Implementation/Vc_Classic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
@@ -1383,7 +1389,7 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Reference_Implementation/Vc_CompressedCyclic:
+./Reference_Implementation/Vc_CompressedCyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.
@@ -1412,7 +1418,7 @@ utils_hash.h		-- The adapter for SHA2 families in openssl.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
-Reference_Implementation/Vc_Cyclic:
+./Reference_Implementation/Vc_Cyclic:
 api_config.h		-- Definitions for the names of the systems.
 api.h		-- API for eBracs
 blas_comm.c		-- Functions for basic linear algebra. Matrix multiplications, Gauss eliminations, etc.

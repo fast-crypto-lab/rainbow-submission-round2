@@ -38,6 +38,13 @@ use the code can be found in Reference_Implementation/README.txt.
 ------------------------------------------------
 Optimized_Implementation
 This folder contains the c-code of our implementations of Rainbow optimized for
-amd64 and avx2 instruction sets. More information on the content of the folder
+amd64 architecture. More information on the content of the folder
 and how to use the code can be found in Optimized_Implementation/amd64/README.txt.
 -----------------------------------------------------
+-----------------------------------------------
+Alternative_Implementation
+This folder contains the c-code of our implementations of Rainbow optimized for
+avx2 and ssse3 instructions. More information on the content of the folder
+and how to use the code can be found in Alternative_Implementation/avx2/README.txt.
+-----------------------------------------------------
+
