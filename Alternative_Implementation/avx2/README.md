@@ -5,8 +5,16 @@ Rainbow Signature system.
 
 #usage:
 
-0. (Optional) Edit rainbow_config.h for setting (V1,O1,O2).
-   The default: (gf(16),32,32,32).
+0. (Optional) Edit the makefile to choose a specific variant to build.
+   For example of building the `Ia_Classic' variant, 
+   set the variable $PROJ_DIR = Ia_Classic in the makefile.
+   It will build the codes in the `Ia_Classic' folder only. No code changes have to be made.
+
+   The default variant is `Ia_Classic' and all possiable variants are 
+   `Ia_Classic',   `Ia_Cyclic',       `Ia_CompressedCyclic', 
+   `IIIc_Classic', `IIIc_Cyclic',     `IIIc_CompressedCyclic',
+   `Vc_Classic',   `Vc_Cyclic',   and `Vc_CompressedCyclic'.
+
 
 1. Make for 3 executables: rainbow-genkey, rainbow-sign, and rainbow-verify .
 
@@ -25,8 +33,4 @@ Rainbow Signature system.
 
 
 
-# (Optional) Use self-defined randomness:
-
-1. Prepare a binary file and add the file name to the command line while executing.
-   The contents of the file are the ``seed of randomness'' used.
 
