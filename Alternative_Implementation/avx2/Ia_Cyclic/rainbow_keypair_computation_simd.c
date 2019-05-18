@@ -11,6 +11,8 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "utils_malloc.h"
+
 
 ////////////////////////////////////////////////////////////////
 
@@ -27,9 +29,9 @@ void calculate_Q_from_F_simd( ext_cpk_t * Qs, const sk_t * Fs , const sk_t * Ts 
     Q_pk.l1_F2s[i] = (F1* T1 + F2) + F1tr * t1
     Q_pk.l1_F5s[i] = UT( T1tr* (F1 * T1 + F2) )
 */
-    unsigned char * t1 = (unsigned char *) aligned_alloc( 32 , _V1*_O1*32 );
-    unsigned char * t2 = (unsigned char *) aligned_alloc( 32 , _V1*_O2*32 );
-    unsigned char * t3 = (unsigned char *) aligned_alloc( 32 , _O1*_O2*32 );
+    unsigned char * t1 = (unsigned char *) adapted_alloc( 32 , _V1*_O1*32 );
+    unsigned char * t2 = (unsigned char *) adapted_alloc( 32 , _V1*_O2*32 );
+    unsigned char * t3 = (unsigned char *) adapted_alloc( 32 , _O1*_O2*32 );
     gfv_generate_multab( t1 , Ts->t1 , _V1*_O1 );
     gfv_generate_multab( t2 , Ts->t4 , _V1*_O2 );
     gfv_generate_multab( t3 , Ts->t3 , _O1*_O2 );
@@ -52,7 +54,7 @@ void calculate_Q_from_F_simd( ext_cpk_t * Qs, const sk_t * Fs , const sk_t * Ts 
     if( _O1_BYTE*_O2*_O2 > size_tempQ ) size_tempQ = _O1_BYTE*_O2*_O2;
     if( _O2_BYTE*_O1*_O1 > size_tempQ ) size_tempQ = _O2_BYTE*_O1*_O1;
     if( _O2_BYTE*_O2*_O2 > size_tempQ ) size_tempQ = _O2_BYTE*_O2*_O2;
-    unsigned char * tempQ = (unsigned char *) aligned_alloc( 32 , size_tempQ + 32 );
+    unsigned char * tempQ = (unsigned char *) adapted_alloc( 32 , size_tempQ + 32 );
 
     memset( tempQ , 0 , _O1_BYTE * _O1 * _O1 );   /// l1_Q5
     batch_matTr_madd_multab( tempQ , t1 , _V1, _V1_BYTE, _O1, Qs->l1_Q2, _O1, _O1_BYTE );  //// t1_tr*(F1*T1 + F2)
@@ -145,9 +147,9 @@ void calculate_Q_from_F_simd( ext_cpk_t * Qs, const sk_t * Fs , const sk_t * Ts 
 
 void calculate_F_from_Q_simd( sk_t * Fs , const sk_t * Qs , sk_t * Ts )
 {
-    unsigned char * t1 = (unsigned char *) aligned_alloc( 32 , _V1*_O1*32 );
-    unsigned char * t4 = (unsigned char *) aligned_alloc( 32 , _V1*_O2*32 );
-    unsigned char * t3 = (unsigned char *) aligned_alloc( 32 , _O1*_O2*32 );
+    unsigned char * t1 = (unsigned char *) adapted_alloc( 32 , _V1*_O1*32 );
+    unsigned char * t4 = (unsigned char *) adapted_alloc( 32 , _V1*_O2*32 );
+    unsigned char * t3 = (unsigned char *) adapted_alloc( 32 , _O1*_O2*32 );
     gfv_generate_multab( t1 , Ts->t1 , _V1*_O1 );
     gfv_generate_multab( t4 , Ts->t4 , _V1*_O2 );
     gfv_generate_multab( t3 , Ts->t3 , _O1*_O2 );
@@ -188,7 +190,7 @@ void calculate_F_from_Q_simd( sk_t * Fs , const sk_t * Qs , sk_t * Ts )
     memcpy( Fs->l2_F2 , Qs->l2_F2 , _O2_BYTE * _V1*_O1 );
     batch_trimat_madd_multab( Fs->l2_F2 , Qs->l2_F1 , t1 , _V1, _V1_BYTE , _O1, _O2_BYTE );    /// Q1_T1+ Q2
 
-    unsigned char * tempQ = (unsigned char *) aligned_alloc( 32 , _O1*_O1*_O2_BYTE + 32 );
+    unsigned char * tempQ = (unsigned char *) adapted_alloc( 32 , _O1*_O1*_O2_BYTE + 32 );
     memset( tempQ , 0 , _O1*_O1*_O2_BYTE );
     //memset( tempQ.l2_F2 , 0 , _V1*_O1 * _O2_BYTE   );  /// the size should be _O1*_O1*_O2_BYTE for the next line. presuming _V1 >= _O1
     batch_matTr_madd_multab( tempQ , t1 , _V1, _V1_BYTE, _O1, Fs->l2_F2, _O1, _O2_BYTE );  //// t1_tr*(Q1_T1+Q2)
@@ -235,9 +237,9 @@ void calculate_Q_from_F_cyclic_simd( cpk_t * Qs, const sk_t * Fs , const sk_t * 
 /*
     Q_pk.l1_F5s[i] = UT( T1tr* (F1 * T1 + F2) )
 */
-    unsigned char * t1 = (unsigned char *) aligned_alloc( 32 , _V1*_O1*32 );
-    unsigned char * t2 = (unsigned char *) aligned_alloc( 32 , _V1*_O2*32 );
-    unsigned char * t3 = (unsigned char *) aligned_alloc( 32 , _O1*_O2*32 );
+    unsigned char * t1 = (unsigned char *) adapted_alloc( 32 , _V1*_O1*32 );
+    unsigned char * t2 = (unsigned char *) adapted_alloc( 32 , _V1*_O2*32 );
+    unsigned char * t3 = (unsigned char *) adapted_alloc( 32 , _O1*_O2*32 );
     gfv_generate_multab( t1 , Ts->t1 , _V1*_O1 );
     gfv_generate_multab( t2 , Ts->t4 , _V1*_O2 );
     gfv_generate_multab( t3 , Ts->t3 , _O1*_O2 );

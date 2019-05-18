@@ -17,6 +17,7 @@
 
 
 #include "utils_prng.h"
+#include "utils_malloc.h"
 
 
 static
@@ -93,7 +94,7 @@ void cpk_to_pk( pk_t * rpk, const cpk_t * cpk )
     // procedure:  cpk_t --> extcpk_t  --> pk_t
 
     // convert from cpk_t to extcpk_t
-    ext_cpk_t * pk = (ext_cpk_t *) aligned_alloc( 32, sizeof(ext_cpk_t) );
+    ext_cpk_t * pk = (ext_cpk_t *) adapted_alloc( 32, sizeof(ext_cpk_t) );
     // setup prng
     prng_t prng0;
     prng_set( &prng0 , cpk->pk_seed , LEN_SKSEED );
@@ -184,7 +185,7 @@ void generate_keypair( pk_t * rpk, sk_t* sk, const unsigned char *sk_seed )
     _generate_secretkey( sk , sk_seed );
 
     // set up a temporary structure ext_cpk_t for calculating public key.
-    ext_cpk_t * pk = (ext_cpk_t*) aligned_alloc( 32 , sizeof(ext_cpk_t) );
+    ext_cpk_t * pk = (ext_cpk_t*) adapted_alloc( 32 , sizeof(ext_cpk_t) );
     calculate_Q_from_F( pk, sk , sk );   // compute the public key in ext_cpk_t format.
     calculate_t4( sk->t4 , sk->t1 , sk->t3 );
 
@@ -246,7 +247,7 @@ void generate_keypair_cyclic( cpk_t * pk, sk_t* sk, const unsigned char *pk_seed
     prng_set( prng0 , sk_seed , LEN_SKSEED );
     generate_S_T( sk->s1 , prng0 );   // S,T:  only a part of sk
 
-    unsigned char * t2 = (unsigned char *) aligned_alloc( 32, sizeof(sk->t4) );
+    unsigned char * t2 = (unsigned char *) adapted_alloc( 32, sizeof(sk->t4) );
     memcpy( t2 , sk->t4 , _V1_BYTE*_O2 );        // temporarily store t2
     calculate_t4( sk->t4 , sk->t1 , sk->t3 );    // t2 <- t4
 
@@ -283,7 +284,7 @@ void generate_compact_keypair_cyclic( cpk_t * pk, csk_t* rsk, const unsigned cha
     memcpy( rsk->pk_seed , pk_seed , LEN_PKSEED );
     memcpy( rsk->sk_seed , sk_seed , LEN_SKSEED );
 
-    sk_t * sk = (sk_t *) aligned_alloc( 32 , sizeof(sk_t) );
+    sk_t * sk = (sk_t *) adapted_alloc( 32 , sizeof(sk_t) );
     generate_keypair_cyclic( pk , sk , pk_seed , sk_seed );
     memset( sk , 0 , sizeof(sk_t) );
     free( sk );    // dispose of sk. don't need to output.

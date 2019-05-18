@@ -72,6 +72,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -119,6 +120,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -166,6 +168,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -213,6 +216,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -260,6 +264,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -307,6 +312,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -354,6 +360,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -401,6 +408,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -448,6 +456,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -510,6 +519,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -553,6 +563,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -596,6 +607,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -639,6 +651,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -682,6 +695,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -725,6 +739,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -768,6 +783,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -811,6 +827,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -854,6 +871,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -908,6 +926,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -940,6 +959,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -972,6 +992,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1004,6 +1025,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1036,6 +1058,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1068,6 +1091,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1100,6 +1124,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1132,6 +1157,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1164,6 +1190,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1212,6 +1239,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1241,6 +1269,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1270,6 +1299,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1299,6 +1329,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1328,6 +1359,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1357,6 +1389,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1386,6 +1419,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1415,6 +1449,7 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
@@ -1444,5 +1479,6 @@ utils.c		-- Implementations for utils.h.
 utils.h		-- Input/Oupput functions.
 utils_hash.c		-- The interfaces for hash functions.
 utils_hash.h		-- The adapter for SHA2 families in openssl.
+utils_malloc.h		-- Interfaces for adapting aligned_alloc or malloc.
 utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.

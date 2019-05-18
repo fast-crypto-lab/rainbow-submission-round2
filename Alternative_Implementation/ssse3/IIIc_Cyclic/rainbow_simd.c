@@ -24,6 +24,7 @@
 
 #include "utils_hash.h"
 
+#include "utils_malloc.h"
 
 #define MAX_ATTEMPT_FRMAT  128
 
@@ -39,9 +40,9 @@
 int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _digest )
 {
     // allocate temporary storage.
-    uint8_t * mat_l1 = aligned_alloc( 32 , _O1*_O1_BYTE );
-    uint8_t * mat_l2 = aligned_alloc( 32 , _O2*_O2_BYTE );
-    uint8_t * mat_buffer = aligned_alloc( 32 , 2*_MAX_O*_MAX_O_BYTE );
+    uint8_t * mat_l1 = adapted_alloc( 32 , _O1*_O1_BYTE );
+    uint8_t * mat_l2 = adapted_alloc( 32 , _O2*_O2_BYTE );
+    uint8_t * mat_buffer = adapted_alloc( 32 , 2*_MAX_O*_MAX_O_BYTE );
 
     // setup PRNG
     prng_t prng_sign;
@@ -74,8 +75,8 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
     batch_quad_trimat_eval_multab( r_l1_F1, sk->l1_F1, multab , _V1, _O1_BYTE );
     batch_quad_trimat_eval_multab( r_l2_F1, sk->l2_F1, multab, _V1, _O2_BYTE );
 
-    uint8_t * mat_l2_F3 = aligned_alloc( 32 , _O2*_O2_BYTE );
-    uint8_t * mat_l2_F2 = aligned_alloc( 32 , _O1*_O2_BYTE );
+    uint8_t * mat_l2_F3 = adapted_alloc( 32 , _O2*_O2_BYTE );
+    uint8_t * mat_l2_F2 = adapted_alloc( 32 , _O1*_O2_BYTE );
     gfmat_prod_multab( mat_l2_F3 , sk->l2_F3 , _O2*_O2_BYTE , _V1 , multab );
     gfmat_prod_multab( mat_l2_F2 , sk->l2_F2 , _O1*_O2_BYTE , _V1 , multab );
 
@@ -202,7 +203,7 @@ int rainbow_verify( const uint8_t * digest , const uint8_t * signature , const p
 
 int rainbow_sign_cyclic( uint8_t * signature , const csk_t * csk , const uint8_t * digest )
 {
-    sk_t * sk = aligned_alloc( 32 , sizeof(sk_t) + 32 );
+    sk_t * sk = adapted_alloc( 32 , sizeof(sk_t) + 32 );
     if( NULL == sk ) return -1;
     generate_secretkey_cyclic( sk, csk->pk_seed , csk->sk_seed );   // generating classic secret key.
 
@@ -213,7 +214,7 @@ int rainbow_sign_cyclic( uint8_t * signature , const csk_t * csk , const uint8_t
 
 int rainbow_verify_cyclic( const uint8_t * digest , const uint8_t * signature , const cpk_t * _pk )
 {
-    pk_t * pk = aligned_alloc( 32 , sizeof(pk_t) + 32 );
+    pk_t * pk = adapted_alloc( 32 , sizeof(pk_t) + 32 );
     if( NULL == pk ) return -1;
     cpk_to_pk( pk , _pk );         // generating classic public key.
 

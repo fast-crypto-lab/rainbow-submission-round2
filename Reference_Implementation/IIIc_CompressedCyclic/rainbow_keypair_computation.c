@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "utils_malloc.h"
 
 ////////////////////////////////////////////////////////////////
 
@@ -125,7 +126,7 @@ void calculate_Q_from_F_ref( ext_cpk_t * Qs, const sk_t * Fs , const sk_t * Ts )
     if( _O1_BYTE*_O2*_O2 > size_tempQ ) size_tempQ = _O1_BYTE*_O2*_O2;
     if( _O2_BYTE*_O1*_O1 > size_tempQ ) size_tempQ = _O2_BYTE*_O1*_O1;
     if( _O2_BYTE*_O2*_O2 > size_tempQ ) size_tempQ = _O2_BYTE*_O2*_O2;
-    unsigned char * tempQ = (unsigned char *) aligned_alloc( 32 , size_tempQ + 32 );
+    unsigned char * tempQ = (unsigned char *) adapted_alloc( 32 , size_tempQ + 32 );
 
     memset( tempQ , 0 , _O1_BYTE * _O1 * _O1 );   // l1_Q5
     batch_matTr_madd( tempQ , Ts->t1 , _V1, _V1_BYTE, _O1, Qs->l1_Q2, _O1, _O1_BYTE );  // t1_tr*(F1*T1 + F2)
@@ -250,7 +251,7 @@ void calculate_F_from_Q_ref( sk_t * Fs , const sk_t * Qs , sk_t * Ts )
     memcpy( Fs->l2_F2 , Qs->l2_F2 , _O2_BYTE * _V1*_O1 );
     batch_trimat_madd( Fs->l2_F2 , Qs->l2_F1 , Ts->t1 , _V1, _V1_BYTE , _O1, _O2_BYTE );    // Q1_T1+ Q2
 
-    unsigned char * tempQ = (unsigned char *) aligned_alloc( 32 , _O1*_O1*_O2_BYTE + 32 );
+    unsigned char * tempQ = (unsigned char *) adapted_alloc( 32 , _O1*_O1*_O2_BYTE + 32 );
     memset( tempQ , 0 , _O1*_O1*_O2_BYTE );
     batch_matTr_madd( tempQ , Ts->t1 , _V1, _V1_BYTE, _O1, Fs->l2_F2, _O1, _O2_BYTE );     // t1_tr*(Q1_T1+Q2)
     memcpy( Fs->l2_F5, Qs->l2_F5, _O2_BYTE * N_TRIANGLE_TERMS(_O1) );                      // F5
