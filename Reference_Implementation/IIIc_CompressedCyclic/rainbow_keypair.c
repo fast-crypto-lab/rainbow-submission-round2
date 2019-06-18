@@ -240,6 +240,7 @@ void generate_secretkey_cyclic( sk_t* sk, const unsigned char *pk_seed , const u
 void generate_keypair_cyclic( cpk_t * pk, sk_t* sk, const unsigned char *pk_seed , const unsigned char *sk_seed )
 {
     memcpy( pk->pk_seed , pk_seed , LEN_PKSEED );
+    memcpy( sk->sk_seed , sk_seed , LEN_SKSEED );
 
     // prng for sk
     prng_t prng;
@@ -263,8 +264,11 @@ void generate_keypair_cyclic( cpk_t * pk, sk_t* sk, const unsigned char *pk_seed
 
     calculate_F_from_Q( sk , Qs , sk );          // calcuate the rest parts of secret key from Qs and S,T
 
+    unsigned char * t4 = (unsigned char *) adapted_alloc( 32, sizeof(sk->t4) );
+    memcpy( t4 , sk->t4 , _V1_BYTE*_O2 );        // temporarily store t4
     memcpy( sk->t4 , t2 , _V1_BYTE*_O2 );        // restore t2
     calculate_Q_from_F_cyclic( pk, sk , sk );    // calculate the rest parts of public key: l1_Q3, l1_Q5, l1_Q6, l1_Q9, l2_Q9
+    memcpy( sk->t4 , t4 , _V1_BYTE*_O2 );        // restore t4
 
     obsfucate_l1_polys( pk->l1_Q3 , Qs->l2_F3 , _V1*_O2 , sk->s1 );
     obsfucate_l1_polys( pk->l1_Q5 , Qs->l2_F5 , N_TRIANGLE_TERMS(_O1) , sk->s1 );
@@ -274,7 +278,9 @@ void generate_keypair_cyclic( cpk_t * pk, sk_t* sk, const unsigned char *pk_seed
     // clean
     memset( &prng , 0 , sizeof(prng_t) );
     memset( t2 , 0 , sizeof(sk->t4) );
+    memset( t4 , 0 , sizeof(sk->t4) );
     free( t2 );
+    free( t4 );
 }
 
 
