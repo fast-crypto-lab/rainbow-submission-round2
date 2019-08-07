@@ -89,6 +89,72 @@ void generate_B1_B2( unsigned char * sk , prng_t * prng0 )
 
 
 
+void rainbow_evaluate_cpk( unsigned char * z, const cpk_t * pk, const unsigned char *w )
+{
+    prng_t prng0;
+    prng_set( &prng0 , pk->pk_seed , LEN_PKSEED );
+
+    // assuming:
+    // 1) _O1_BYTE*(_V1*_O1) is the largest size among l1_O1, l1_Q2, ..... l2_Q1, .... l2_Q9.
+    // 2) 128 >= _O1_BYTE + _O2_BYTE
+#if (_O2*2<(_V1+1))||( _O2>_O1)||(128<_O1_BYTE+_O2_BYTE)
+error: buffer size.
+#endif
+    unsigned char * buffer = (unsigned char *) adapted_alloc( 32 , _O1_BYTE*(_V1*_O1) + 128 );
+    unsigned char * pk_seg = buffer + 128;
+
+    const unsigned char *v1 = w;
+    const unsigned char *o1 = v1 + _V1_BYTE;
+    const unsigned char *o2 = o1 + _O1_BYTE;
+    unsigned char *l1 = z;
+    unsigned char *l2 = l1 + _O1_BYTE;
+
+    prng_gen( &prng0 , pk_seg , _O1_BYTE * N_TRIANGLE_TERMS(_V1) ); // l1_F1
+    batch_quad_trimat_eval( l1 , pk_seg , v1 , _V1 , _O1_BYTE );
+
+    prng_gen( &prng0 , pk_seg , _O1_BYTE * _V1*_O1 );  // l1_F2
+    batch_quad_recmat_eval( buffer , v1 , _V1 , pk_seg , o1 , _O1 , _O1_BYTE );
+    gf256v_add( l1 , buffer , _O1_BYTE );
+
+    batch_quad_recmat_eval( buffer , v1 , _V1 , pk->l1_Q3 , o2 , _O2 , _O1_BYTE );
+    gf256v_add( l1 , buffer , _O1_BYTE );
+
+    batch_quad_trimat_eval( buffer , pk->l1_Q5 , o1 , _O1 , _O1_BYTE );
+    gf256v_add( l1 , buffer , _O1_BYTE );
+
+    batch_quad_recmat_eval( buffer , o1 , _O1 , pk->l1_Q6 , o2 , _O2 , _O1_BYTE );
+    gf256v_add( l1 , buffer , _O1_BYTE );
+
+    batch_quad_trimat_eval( buffer , pk->l1_Q9 , o2 , _O2 , _O1_BYTE );
+    gf256v_add( l1 , buffer , _O1_BYTE );
+
+    // l2
+    prng_gen( &prng0 , pk_seg , _O2_BYTE * N_TRIANGLE_TERMS(_V1) ); // l2_F1
+    batch_quad_trimat_eval( l2 , pk_seg , v1 , _V1 , _O2_BYTE );
+
+    prng_gen( &prng0 , pk_seg , _O2_BYTE * _V1*_O1 ); // l2_F2
+    batch_quad_recmat_eval( buffer , v1 , _V1 , pk_seg , o1 , _O1 , _O2_BYTE );
+    gf256v_add( l2 , buffer , _O2_BYTE );
+
+    prng_gen( &prng0 , pk_seg , _O2_BYTE * _V1*_O2 ); // l2_F3
+    batch_quad_recmat_eval( buffer , v1 , _V1 , pk_seg , o2 , _O2 , _O2_BYTE );
+    gf256v_add( l2 , buffer , _O2_BYTE );
+
+    prng_gen( &prng0 , pk_seg , _O2_BYTE * N_TRIANGLE_TERMS(_O1) ); // l2_F5
+    batch_quad_trimat_eval( buffer , pk_seg , o1 , _O1 , _O2_BYTE );
+    gf256v_add( l2 , buffer , _O2_BYTE );
+
+    prng_gen( &prng0 , pk_seg , _O2_BYTE * _O1*_O2 ); // l2_F6
+    batch_quad_recmat_eval( buffer , o1 , _O1 , pk_seg , o2 , _O2 , _O2_BYTE );
+    gf256v_add( l2 , buffer , _O2_BYTE );
+
+    batch_quad_trimat_eval( buffer , pk->l2_Q9 , o2 , _O2 , _O2_BYTE );
+    gf256v_add( l2 , buffer , _O2_BYTE );
+
+    free( buffer );
+}
+
+
 void cpk_to_pk( pk_t * rpk, const cpk_t * cpk )
 {
     // procedure:  cpk_t --> extcpk_t  --> pk_t
@@ -97,7 +163,7 @@ void cpk_to_pk( pk_t * rpk, const cpk_t * cpk )
     ext_cpk_t * pk = (ext_cpk_t *) adapted_alloc( 32, sizeof(ext_cpk_t) );
     // setup prng
     prng_t prng0;
-    prng_set( &prng0 , cpk->pk_seed , LEN_SKSEED );
+    prng_set( &prng0 , cpk->pk_seed , LEN_PKSEED );
 
     // generating parts of key with prng
     generate_l1_F12( pk->l1_Q1 , &prng0 );

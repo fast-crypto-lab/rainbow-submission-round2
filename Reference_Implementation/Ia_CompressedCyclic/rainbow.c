@@ -204,13 +204,22 @@ int rainbow_sign_cyclic( uint8_t * signature , const csk_t * csk , const uint8_t
 
 int rainbow_verify_cyclic( const uint8_t * digest , const uint8_t * signature , const cpk_t * _pk )
 {
-    pk_t * pk = adapted_alloc( 32 , sizeof(pk_t) + 32 );
-    if( NULL == pk ) return -1;
-    cpk_to_pk( pk , _pk );         // generating classic public key.
+    unsigned char digest_ck[_PUB_M_BYTE];
+    // public_map( digest_ck , pk , signature ); Evaluating the quadratic public polynomials.
+    rainbow_evaluate_cpk( digest_ck , _pk , signature );
 
-    int r = rainbow_verify( digest , signature , pk );
-    free( pk );
-    return r;
+    unsigned char correct[_PUB_M_BYTE];
+    unsigned char digest_salt[_HASH_LEN + _SALT_BYTE];
+    memcpy( digest_salt , digest , _HASH_LEN );
+    memcpy( digest_salt+_HASH_LEN , signature+_PUB_N_BYTE , _SALT_BYTE );
+    hash_msg( correct , _PUB_M_BYTE , digest_salt , _HASH_LEN+_SALT_BYTE );  // H( digest || salt )
+
+    // check consistancy.
+    unsigned char cc = 0;
+    for(unsigned i=0;i<_PUB_M_BYTE;i++) {
+        cc |= (digest_ck[i]^correct[i]);
+    }
+    return (0==cc)? 0: -1;
 }
 
 
