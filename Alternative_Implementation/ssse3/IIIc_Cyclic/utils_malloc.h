@@ -10,6 +10,18 @@
 #include <stdlib.h>
 
 
+#if !defined( _ALIGN_ )
+#if defined(__GNUC__) || defined(__clang__)
+#define _ALIGN_(x)  __attribute__((aligned(x)))
+#elif defined(_MSC_VER)
+#define _ALIGN_(x)  __declspec(align(x))
+#else
+#define _ALIGN_(x)
+#endif
+#endif
+
+
+
 #define _HAS_ALIGNED_ALLOC_
 
 

@@ -40,9 +40,9 @@
 int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _digest )
 {
     // allocate temporary storage.
-    uint8_t * mat_l1 = adapted_alloc( 32 , _O1*_O1_BYTE );
-    uint8_t * mat_l2 = adapted_alloc( 32 , _O2*_O2_BYTE );
-    uint8_t * mat_buffer = adapted_alloc( 32 , 2*_MAX_O*_MAX_O_BYTE );
+    uint8_t _ALIGN_(32) mat_l1[_O1*_O1_BYTE];
+    uint8_t _ALIGN_(32) mat_l2[_O2*_O2_BYTE];
+    uint8_t _ALIGN_(32) mat_buffer[2*_MAX_O*_MAX_O_BYTE];
 
     // setup PRNG
     prng_t prng_sign;
@@ -56,7 +56,7 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
     for(unsigned i=0;i<_HASH_LEN;i++) prng_seed[i] ^= prng_seed[i];                   // clean
 
     // roll vinegars.
-    uint8_t vinegar[_V1_BYTE] __attribute__((aligned(32)));;
+    uint8_t _ALIGN_(32) vinegar[_V1_BYTE];
     unsigned n_attempt = 0;
     unsigned l1_succ = 0;
     while( !l1_succ ) {
@@ -66,17 +66,17 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
         l1_succ = gfmat_inv( mat_l1 , mat_l1 , _O1 , mat_buffer );         // check if the linear equation solvable
         n_attempt ++;
     }
-    uint8_t multab[_V1*2*16] __attribute__((aligned(32)));
+    uint8_t _ALIGN_(32) multab[_V1*2*16];
     gfv_generate_multab( multab , vinegar , _V1 );
 
     // pre-compute variables needed for layer 2
-    uint8_t r_l1_F1[_O1_BYTE]  __attribute__((aligned(32))) = {0};
-    uint8_t r_l2_F1[_O2_BYTE]  __attribute__((aligned(32))) = {0};
+    uint8_t _ALIGN_(32) r_l1_F1[_O1_BYTE] = {0};
+    uint8_t _ALIGN_(32) r_l2_F1[_O2_BYTE] = {0};
     batch_quad_trimat_eval_multab( r_l1_F1, sk->l1_F1, multab , _V1, _O1_BYTE );
     batch_quad_trimat_eval_multab( r_l2_F1, sk->l2_F1, multab, _V1, _O2_BYTE );
 
-    uint8_t * mat_l2_F3 = adapted_alloc( 32 , _O2*_O2_BYTE );
-    uint8_t * mat_l2_F2 = adapted_alloc( 32 , _O1*_O2_BYTE );
+    uint8_t _ALIGN_(32) mat_l2_F3[_O2*_O2_BYTE];
+    uint8_t _ALIGN_(32) mat_l2_F2[_O1*_O2_BYTE];
     gfmat_prod_multab( mat_l2_F3 , sk->l2_F3 , _O2*_O2_BYTE , _V1 , multab );
     gfmat_prod_multab( mat_l2_F2 , sk->l2_F2 , _O1*_O2_BYTE , _V1 , multab );
 
@@ -148,15 +148,15 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
 
     memset( signature , 0 , _SIGNATURE_BYTE );  // set the output 0
     // clean
-    memset( mat_l1 , 0 , _O1*_O1_BYTE );  free( mat_l1 );
-    memset( mat_l2 , 0 , _O2*_O2_BYTE );  free( mat_l2 );
-    memset( mat_buffer , 0 , 2*_MAX_O*_MAX_O_BYTE );  free( mat_buffer );
+    memset( mat_l1 , 0 , _O1*_O1_BYTE );
+    memset( mat_l2 , 0 , _O2*_O2_BYTE );
+    memset( mat_buffer , 0 , 2*_MAX_O*_MAX_O_BYTE );
     memset( &prng_sign , 0 , sizeof(prng_t) );
     memset( vinegar , 0 , _V1_BYTE );
     memset( r_l1_F1 , 0 , _O1_BYTE );
     memset( r_l2_F1 , 0 , _O2_BYTE );
-    memset( mat_l2_F3 , 0 , _O2*_O2_BYTE );  free( mat_l2_F3 );
-    memset( mat_l2_F2 , 0 , _O1*_O2_BYTE );  free( mat_l2_F2 );
+    memset( mat_l2_F3 , 0 , _O2*_O2_BYTE );
+    memset( mat_l2_F2 , 0 , _O1*_O2_BYTE );
     memset( _z , 0 , _PUB_M_BYTE );
     memset( y , 0 , _PUB_M_BYTE );
     memset( x_o1 , 0 , _O1_BYTE );
@@ -171,21 +171,13 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
 }
 
 
-
-
-
-
-
-int rainbow_verify( const uint8_t * digest , const uint8_t * signature , const pk_t * pk )
+static
+int _rainbow_verify( const uint8_t * digest , const uint8_t * salt , const unsigned char * digest_ck )
 {
-    unsigned char digest_ck[_PUB_M_BYTE];
-    // public_map( digest_ck , pk , signature ); Evaluating the quadratic public polynomials.
-    batch_quad_trimat_eval_simd( digest_ck , pk->pk , signature , _PUB_N , _PUB_M_BYTE );
-
     unsigned char correct[_PUB_M_BYTE];
     unsigned char digest_salt[_HASH_LEN + _SALT_BYTE];
     memcpy( digest_salt , digest , _HASH_LEN );
-    memcpy( digest_salt+_HASH_LEN , signature+_PUB_N_BYTE , _SALT_BYTE );
+    memcpy( digest_salt+_HASH_LEN , salt , _SALT_BYTE );
     hash_msg( correct , _PUB_M_BYTE , digest_salt , _HASH_LEN+_SALT_BYTE );  // H( digest || salt )
 
     // check consistancy.
@@ -197,30 +189,39 @@ int rainbow_verify( const uint8_t * digest , const uint8_t * signature , const p
 }
 
 
+int rainbow_verify( const uint8_t * digest , const uint8_t * signature , const pk_t * pk )
+{
+    unsigned char digest_ck[_PUB_M_BYTE];
+    // public_map( digest_ck , pk , signature ); Evaluating the quadratic public polynomials.
+    batch_quad_trimat_eval_simd( digest_ck , pk->pk , signature , _PUB_N , _PUB_M_BYTE );
+
+    return _rainbow_verify( digest , signature+_PUB_N_BYTE , digest_ck );
+}
+
+
 
 ///////////////  cyclic version  ///////////////////////////
 
 
 int rainbow_sign_cyclic( uint8_t * signature , const csk_t * csk , const uint8_t * digest )
 {
-    sk_t * sk = adapted_alloc( 32 , sizeof(sk_t) + 32 );
-    if( NULL == sk ) return -1;
+    sk_t _sk;
+    sk_t * sk = &_sk;
     generate_secretkey_cyclic( sk, csk->pk_seed , csk->sk_seed );   // generating classic secret key.
 
     int r = rainbow_sign( signature , sk , digest );
-    free( sk );
+
+    memset( sk , 0 , sizeof(sk_t) ); // clean
     return r;
 }
 
-int rainbow_verify_cyclic( const uint8_t * digest , const uint8_t * signature , const cpk_t * _pk )
+int rainbow_verify_cyclic( const uint8_t * digest , const uint8_t * signature , const cpk_t * inp_pk )
 {
-    pk_t * pk = adapted_alloc( 32 , sizeof(pk_t) + 32 );
-    if( NULL == pk ) return -1;
-    cpk_to_pk( pk , _pk );         // generating classic public key.
+    pk_t _pk;
+    pk_t * pk = &_pk;
+    cpk_to_pk( pk , inp_pk );         // generating classic public key.
 
-    int r = rainbow_verify( digest , signature , pk );
-    free( pk );
-    return r;
+    return rainbow_verify( digest , signature , pk );
 }
 
 
