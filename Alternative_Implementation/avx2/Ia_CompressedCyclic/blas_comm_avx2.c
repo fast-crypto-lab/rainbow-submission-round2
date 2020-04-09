@@ -50,10 +50,10 @@ void gf16mat_prod_16_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned 
 
 
 void gf16mat_prod_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * multab ) {
-	if( 16 == n_A_vec_byte && (0==(n_A_width&1)) ) { return gf16mat_prod_16_multab_avx2(c,matA,n_A_width,multab); }
+	if( 16 == n_A_vec_byte && (0==(n_A_width&1)) ) { gf16mat_prod_16_multab_avx2(c,matA,n_A_width,multab); return; }
 	assert( n_A_width <= 256 );
 	assert( n_A_vec_byte <= 512 );
-	if( 16 >= n_A_vec_byte ) { return gf16mat_prod_multab_sse(c,matA,n_A_vec_byte,n_A_width,multab); }
+	if( 16 >= n_A_vec_byte ) { gf16mat_prod_multab_sse(c,matA,n_A_vec_byte,n_A_width,multab); return; }
 
 	__m256i mask_f = _mm256_load_si256( (__m256i*)__mask_low);
 
@@ -112,7 +112,7 @@ void gf16mat_prod_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_by
 void gf16mat_prod_avx2( uint8_t * c , const uint8_t * mat_a , unsigned a_h_byte , unsigned a_w , const uint8_t * b ) {
 	assert( a_w <= 256 );
 	assert( a_h_byte <= 512 );
-	if( 16 >= a_h_byte ) { return gf16mat_prod_sse(c,mat_a,a_h_byte,a_w,b); }
+	if( 16 >= a_h_byte ) { gf16mat_prod_sse(c,mat_a,a_h_byte,a_w,b); return; }
 
 	__m256i mask_f = _mm256_load_si256( (__m256i*)__mask_low);
 
@@ -330,7 +330,7 @@ unsigned gf16mat_gauss_elim_avx2( uint8_t * mat , unsigned h , unsigned w )
 void gf256mat_prod_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * multab ) {
 	assert( n_A_width <= 256 );
 	assert( n_A_vec_byte <= 48*48 );
-	if( 16 >= n_A_vec_byte ) { return gf256mat_prod_multab_sse(c,matA,n_A_vec_byte,n_A_width,multab); }
+	if( 16 >= n_A_vec_byte ) { gf256mat_prod_multab_sse(c,matA,n_A_vec_byte,n_A_width,multab); return; }
 
 	__m256i mask_f = _mm256_load_si256((__m256i const *) __mask_low);
 
@@ -373,7 +373,7 @@ void gf256mat_prod_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_b
 	assert( n_A_width <= 256 );
 	assert( n_A_vec_byte <= 48*48 );
 	//if( 256 < n_A_vec_byte ) return gf256mat_prod_no_buffer_avx2(c,matA,n_A_vec_byte,n_A_width,b);
-	if( 16 >= n_A_vec_byte ) { return gf256mat_prod_sse(c,matA,n_A_vec_byte,n_A_width,b); }
+	if( 16 >= n_A_vec_byte ) { gf256mat_prod_sse(c,matA,n_A_vec_byte,n_A_width,b); return; }
 
 	__m256i mask_f = _mm256_load_si256( (__m256i*)__mask_low);
 

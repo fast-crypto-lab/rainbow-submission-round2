@@ -299,7 +299,7 @@ void mq_gf16_n96_m64_vartime_avx2_unalign( uint8_t * z , const uint8_t * pk_mat 
 
 void batch_quad_trimat_eval_gf16_avx2( unsigned char * y, const unsigned char * trimat, const unsigned char * x, unsigned dim , unsigned size_batch )
 {
-    if( 96==dim && 32==size_batch ) { return mq_gf16_n96_m64_vartime_avx2_unalign( y , trimat , x ); }
+    if( 96==dim && 32==size_batch ) { mq_gf16_n96_m64_vartime_avx2_unalign( y , trimat , x ); return; }
     batch_quad_trimat_eval_gf16( y , trimat , x , dim , size_batch );
 }
 
@@ -459,8 +459,8 @@ void mq_gf256_n188_m96_vartime_avx2_unalign( uint8_t * z , const uint8_t * pk_ma
 
 void batch_quad_trimat_eval_gf256_avx2( unsigned char * y, const unsigned char * trimat, const unsigned char * x, unsigned dim , unsigned size_batch )
 {
-    if( 140==dim && 72==size_batch ) { return mq_gf256_n140_m72_vartime_avx2_unalign( y, trimat , x); }
-    if( 188==dim && 96==size_batch ) { return mq_gf256_n188_m96_vartime_avx2_unalign( y, trimat , x); }
+    if( 140==dim && 72==size_batch ) { mq_gf256_n140_m72_vartime_avx2_unalign( y, trimat , x); return; }
+    if( 188==dim && 96==size_batch ) { mq_gf256_n188_m96_vartime_avx2_unalign( y, trimat , x); return; }
     batch_quad_trimat_eval_gf256( y , trimat , x , dim , size_batch );
 }
 
