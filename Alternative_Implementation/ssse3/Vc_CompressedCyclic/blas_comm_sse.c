@@ -389,7 +389,9 @@ void gf256mat_prod_add_sse( __m128i * r , const uint8_t * matA , unsigned n_A_ve
 		n_A_width -= 16;
 	}
 	// last 16 column
-	gf256v_generate_multab_sse( multab , b , 16 );
+	uint8_t b_16[32] __attribute__((aligned(32)));
+	for(unsigned i=0;i<n_A_width;i++) b_16[i]=b[i];
+	gf256v_generate_multab_sse( multab , b_16 , 16 );
 	if(0 == n_A_width ){ return; }
 	if(1 < n_A_width) gf256mat_prod_add_multab_sse( r , matA, n_A_vec_byte , n_A_width - 1 , multab );
 	// last column

@@ -326,7 +326,7 @@ unsigned gf16mat_gauss_elim_avx2( uint8_t * mat , unsigned h , unsigned w )
 
 
 
-
+/// XXX: will access out of matA if n_A_vec_byte is not a multiple of 32.
 void gf256mat_prod_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * multab ) {
 	assert( n_A_width <= 256 );
 	assert( n_A_vec_byte <= 48*48 );
@@ -338,7 +338,7 @@ void gf256mat_prod_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_
 	unsigned n_ymm = ((n_A_vec_byte + 31)>>5);
 	for(unsigned i=0;i<n_ymm;i++) r[i] = _mm256_setzero_si256();
 
-	for(unsigned i=0;i<n_A_width;i++) {
+	if(0 == (n_A_vec_byte&31) ) { for(unsigned i=0;i<n_A_width;i++) {
 		__m256i mt = _mm256_load_si256( (__m256i*)( multab + i*32) );
 		__m256i ml = _mm256_permute2x128_si256(mt,mt,0x00 );
 		__m256i mh = _mm256_permute2x128_si256(mt,mt,0x11 );
@@ -348,6 +348,33 @@ void gf256mat_prod_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_
 			r[j] ^= _mm256_shuffle_epi8( mh , _mm256_srli_epi16(inp,4)&mask_f );
 		}
 		matA += n_A_vec_byte;
+	} } else { for(unsigned i=0;i<n_A_width-1;i++) {
+		__m256i mt = _mm256_load_si256( (__m256i*)( multab + i*32) );
+		__m256i ml = _mm256_permute2x128_si256(mt,mt,0x00 );
+		__m256i mh = _mm256_permute2x128_si256(mt,mt,0x11 );
+		for(unsigned j=0;j<n_ymm;j++) {
+			__m256i inp = _mm256_loadu_si256( (__m256i*)(matA+j*32) );
+			r[j] ^= _mm256_shuffle_epi8( ml , inp&mask_f );
+			r[j] ^= _mm256_shuffle_epi8( mh , _mm256_srli_epi16(inp,4)&mask_f );
+		}
+		matA += n_A_vec_byte;
+		}{
+			unsigned i=n_A_width-1;
+		__m256i mt = _mm256_load_si256( (__m256i*)( multab + i*32) );
+		__m256i ml = _mm256_permute2x128_si256(mt,mt,0x00 );
+		__m256i mh = _mm256_permute2x128_si256(mt,mt,0x11 );
+		for(unsigned j=0;j<n_ymm-1;j++) {
+			__m256i inp = _mm256_loadu_si256( (__m256i*)(matA+j*32) );
+			r[j] ^= _mm256_shuffle_epi8( ml , inp&mask_f );
+			r[j] ^= _mm256_shuffle_epi8( mh , _mm256_srli_epi16(inp,4)&mask_f );
+		}
+			unsigned j=n_ymm-1;
+			uint8_t tmp_mat_col[32] __attribute__((aligned(32)));
+			for(unsigned k=0;k<(n_A_vec_byte&31);k++) tmp_mat_col[k] = matA[k+j*32];
+			__m256i inp = _mm256_load_si256( (__m256i*)tmp_mat_col );
+			r[j] ^= _mm256_shuffle_epi8( ml , inp&mask_f );
+			r[j] ^= _mm256_shuffle_epi8( mh , _mm256_srli_epi16(inp,4)&mask_f );
+		}
 	}
 
 	unsigned n_32 = (n_A_vec_byte>>5);
@@ -392,7 +419,7 @@ void gf256mat_prod_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_b
 		_mm256_store_si256((__m256i*)(x1+i*32),tbl32_gf16_log(i1));
 	}
 
-	for(unsigned i=0;i<n_A_width;i++) {
+	if(0 == (n_A_vec_byte&31) ) { for(unsigned i=0;i<n_A_width;i++) {
 		x0[0] = x0[i]; __m256i m0 = _mm256_broadcastb_epi8( _mm_load_si128((__m128i*)x0) );
 		x1[0] = x1[i]; __m256i m1 = _mm256_broadcastb_epi8( _mm_load_si128((__m128i*)x1) );
 		//__m128i ml = _mm_set1_epi8(x[i]);
@@ -409,6 +436,53 @@ void gf256mat_prod_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_b
 			r[j] ^= ab0 ^ ab2x8 ^ _mm256_slli_epi16( ab1^ab2 , 4 );
 		}
 		matA += n_A_vec_byte;
+	} } else { for(unsigned i=0;i<n_A_width-1;i++) {
+		x0[0] = x0[i]; __m256i m0 = _mm256_broadcastb_epi8( _mm_load_si128((__m128i*)x0) );
+		x1[0] = x1[i]; __m256i m1 = _mm256_broadcastb_epi8( _mm_load_si128((__m128i*)x1) );
+		//__m128i ml = _mm_set1_epi8(x[i]);
+		for(unsigned j=0;j<n_ymm;j++) {
+			__m256i inp = _mm256_loadu_si256( (__m256i*)(matA+j*32) );
+			__m256i l_i0 = tbl32_gf16_log(inp&mask_f);
+			__m256i l_i1 = tbl32_gf16_log(_mm256_srli_epi16(inp,4)&mask_f);
+
+			__m256i ab0 = tbl32_gf16_mul_log_log( l_i0 , m0 , mask_f );
+			__m256i ab1 = tbl32_gf16_mul_log_log( l_i1 , m0 , mask_f )^tbl32_gf16_mul_log_log( l_i0 , m1 , mask_f );
+			__m256i ab2 = tbl32_gf16_mul_log_log( l_i1 , m1 , mask_f );
+			__m256i ab2x8 = tbl32_gf16_mul_0x8( ab2 );
+
+			r[j] ^= ab0 ^ ab2x8 ^ _mm256_slli_epi16( ab1^ab2 , 4 );
+		}
+		matA += n_A_vec_byte;
+		}{
+		unsigned i=n_A_width-1;
+		x0[0] = x0[i]; __m256i m0 = _mm256_broadcastb_epi8( _mm_load_si128((__m128i*)x0) );
+		x1[0] = x1[i]; __m256i m1 = _mm256_broadcastb_epi8( _mm_load_si128((__m128i*)x1) );
+		//__m128i ml = _mm_set1_epi8(x[i]);
+		for(unsigned j=0;j<n_ymm-1;j++) {
+			__m256i inp = _mm256_loadu_si256( (__m256i*)(matA+j*32) );
+			__m256i l_i0 = tbl32_gf16_log(inp&mask_f);
+			__m256i l_i1 = tbl32_gf16_log(_mm256_srli_epi16(inp,4)&mask_f);
+
+			__m256i ab0 = tbl32_gf16_mul_log_log( l_i0 , m0 , mask_f );
+			__m256i ab1 = tbl32_gf16_mul_log_log( l_i1 , m0 , mask_f )^tbl32_gf16_mul_log_log( l_i0 , m1 , mask_f );
+			__m256i ab2 = tbl32_gf16_mul_log_log( l_i1 , m1 , mask_f );
+			__m256i ab2x8 = tbl32_gf16_mul_0x8( ab2 );
+
+			r[j] ^= ab0 ^ ab2x8 ^ _mm256_slli_epi16( ab1^ab2 , 4 );
+		}
+			unsigned j=n_ymm-1;
+			uint8_t tmp_mat_col[32] __attribute__((aligned(32)));
+			for(unsigned k=0;k<(n_A_vec_byte&31);k++) tmp_mat_col[k] = matA[k+j*32];
+			__m256i inp = _mm256_load_si256( (__m256i*)tmp_mat_col );
+			__m256i l_i0 = tbl32_gf16_log(inp&mask_f);
+			__m256i l_i1 = tbl32_gf16_log(_mm256_srli_epi16(inp,4)&mask_f);
+
+			__m256i ab0 = tbl32_gf16_mul_log_log( l_i0 , m0 , mask_f );
+			__m256i ab1 = tbl32_gf16_mul_log_log( l_i1 , m0 , mask_f )^tbl32_gf16_mul_log_log( l_i0 , m1 , mask_f );
+			__m256i ab2 = tbl32_gf16_mul_log_log( l_i1 , m1 , mask_f );
+			__m256i ab2x8 = tbl32_gf16_mul_0x8( ab2 );
+			r[j] ^= ab0 ^ ab2x8 ^ _mm256_slli_epi16( ab1^ab2 , 4 );
+		}
 	}
 
         if( 0 == (n_A_vec_byte & 31 ) ) {

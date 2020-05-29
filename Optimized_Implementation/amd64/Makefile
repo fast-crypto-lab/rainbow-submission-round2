@@ -27,7 +27,7 @@ PROJ_DIR = Ia_Classic
 endif
 
 
-CFLAGS= -O2 -std=c11 -Wall -Wextra -fno-omit-frame-pointer
+CFLAGS= -O3 -std=c11 -Wall -Wextra -fno-omit-frame-pointer
 INCPATH= -I/usr/local/include -I/opt/local/include -I/usr/include -I$(PROJ_DIR)
 LDFLAGS=
 LIBPATH= -L/usr/local/lib -L/opt/local/lib -L/usr/lib

@@ -82,7 +82,7 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
 
     // Some local variables.
     uint8_t _z[_PUB_M_BYTE];
-    uint8_t y[_PUB_M_BYTE];
+    uint8_t y[_PUB_N_BYTE];
     uint8_t * x_v1 = vinegar;
     uint8_t x_o1[_O1_BYTE];
     uint8_t x_o2[_O1_BYTE];
@@ -158,7 +158,7 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
     memset( mat_l2_F3 , 0 , _O2*_O2_BYTE );
     memset( mat_l2_F2 , 0 , _O1*_O2_BYTE );
     memset( _z , 0 , _PUB_M_BYTE );
-    memset( y , 0 , _PUB_M_BYTE );
+    memset( y , 0 , _PUB_N_BYTE );
     memset( x_o1 , 0 , _O1_BYTE );
     memset( x_o2 , 0 , _O2_BYTE );
     memset( temp_o , 0 , sizeof(temp_o) );

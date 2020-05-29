@@ -51,6 +51,13 @@ struct rainbow_extend_publickey {
 ///
 void extcpk_to_pk( pk_t * pk , const ext_cpk_t * cpk );
 
+///
+/// @brief converting formats of public keys : from ext_cpk_t version to pk_t
+///
+/// @param[in,out] pk    - the public key.
+///
+void extcpk_to_pk_inplace( pk_t * pk );
+
 
 /////////////////////////////////////////////////
 

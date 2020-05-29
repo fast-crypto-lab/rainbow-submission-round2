@@ -97,10 +97,12 @@ void rainbow_evaluate_cpk( unsigned char * z, const cpk_t * pk, const unsigned c
     // assuming:
     // 1) _O1_BYTE*(_V1*_O1) is the largest size among l1_O1, l1_Q2, ..... l2_Q1, .... l2_Q9.
     // 2) 128 >= _O1_BYTE + _O2_BYTE
-#if (_O2*2<(_V1+1))||( _O2>_O1)||(128<_O1_BYTE+_O2_BYTE)
+
+#define _BUF_SIZE_1 (((_V1+1)>_O1*2)? _O1_BYTE*(N_TRIANGLE_TERMS(_V1)): _V1*_O1)
+#if ( _O2!=_O1)||(128<_O1_BYTE+_O2_BYTE)
 error: buffer size.
 #endif
-    unsigned char _ALIGN_(32) buffer[_O1_BYTE*(_V1*_O1) + 128];
+    unsigned char _ALIGN_(32) buffer[_BUF_SIZE_1 + 128];
     // align space with pointer arithmetic
     //unsigned char _buffer[32 + _O1_BYTE*(_V1*_O1) + 128];
     //unsigned char * buffer = _buffer + (32 - (((uint64_t)(&_buffer[0]))&31) );

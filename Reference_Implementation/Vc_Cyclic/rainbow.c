@@ -15,7 +15,6 @@
 #include <string.h>
 #include <stdint.h>
 
-
 #include "utils_prng.h"
 #include "utils_hash.h"
 #include "utils_malloc.h"
@@ -36,9 +35,9 @@
 int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _digest )
 {
     // allocate temporary storage.
-    uint8_t * mat_l1 = adapted_alloc( 32 , _O1*_O1_BYTE );
-    uint8_t * mat_l2 = adapted_alloc( 32 , _O2*_O2_BYTE );
-    uint8_t * mat_buffer = adapted_alloc( 32 , 2*_MAX_O*_MAX_O_BYTE );
+    uint8_t mat_l1[_O1*_O1_BYTE];
+    uint8_t mat_l2[_O2*_O2_BYTE];
+    uint8_t mat_buffer[2*_MAX_O*_MAX_O_BYTE];
 
     // setup PRNG
     prng_t prng_sign;
@@ -68,14 +67,14 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
     uint8_t r_l2_F1[_O2_BYTE] = {0};
     batch_quad_trimat_eval( r_l1_F1, sk->l1_F1, vinegar, _V1, _O1_BYTE );
     batch_quad_trimat_eval( r_l2_F1, sk->l2_F1, vinegar, _V1, _O2_BYTE );
-    uint8_t * mat_l2_F3 = adapted_alloc( 32 , _O2*_O2_BYTE );
-    uint8_t * mat_l2_F2 = adapted_alloc( 32 , _O1*_O2_BYTE );
+    uint8_t mat_l2_F3[_O2*_O2_BYTE];
+    uint8_t mat_l2_F2[_O1*_O2_BYTE];
     gfmat_prod( mat_l2_F3 , sk->l2_F3 , _O2*_O2_BYTE , _V1 , vinegar );
     gfmat_prod( mat_l2_F2 , sk->l2_F2 , _O1*_O2_BYTE , _V1 , vinegar );
 
     // Some local variables.
     uint8_t _z[_PUB_M_BYTE];
-    uint8_t y[_PUB_M_BYTE];
+    uint8_t y[_PUB_N_BYTE];
     uint8_t * x_v1 = vinegar;
     uint8_t x_o1[_O1_BYTE];
     uint8_t x_o2[_O1_BYTE];
@@ -138,17 +137,17 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
 
     memset( signature , 0 , _SIGNATURE_BYTE );  // set the output 0
     // clean
-    memset( mat_l1 , 0 , _O1*_O1_BYTE );  free( mat_l1 );
-    memset( mat_l2 , 0 , _O2*_O2_BYTE );  free( mat_l2 );
-    memset( mat_buffer , 0 , 2*_MAX_O*_MAX_O_BYTE );  free( mat_buffer );
+    memset( mat_l1 , 0 , _O1*_O1_BYTE );
+    memset( mat_l2 , 0 , _O2*_O2_BYTE );
+    memset( mat_buffer , 0 , 2*_MAX_O*_MAX_O_BYTE );
     memset( &prng_sign , 0 , sizeof(prng_t) );
     memset( vinegar , 0 , _V1_BYTE );
     memset( r_l1_F1 , 0 , _O1_BYTE );
     memset( r_l2_F1 , 0 , _O2_BYTE );
-    memset( mat_l2_F3 , 0 , _O2*_O2_BYTE );  free( mat_l2_F3 );
-    memset( mat_l2_F2 , 0 , _O1*_O2_BYTE );  free( mat_l2_F2 );
+    memset( mat_l2_F3 , 0 , _O2*_O2_BYTE );
+    memset( mat_l2_F2 , 0 , _O1*_O2_BYTE );
     memset( _z , 0 , _PUB_M_BYTE );
-    memset( y , 0 , _PUB_M_BYTE );
+    memset( y , 0 , _PUB_N_BYTE );
     memset( x_o1 , 0 , _O1_BYTE );
     memset( x_o2 , 0 , _O2_BYTE );
     memset( temp_o , 0 , sizeof(temp_o) );
@@ -161,21 +160,13 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
 }
 
 
-
-
-
-
-
-int rainbow_verify( const uint8_t * digest , const uint8_t * signature , const pk_t * pk )
+static
+int _rainbow_verify( const uint8_t * digest , const uint8_t * salt , const unsigned char * digest_ck )
 {
-    unsigned char digest_ck[_PUB_M_BYTE];
-    // public_map( digest_ck , pk , signature ); Evaluating the quadratic public polynomials.
-    batch_quad_trimat_eval( digest_ck , pk->pk , signature , _PUB_N , _PUB_M_BYTE );
-
     unsigned char correct[_PUB_M_BYTE];
     unsigned char digest_salt[_HASH_LEN + _SALT_BYTE];
     memcpy( digest_salt , digest , _HASH_LEN );
-    memcpy( digest_salt+_HASH_LEN , signature+_PUB_N_BYTE , _SALT_BYTE );
+    memcpy( digest_salt+_HASH_LEN , salt , _SALT_BYTE );
     hash_msg( correct , _PUB_M_BYTE , digest_salt , _HASH_LEN+_SALT_BYTE );  // H( digest || salt )
 
     // check consistancy.
@@ -184,6 +175,16 @@ int rainbow_verify( const uint8_t * digest , const uint8_t * signature , const p
         cc |= (digest_ck[i]^correct[i]);
     }
     return (0==cc)? 0: -1;
+}
+
+
+int rainbow_verify( const uint8_t * digest , const uint8_t * signature , const pk_t * pk )
+{
+    unsigned char digest_ck[_PUB_M_BYTE];
+    // public_map( digest_ck , pk , signature ); Evaluating the quadratic public polynomials.
+    batch_quad_trimat_eval( digest_ck , pk->pk , signature , _PUB_N , _PUB_M_BYTE );
+
+    return _rainbow_verify( digest , signature+_PUB_N_BYTE , digest_ck );
 }
 
 
@@ -193,33 +194,29 @@ int rainbow_verify( const uint8_t * digest , const uint8_t * signature , const p
 
 int rainbow_sign_cyclic( uint8_t * signature , const csk_t * csk , const uint8_t * digest )
 {
-    sk_t * sk = adapted_alloc( 32 , sizeof(sk_t) + 32 );
-    if( NULL == sk ) return -1;
+    sk_t _sk;
+    sk_t * sk = &_sk;
     generate_secretkey_cyclic( sk, csk->pk_seed , csk->sk_seed );   // generating classic secret key.
 
     int r = rainbow_sign( signature , sk , digest );
-    free( sk );
+    memset( sk , 0 , sizeof(sk_t) );  // clean
     return r;
 }
 
 int rainbow_verify_cyclic( const uint8_t * digest , const uint8_t * signature , const cpk_t * _pk )
 {
     unsigned char digest_ck[_PUB_M_BYTE];
+#if defined(_USE_MEMORY_SAVE_)
     // public_map( digest_ck , pk , signature ); Evaluating the quadratic public polynomials.
-    rainbow_evaluate_cpk( digest_ck , _pk , signature );
+    rainbow_evaluate_cpk( digest_ck , _pk , signature ); // use less temporary space.
+#else
+    pk_t _buffer_pk;
+    pk_t * pk = &_buffer_pk;
+    cpk_to_pk( pk , _pk );         // generating classic public key.
+    batch_quad_trimat_eval( digest_ck , pk->pk , signature , _PUB_N , _PUB_M_BYTE );
+#endif
 
-    unsigned char correct[_PUB_M_BYTE];
-    unsigned char digest_salt[_HASH_LEN + _SALT_BYTE];
-    memcpy( digest_salt , digest , _HASH_LEN );
-    memcpy( digest_salt+_HASH_LEN , signature+_PUB_N_BYTE , _SALT_BYTE );
-    hash_msg( correct , _PUB_M_BYTE , digest_salt , _HASH_LEN+_SALT_BYTE );  // H( digest || salt )
-
-    // check consistancy.
-    unsigned char cc = 0;
-    for(unsigned i=0;i<_PUB_M_BYTE;i++) {
-        cc |= (digest_ck[i]^correct[i]);
-    }
-    return (0==cc)? 0: -1;
+    return _rainbow_verify( digest , signature+_PUB_N_BYTE , digest_ck );
 }
 
 

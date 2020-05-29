@@ -97,10 +97,15 @@ void rainbow_evaluate_cpk( unsigned char * z, const cpk_t * pk, const unsigned c
     // assuming:
     // 1) _O1_BYTE*(_V1*_O1) is the largest size among l1_O1, l1_Q2, ..... l2_Q1, .... l2_Q9.
     // 2) 128 >= _O1_BYTE + _O2_BYTE
-#if (_O2*2<(_V1+1))||( _O2>_O1)||(128<_O1_BYTE+_O2_BYTE)
+
+#define _BUF_SIZE_1 (((_V1+1)>_O1*2)? _O1_BYTE*(N_TRIANGLE_TERMS(_V1)): _V1*_O1)
+#if ( _O2!=_O1)||(128<_O1_BYTE+_O2_BYTE)
 error: buffer size.
 #endif
-    unsigned char * buffer = (unsigned char *) adapted_alloc( 32 , _O1_BYTE*(_V1*_O1) + 128 );
+    unsigned char _ALIGN_(32) buffer[_BUF_SIZE_1 + 128];
+    // align space with pointer arithmetic
+    //unsigned char _buffer[32 + _O1_BYTE*(_V1*_O1) + 128];
+    //unsigned char * buffer = _buffer + (32 - (((uint64_t)(&_buffer[0]))&31) );
     unsigned char * pk_seg = buffer + 128;
 
     const unsigned char *v1 = w;
@@ -151,7 +156,6 @@ error: buffer size.
     batch_quad_trimat_eval( buffer , pk->l2_Q9 , o2 , _O2 , _O2_BYTE );
     gf256v_add( l2 , buffer , _O2_BYTE );
 
-    free( buffer );
 }
 
 
@@ -160,7 +164,8 @@ void cpk_to_pk( pk_t * rpk, const cpk_t * cpk )
     // procedure:  cpk_t --> extcpk_t  --> pk_t
 
     // convert from cpk_t to extcpk_t
-    ext_cpk_t * pk = (ext_cpk_t *) adapted_alloc( 32, sizeof(ext_cpk_t) );
+    ext_cpk_t _pk;
+    ext_cpk_t * pk = &_pk;
     // setup prng
     prng_t prng0;
     prng_set( &prng0 , cpk->pk_seed , LEN_PKSEED );
@@ -178,7 +183,6 @@ void cpk_to_pk( pk_t * rpk, const cpk_t * cpk )
     // convert from extcpk_t to pk_t
     extcpk_to_pk( rpk , pk );
 
-    free( pk );
 }
 
 
@@ -251,7 +255,12 @@ void generate_keypair( pk_t * rpk, sk_t* sk, const unsigned char *sk_seed )
     _generate_secretkey( sk , sk_seed );
 
     // set up a temporary structure ext_cpk_t for calculating public key.
-    ext_cpk_t * pk = (ext_cpk_t*) adapted_alloc( 32 , sizeof(ext_cpk_t) );
+#if defined(_USE_MEMORY_SAVE_)
+    ext_cpk_t * pk = (ext_cpk_t *)rpk;
+#else
+    ext_cpk_t _pk;
+    ext_cpk_t * pk = &_pk;
+#endif
     calculate_Q_from_F( pk, sk , sk );   // compute the public key in ext_cpk_t format.
     calculate_t4( sk->t4 , sk->t1 , sk->t3 );
 
@@ -263,8 +272,11 @@ void generate_keypair( pk_t * rpk, sk_t* sk, const unsigned char *sk_seed )
     obsfucate_l1_polys( pk->l1_Q9 , pk->l2_Q9 , N_TRIANGLE_TERMS(_O2) , sk->s1 );
     // so far, the pk contains the full pk but in ext_cpk_t format.
 
+#if defined(_USE_MEMORY_SAVE_)
+    extcpk_to_pk_inplace( rpk );     // convert the public key from ext_cpk_t to pk_t.
+#else
     extcpk_to_pk( rpk , pk );     // convert the public key from ext_cpk_t to pk_t.
-    free( pk );
+#endif
 }
 
 
@@ -277,17 +289,18 @@ void generate_secretkey_cyclic( sk_t* sk, const unsigned char *pk_seed , const u
     memcpy( sk->sk_seed , sk_seed , LEN_SKSEED );
 
     // prng for sk
-    prng_t prng0;
-    prng_set( &prng0 , sk_seed , LEN_SKSEED );
-    generate_S_T( sk->s1 , &prng0 );
+    prng_t _prng;
+    prng_t * prng0 = &_prng;
+    prng_set( prng0 , sk_seed , LEN_SKSEED );
+    generate_S_T( sk->s1 , prng0 );
     calculate_t4( sk->t4 , sk->t1 , sk->t3 );
 
     // prng for pk
     sk_t inst_Qs;
     sk_t * Qs = &inst_Qs;
-    prng_t prng1;
-    prng_set( &prng1 , pk_seed , LEN_PKSEED );
-    generate_B1_B2( Qs->l1_F1 , &prng1 );
+    prng_t * prng1 = &_prng;
+    prng_set( prng1 , pk_seed , LEN_PKSEED );
+    generate_B1_B2( Qs->l1_F1 , prng1 );
 
     obsfucate_l1_polys( Qs->l1_F1 , Qs->l2_F1 , N_TRIANGLE_TERMS(_V1) , sk->s1 );
     obsfucate_l1_polys( Qs->l1_F2 , Qs->l2_F2 , _V1*_O1 , sk->s1 );
@@ -295,8 +308,8 @@ void generate_secretkey_cyclic( sk_t* sk, const unsigned char *pk_seed , const u
     // calcuate the parts of sk according to pk.
     calculate_F_from_Q( sk , Qs , sk );
 
-    // clean prng for sk
-    memset( &prng0 , 0 , sizeof(prng_t) );
+    // clean
+    memset( Qs , 0 , sizeof(sk_t) );  // since Qs has benn modified by sk
 }
 
 
@@ -314,13 +327,16 @@ void generate_keypair_cyclic( cpk_t * pk, sk_t* sk, const unsigned char *pk_seed
     prng_set( prng0 , sk_seed , LEN_SKSEED );
     generate_S_T( sk->s1 , prng0 );   // S,T:  only a part of sk
 
-    unsigned char * t2 = (unsigned char *) adapted_alloc( 32, sizeof(sk->t4) );
+    unsigned char _ALIGN_(32) t2[sizeof(sk->t4)];
+    // align space with pointer arithmetic
+    //unsigned char _t2[sizeof(sk->t4)+32];
+    //unsigned char * t2 = _t2 + (32-(   ((uint64_t)(&_t2[0])) &31));
     memcpy( t2 , sk->t4 , _V1_BYTE*_O2 );        // temporarily store t2
     calculate_t4( sk->t4 , sk->t1 , sk->t3 );    // t2 <- t4
 
     // prng for pk
-    sk_t inst_Qs;
-    sk_t * Qs = &inst_Qs;
+    sk_t _Qs;
+    sk_t * Qs = &_Qs;
     prng_t * prng1 = &prng;
     prng_set( prng1 , pk_seed , LEN_PKSEED );
     generate_B1_B2( Qs->l1_F1 , prng1 );  // generating l1_Q1, l1_Q2, l2_Q1, l2_Q2, l2_Q3, l2_Q5, l2_Q6
@@ -330,7 +346,10 @@ void generate_keypair_cyclic( cpk_t * pk, sk_t* sk, const unsigned char *pk_seed
 
     calculate_F_from_Q( sk , Qs , sk );          // calcuate the rest parts of secret key from Qs and S,T
 
-    unsigned char * t4 = (unsigned char *) adapted_alloc( 32, sizeof(sk->t4) );
+    unsigned char _ALIGN_(32) t4[sizeof(sk->t4)];
+    // align space with pointer arithmetic
+    //unsigned char _t4[sizeof(sk->t4)+32];
+    //unsigned char * t4 = _t4 + (32-(  ((uint64_t)(&_t4[0]))  &31));
     memcpy( t4 , sk->t4 , _V1_BYTE*_O2 );        // temporarily store t4
     memcpy( sk->t4 , t2 , _V1_BYTE*_O2 );        // restore t2
     calculate_Q_from_F_cyclic( pk, sk , sk );    // calculate the rest parts of public key: l1_Q3, l1_Q5, l1_Q6, l1_Q9, l2_Q9
@@ -345,8 +364,6 @@ void generate_keypair_cyclic( cpk_t * pk, sk_t* sk, const unsigned char *pk_seed
     memset( &prng , 0 , sizeof(prng_t) );
     memset( t2 , 0 , sizeof(sk->t4) );
     memset( t4 , 0 , sizeof(sk->t4) );
-    free( t2 );
-    free( t4 );
 }
 
 
@@ -356,10 +373,10 @@ void generate_compact_keypair_cyclic( cpk_t * pk, csk_t* rsk, const unsigned cha
     memcpy( rsk->pk_seed , pk_seed , LEN_PKSEED );
     memcpy( rsk->sk_seed , sk_seed , LEN_SKSEED );
 
-    sk_t * sk = (sk_t *) adapted_alloc( 32 , sizeof(sk_t) );
+    sk_t _sk;
+    sk_t * sk = &_sk;
     generate_keypair_cyclic( pk , sk , pk_seed , sk_seed );
-    memset( sk , 0 , sizeof(sk_t) );
-    free( sk );    // dispose of sk. don't need to output.
+    memset( sk , 0 , sizeof(sk_t) ); // clean
 }
 
 
