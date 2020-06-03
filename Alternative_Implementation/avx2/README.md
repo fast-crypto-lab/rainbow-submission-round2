@@ -42,5 +42,6 @@ Rainbow Signature system.
   rainbow-verify  pk_file_name  signature_file_name  file_name_to_be_signed
 
 
-5. (generate KATs) : The KATs will be copied to corresponding source folders.
+5. (generate KATs) :
   genKATs.sh
+  execute `genKATs.sh'. The KATs will be copied to corresponding source folders.
