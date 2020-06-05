@@ -208,7 +208,7 @@ void calculate_t4( unsigned char * t2_to_t4 , const unsigned char *t1 , const un
 
 
 static
-void obsfucate_l1_polys( unsigned char * l1_polys , const unsigned char * l2_polys , unsigned n_terms , const unsigned char * s1 )
+void obfuscate_l1_polys( unsigned char * l1_polys , const unsigned char * l2_polys , unsigned n_terms , const unsigned char * s1 )
 {
     unsigned char temp[_O1_BYTE + 32];
     while( n_terms-- ) {
@@ -264,12 +264,12 @@ void generate_keypair( pk_t * rpk, sk_t* sk, const unsigned char *sk_seed )
     calculate_Q_from_F( pk, sk , sk );   // compute the public key in ext_cpk_t format.
     calculate_t4( sk->t4 , sk->t1 , sk->t3 );
 
-    obsfucate_l1_polys( pk->l1_Q1 , pk->l2_Q1 , N_TRIANGLE_TERMS(_V1) , sk->s1 );
-    obsfucate_l1_polys( pk->l1_Q2 , pk->l2_Q2 , _V1*_O1 , sk->s1 );
-    obsfucate_l1_polys( pk->l1_Q3 , pk->l2_Q3 , _V1*_O2 , sk->s1 );
-    obsfucate_l1_polys( pk->l1_Q5 , pk->l2_Q5 , N_TRIANGLE_TERMS(_O1) , sk->s1 );
-    obsfucate_l1_polys( pk->l1_Q6 , pk->l2_Q6 , _O1*_O2 , sk->s1 );
-    obsfucate_l1_polys( pk->l1_Q9 , pk->l2_Q9 , N_TRIANGLE_TERMS(_O2) , sk->s1 );
+    obfuscate_l1_polys( pk->l1_Q1 , pk->l2_Q1 , N_TRIANGLE_TERMS(_V1) , sk->s1 );
+    obfuscate_l1_polys( pk->l1_Q2 , pk->l2_Q2 , _V1*_O1 , sk->s1 );
+    obfuscate_l1_polys( pk->l1_Q3 , pk->l2_Q3 , _V1*_O2 , sk->s1 );
+    obfuscate_l1_polys( pk->l1_Q5 , pk->l2_Q5 , N_TRIANGLE_TERMS(_O1) , sk->s1 );
+    obfuscate_l1_polys( pk->l1_Q6 , pk->l2_Q6 , _O1*_O2 , sk->s1 );
+    obfuscate_l1_polys( pk->l1_Q9 , pk->l2_Q9 , N_TRIANGLE_TERMS(_O2) , sk->s1 );
     // so far, the pk contains the full pk but in ext_cpk_t format.
 
 #if defined(_USE_MEMORY_SAVE_)
@@ -302,8 +302,8 @@ void generate_secretkey_cyclic( sk_t* sk, const unsigned char *pk_seed , const u
     prng_set( prng1 , pk_seed , LEN_PKSEED );
     generate_B1_B2( Qs->l1_F1 , prng1 );
 
-    obsfucate_l1_polys( Qs->l1_F1 , Qs->l2_F1 , N_TRIANGLE_TERMS(_V1) , sk->s1 );
-    obsfucate_l1_polys( Qs->l1_F2 , Qs->l2_F2 , _V1*_O1 , sk->s1 );
+    obfuscate_l1_polys( Qs->l1_F1 , Qs->l2_F1 , N_TRIANGLE_TERMS(_V1) , sk->s1 );
+    obfuscate_l1_polys( Qs->l1_F2 , Qs->l2_F2 , _V1*_O1 , sk->s1 );
 
     // calcuate the parts of sk according to pk.
     calculate_F_from_Q( sk , Qs , sk );
@@ -340,8 +340,8 @@ void generate_keypair_cyclic( cpk_t * pk, sk_t* sk, const unsigned char *pk_seed
     prng_t * prng1 = &prng;
     prng_set( prng1 , pk_seed , LEN_PKSEED );
     generate_B1_B2( Qs->l1_F1 , prng1 );  // generating l1_Q1, l1_Q2, l2_Q1, l2_Q2, l2_Q3, l2_Q5, l2_Q6
-    obsfucate_l1_polys( Qs->l1_F1 , Qs->l2_F1 , N_TRIANGLE_TERMS(_V1) , sk->s1 );
-    obsfucate_l1_polys( Qs->l1_F2 , Qs->l2_F2 , _V1*_O1 , sk->s1 );
+    obfuscate_l1_polys( Qs->l1_F1 , Qs->l2_F1 , N_TRIANGLE_TERMS(_V1) , sk->s1 );
+    obfuscate_l1_polys( Qs->l1_F2 , Qs->l2_F2 , _V1*_O1 , sk->s1 );
     // so far, the Qs contains l1_F1, l1_F2, l2_F1, l2_F2, l2_F3, l2_F5, l2_F6.
 
     calculate_F_from_Q( sk , Qs , sk );          // calcuate the rest parts of secret key from Qs and S,T
@@ -355,10 +355,10 @@ void generate_keypair_cyclic( cpk_t * pk, sk_t* sk, const unsigned char *pk_seed
     calculate_Q_from_F_cyclic( pk, sk , sk );    // calculate the rest parts of public key: l1_Q3, l1_Q5, l1_Q6, l1_Q9, l2_Q9
     memcpy( sk->t4 , t4 , _V1_BYTE*_O2 );        // restore t4
 
-    obsfucate_l1_polys( pk->l1_Q3 , Qs->l2_F3 , _V1*_O2 , sk->s1 );
-    obsfucate_l1_polys( pk->l1_Q5 , Qs->l2_F5 , N_TRIANGLE_TERMS(_O1) , sk->s1 );
-    obsfucate_l1_polys( pk->l1_Q6 , Qs->l2_F6 , _O1*_O2 , sk->s1 );
-    obsfucate_l1_polys( pk->l1_Q9 , pk->l2_Q9 , N_TRIANGLE_TERMS(_O2) , sk->s1 );
+    obfuscate_l1_polys( pk->l1_Q3 , Qs->l2_F3 , _V1*_O2 , sk->s1 );
+    obfuscate_l1_polys( pk->l1_Q5 , Qs->l2_F5 , N_TRIANGLE_TERMS(_O1) , sk->s1 );
+    obfuscate_l1_polys( pk->l1_Q6 , Qs->l2_F6 , _O1*_O2 , sk->s1 );
+    obfuscate_l1_polys( pk->l1_Q9 , pk->l2_Q9 , N_TRIANGLE_TERMS(_O2) , sk->s1 );
 
     // clean
     memset( &prng , 0 , sizeof(prng_t) );

@@ -17,6 +17,8 @@
 extern  "C" {
 #endif
 
+/// alignment 1 for sturct
+#pragma pack(push,1)
 
 
 /// @brief public key for classic rainbow
@@ -88,6 +90,9 @@ struct rainbow_secretkey_cyclic {
     unsigned char sk_seed[LEN_SKSEED];   ///< seed for generating a part of secret key.
 } csk_t;
 
+
+/// restores alignment
+#pragma pack(pop)
 
 
 /////////////////////////////////////

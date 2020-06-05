@@ -154,6 +154,8 @@ randombytes_init(unsigned char *entropy_input,
     DRBG_ctx.reseed_counter = 1;
 }
 
+
+#if !defined(_SUPERCOP_)
 int
 randombytes(unsigned char *x, unsigned long long xlen)
 {
@@ -186,6 +188,7 @@ randombytes(unsigned char *x, unsigned long long xlen)
     
     return RNG_SUCCESS;
 }
+#endif
 
 void
 AES256_CTR_DRBG_Update(unsigned char *provided_data,

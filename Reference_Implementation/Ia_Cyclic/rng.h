@@ -18,6 +18,9 @@
 #define RNG_BAD_OUTBUF  -2
 #define RNG_BAD_REQ_LEN -3
 
+//#define _SUPERCOP_
+
+
 typedef struct {
     unsigned char   buffer[16];
     int             buffer_pos;
@@ -52,9 +55,12 @@ randombytes_init(unsigned char *entropy_input,
                  unsigned char *personalization_string,
                  int security_strength);
 
+#if defined(_SUPERCOP_)
+#include "randombytes.h"
+#else
 int
 randombytes(unsigned char *x, unsigned long long xlen);
-
+#endif
 
 
 
