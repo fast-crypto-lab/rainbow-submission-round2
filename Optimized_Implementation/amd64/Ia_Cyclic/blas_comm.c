@@ -170,23 +170,24 @@ unsigned gf256mat_gauss_elim_ref( uint8_t * mat , unsigned h , unsigned w )
 
     for(unsigned i=0;i<h;i++) {
         uint8_t * ai = mat + w*i;
-        unsigned skip_len_align4 = i&(~0x3);
+        //unsigned i_start = i&(~0x3);
+        unsigned i_start = i-(i&3);
 
         for(unsigned j=i+1;j<h;j++) {
             uint8_t * aj = mat + w*j;
 //            gf256v_predicated_add( ai + i , !gf256_is_nonzero(ai[i]) , aj + i , w-i );
-            gf256v_predicated_add( ai + skip_len_align4 , !gf256_is_nonzero(ai[i]) , aj + skip_len_align4 , w - skip_len_align4 );
+            gf256v_predicated_add( ai + i_start , !gf256_is_nonzero(ai[i]) , aj + i_start , w - i_start );
         }
         r8 &= gf256_is_nonzero(ai[i]);
         uint8_t pivot = ai[i];
         pivot = gf256_inv( pivot );
 //        gf256v_mul_scalar( ai + (i+1) , pivot , w - (i+1) );
-        gf256v_mul_scalar( ai + skip_len_align4  , pivot , w - skip_len_align4 );
+        gf256v_mul_scalar( ai + i_start  , pivot , w - i_start );
         for(unsigned j=0;j<h;j++) {
             if(i==j) continue;
             uint8_t * aj = mat + w*j;
 //            gf256v_madd( aj + (i+1) , ai + (i+1) , aj[i] , w - (i+1) );
-            gf256v_madd( aj + skip_len_align4 , ai+skip_len_align4 , aj[i] , w - skip_len_align4 );
+            gf256v_madd( aj + i_start , ai+ i_start , aj[i] , w - i_start );
         }
     }
 
@@ -196,8 +197,8 @@ unsigned gf256mat_gauss_elim_ref( uint8_t * mat , unsigned h , unsigned w )
 static
 unsigned gf256mat_solve_linear_eq_ref( uint8_t * sol , const uint8_t * inp_mat , const uint8_t * c_terms , unsigned n )
 {
-    assert( 63 >= n );
-    uint8_t mat[ 64*64 ];
+    assert( 64 >= n );
+    uint8_t mat[ 64*72 ];
     for(unsigned i=0;i<n;i++) {
     memcpy( mat + i*(n+1) , inp_mat + i*n , n );
     mat[i*(n+1)+n] = c_terms[i];

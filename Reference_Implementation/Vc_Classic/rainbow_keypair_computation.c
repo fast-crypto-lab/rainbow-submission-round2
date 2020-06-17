@@ -206,7 +206,7 @@ void calculate_Q_from_F_ref( ext_cpk_t * Qs, const sk_t * Fs , const sk_t * Ts )
     // l1_Q9 : _O1_BYTE * _O2 * _O2
     // l2_Q5 : _O2_BYTE * _O1 * _O1
     // l2_Q9 : _O2_BYTE * _O2 * _O2
-#define _SIZE_TEMPQ  (_O1_BYTE*_O1*_O1)
+#define _SIZE_TEMPQ  (_O2_BYTE*_O2*_O2)
 #if ( _O1_BYTE*_O2*_O2 > _SIZE_TEMPQ )||( _O2_BYTE*_O1*_O1 > _SIZE_TEMPQ )||( _O2_BYTE*_O2*_O2 > _SIZE_TEMPQ )
 error: incorrect buffer size.
 #endif
@@ -370,12 +370,14 @@ void calculate_Q_from_F_cyclic_ref( cpk_t * Qs, const sk_t * Fs , const sk_t * T
 //  Q_pk.l1_F5s[i] = UT( T1tr* (F1 * T1 + F2) )
     const unsigned char * t2 = Ts->t4;
 
-#define _SIZE_BUFFER_F2 (_O1_BYTE * _V1 * _O1)
+// assuming _O2 >= _O1
+#define _SIZE_BUFFER_F2 (_O2_BYTE * _V1 * _O2)
     unsigned char _ALIGN_(32) buffer_F2[_SIZE_BUFFER_F2];
     memcpy( buffer_F2 , Fs->l1_F2 , _O1_BYTE * _V1 * _O1 );
     batch_trimat_madd( buffer_F2 , Fs->l1_F1 , Ts->t1 , _V1, _V1_BYTE , _O1, _O1_BYTE );      // F1*T1 + F2
 
-#define _SIZE_BUFFER_F3 (_O1_BYTE * _V1 * _O2)
+// assuming _O2 >= _O1
+#define _SIZE_BUFFER_F3 (_O2_BYTE * _V1 * _O2)
     unsigned char _ALIGN_(32) buffer_F3[_SIZE_BUFFER_F3];
     memset( buffer_F3 , 0 , _O1_BYTE * _V1 * _O2 );
     batch_matTr_madd( buffer_F3 , Ts->t1 , _V1, _V1_BYTE, _O1, buffer_F2, _O1, _O1_BYTE );  // T1tr*(F1*T1 + F2) , release buffer_F2
@@ -439,7 +441,6 @@ error: incorrect buffer size.
     memset( buffer_F2 , 0 , _SIZE_BUFFER_F2 );
     memset( buffer_F3 , 0 , _SIZE_BUFFER_F2 );
 }
-
 
 
 ///////////////////////////////////////////////////////////////////////

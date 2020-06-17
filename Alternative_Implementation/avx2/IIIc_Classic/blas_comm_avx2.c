@@ -326,15 +326,14 @@ unsigned gf16mat_gauss_elim_avx2( uint8_t * mat , unsigned h , unsigned w )
 
 
 
-/// XXX: will access out of matA if n_A_vec_byte is not a multiple of 32.
 void gf256mat_prod_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * multab ) {
 	assert( n_A_width <= 256 );
-	assert( n_A_vec_byte <= 48*48 );
+	assert( n_A_vec_byte <= 64*64 );
 	if( 16 >= n_A_vec_byte ) { gf256mat_prod_multab_sse(c,matA,n_A_vec_byte,n_A_width,multab); return; }
 
 	__m256i mask_f = _mm256_load_si256((__m256i const *) __mask_low);
 
-	__m256i r[48*48/32];
+	__m256i r[64*64/32];
 	unsigned n_ymm = ((n_A_vec_byte + 31)>>5);
 	for(unsigned i=0;i<n_ymm;i++) r[i] = _mm256_setzero_si256();
 

@@ -104,8 +104,9 @@ struct rainbow_secretkey_cyclic {
 /// @param[out] pk        - the public key.
 /// @param[out] sk        - the secret key.
 /// @param[in]  sk_seed   - seed for generating the secret key.
+/// @return 0 for success. -1 otherwise.
 ///
-void generate_keypair( pk_t * pk, sk_t* sk, const unsigned char *sk_seed );
+int generate_keypair( pk_t * pk, sk_t* sk, const unsigned char *sk_seed );
 
 ///
 /// @brief Generate key pairs for cyclic rainbow.
@@ -114,8 +115,9 @@ void generate_keypair( pk_t * pk, sk_t* sk, const unsigned char *sk_seed );
 /// @param[out] sk        - the secret key.
 /// @param[in]  pk_seed   - seed for generating parts of public key.
 /// @param[in]  sk_seed   - seed for generating secret key.
+/// @return 0 for success. -1 otherwise.
 ///
-void generate_keypair_cyclic( cpk_t * pk, sk_t* sk, const unsigned char *pk_seed , const unsigned char *sk_seed );
+int generate_keypair_cyclic( cpk_t * pk, sk_t* sk, const unsigned char *pk_seed , const unsigned char *sk_seed );
 
 ///
 /// @brief Generate compressed key pairs for cyclic rainbow.
@@ -124,8 +126,9 @@ void generate_keypair_cyclic( cpk_t * pk, sk_t* sk, const unsigned char *pk_seed
 /// @param[out] sk        - the compressed secret key.
 /// @param[in]  pk_seed   - seed for generating parts of the public key.
 /// @param[in]  sk_seed   - seed for generating the secret key.
+/// @return 0 for success. -1 otherwise.
 ///
-void generate_compact_keypair_cyclic( cpk_t * pk, csk_t* sk, const unsigned char *pk_seed , const unsigned char *sk_seed );
+int generate_compact_keypair_cyclic( cpk_t * pk, csk_t* sk, const unsigned char *pk_seed , const unsigned char *sk_seed );
 
 ////////////////////////////////////
 
@@ -138,13 +141,23 @@ void generate_compact_keypair_cyclic( cpk_t * pk, csk_t* sk, const unsigned char
 void generate_secretkey( sk_t* sk, const unsigned char *sk_seed );
 
 ///
+/// @brief Convert secret key to public key for classic rainbow.
+///
+/// @param[out] pk        - the public key.
+/// @param[in] sk         - the secret key.
+/// @return 0 for success. -1 otherwise.
+///
+int sk_to_pk( pk_t * pk , const sk_t* sk );
+
+///
 /// @brief Generate secret key for cyclic rainbow.
 ///
 /// @param[out] sk        - the secret key.
 /// @param[in]  pk_seed   - seed for generating parts of the pbulic key.
 /// @param[in]  sk_seed   - seed for generating the secret key.
+/// @return 0 for success. -1 otherwise.
 ///
-void generate_secretkey_cyclic( sk_t* sk, const unsigned char *pk_seed , const unsigned char *sk_seed );
+int generate_secretkey_cyclic( sk_t* sk, const unsigned char *pk_seed , const unsigned char *sk_seed );
 
 ////////////////////////////////////
 
@@ -164,7 +177,7 @@ void rainbow_evaluate_cpk( unsigned char * z, const cpk_t * pk, const unsigned c
 /// @param[out] pk       - the classic public key.
 /// @param[in]  cpk      - the cyclic  public key.
 ///
-void cpk_to_pk( pk_t * pk , const cpk_t * cpk );
+int cpk_to_pk( pk_t * pk , const cpk_t * cpk );
 
 
 

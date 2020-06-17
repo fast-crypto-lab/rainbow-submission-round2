@@ -28,24 +28,24 @@ crypto_sign_keypair(unsigned char *pk, unsigned char *sk)
 
 #if defined _RAINBOW_CLASSIC
 
-    generate_keypair( (pk_t*) pk , (sk_t*) sk , sk_seed );
+    int r = generate_keypair( (pk_t*) pk , (sk_t*) sk , sk_seed );
 
 #elif defined _RAINBOW_CYCLIC
 
     unsigned char pk_seed[LEN_PKSEED] = {0};
     randombytes( pk_seed , LEN_PKSEED );
-    generate_keypair_cyclic( (cpk_t*) pk , (sk_t*) sk , pk_seed , sk_seed );
+    int r = generate_keypair_cyclic( (cpk_t*) pk , (sk_t*) sk , pk_seed , sk_seed );
 
 #elif defined _RAINBOW_CYCLIC_COMPRESSED
 
     unsigned char pk_seed[LEN_PKSEED] = {0};
     randombytes( pk_seed , LEN_PKSEED );
-    generate_compact_keypair_cyclic( (cpk_t*) pk , (csk_t*) sk , pk_seed , sk_seed );
+    int r = generate_compact_keypair_cyclic( (cpk_t*) pk , (csk_t*) sk , pk_seed , sk_seed );
 
 #else
 error here
 #endif
-    return 0;
+    return r;
 }
 
 

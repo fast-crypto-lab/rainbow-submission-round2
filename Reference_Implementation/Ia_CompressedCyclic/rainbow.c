@@ -77,7 +77,7 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
     uint8_t y[_PUB_N_BYTE];
     uint8_t * x_v1 = vinegar;
     uint8_t x_o1[_O1_BYTE];
-    uint8_t x_o2[_O1_BYTE];
+    uint8_t x_o2[_O2_BYTE];
 
     uint8_t digest_salt[_HASH_LEN + _SALT_BYTE];
     memcpy( digest_salt , _digest , _HASH_LEN );
@@ -89,7 +89,7 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
         if( MAX_ATTEMPT_FRMAT <= n_attempt ) break;
         // The computation:  H(digest||salt)  -->   z   --S-->   y  --C-map-->   x   --T-->   w
 
-        prng_gen( &prng_sign , salt , _SALT_BYTE );                        // roll the salt
+        prng_gen( &prng_sign , salt , _SALT_BYTE );                        // generate the salt
         hash_msg( _z , _PUB_M_BYTE , digest_salt , _HASH_LEN+_SALT_BYTE ); // H(digest||salt)
 
         //  y = S^-1 * z

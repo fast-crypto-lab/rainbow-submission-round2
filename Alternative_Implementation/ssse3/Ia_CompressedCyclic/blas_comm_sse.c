@@ -348,9 +348,9 @@ void gf256mat_prod_add_multab_sse( __m128i * r , const uint8_t * matA , unsigned
 
 
 void gf256mat_prod_multab_sse( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * multab ) {
-	assert( n_A_vec_byte <= 48*48 );
+	assert( n_A_vec_byte <= 64*64 );
 
-	__m128i r[48*48/16];
+	__m128i r[64*64/16];
 	unsigned n_xmm = ((n_A_vec_byte + 15)>>4);
 	for(unsigned i=0;i<n_xmm;i++) r[i] = _mm_setzero_si128();
 

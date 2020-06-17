@@ -70,7 +70,6 @@ void extcpk_to_pk_inplace( pk_t * pk );
 ///
 void calculate_Q_from_F( ext_cpk_t * Qs, const sk_t * Fs , const sk_t * Ts );
 
-
 ///
 /// @brief Computing parts of the sk from parts of pk and sk
 ///

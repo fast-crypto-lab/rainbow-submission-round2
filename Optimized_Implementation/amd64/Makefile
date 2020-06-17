@@ -34,9 +34,14 @@ LIBPATH= -L/usr/local/lib -L/opt/local/lib -L/usr/lib
 LIBS=    -lcrypto
 
 
-ifeq ($(PROJ_DIR),avx2)
+ifeq ($(shell pwd | tail -c 5),avx2)
 CFLAGS += -mavx2
 CXXFLAGS += -mavx2
+endif
+
+ifeq ($(shell pwd | tail -c 6),ssse3)
+CFLAGS += -mssse3
+CXXFLAGS += -mssse3
 endif
 
 

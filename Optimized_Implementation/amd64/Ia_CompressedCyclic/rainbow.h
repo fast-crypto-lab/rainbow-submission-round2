@@ -21,6 +21,7 @@ extern  "C" {
 /// @param[out] signature - the signature.
 /// @param[in]  sk        - the secret key.
 /// @param[in]  digest    - the digest.
+/// @return 0 for success. -1 otherwise.
 ///
 int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * digest );
 
@@ -41,6 +42,7 @@ int rainbow_verify( const uint8_t * digest , const uint8_t * signature , const p
 /// @param[out] signature - the signature.
 /// @param[in]  sk        - the compressed secret key.
 /// @param[in]  digest    - the digest.
+/// @return 0 for success. -1 otherwise.
 ///
 int rainbow_sign_cyclic( uint8_t * signature , const csk_t * sk , const uint8_t * digest );
 

@@ -16,7 +16,9 @@
 
 ////////////////////////////////////////////////////////////////
 
-
+#if 64 < _V1
+#define _MALLOC_
+#endif
 
 
 
@@ -30,9 +32,15 @@ void calculate_Q_from_F_simd( ext_cpk_t * Qs, const sk_t * Fs , const sk_t * Ts 
     Q_pk.l1_F5s[i] = UT( T1tr* (F1 * T1 + F2) )
 */
     // the size might be large.
+#if defined(_MALLOC_)
     unsigned char * t1 = (unsigned char *) adapted_alloc( 32 , _V1*_O1*32 );
     unsigned char * t2 = (unsigned char *) adapted_alloc( 32 , _V1*_O2*32 );
     unsigned char * t3 = (unsigned char *) adapted_alloc( 32 , _O1*_O2*32 );
+#else
+    unsigned char _ALIGN_(32) t1[_V1*_O1*32];
+    unsigned char _ALIGN_(32) t2[_V1*_O2*32];
+    unsigned char _ALIGN_(32) t3[_O1*_O2*32];
+#endif
     gfv_generate_multab( t1 , Ts->t1 , _V1*_O1 );
     gfv_generate_multab( t2 , Ts->t4 , _V1*_O2 );
     gfv_generate_multab( t3 , Ts->t3 , _O1*_O2 );
@@ -51,7 +59,7 @@ void calculate_Q_from_F_simd( ext_cpk_t * Qs, const sk_t * Fs , const sk_t * Ts 
     /// l1_Q9 : _O1_BYTE * _O2 * _O2
     /// l2_Q5 : _O2_BYTE * _V1 * _O1
     /// l2_Q9 : _O2_BYTE * _V1 * _O2
-#define _SIZE_TEMPQ  (_O1_BYTE*_O1*_O1)
+#define _SIZE_TEMPQ  (_O2_BYTE*_O2*_O2)
 #if ( _O1_BYTE*_O2*_O2 > _SIZE_TEMPQ )||( _O2_BYTE*_O1*_O1 > _SIZE_TEMPQ )||( _O2_BYTE*_O2*_O2 > _SIZE_TEMPQ )
 error: incorrect buffer size.
 #endif
@@ -133,9 +141,11 @@ error: incorrect buffer size.
     memset( t1 , 0 , _V1*_O1*32 );
     memset( t2 , 0 , _V1*_O2*32 );
     memset( t3 , 0 , _O1*_O2*32 );
+#if defined(_MALLOC_)
     free( t1 );
     free( t2 );
     free( t3 );
+#endif
 }
 
 
@@ -148,9 +158,15 @@ error: incorrect buffer size.
 void calculate_F_from_Q_simd( sk_t * Fs , const sk_t * Qs , sk_t * Ts )
 {
     // the size might be large.
+#if defined(_MALLOC_)
     unsigned char * t1 = (unsigned char *) adapted_alloc( 32 , _V1*_O1*32 );
     unsigned char * t4 = (unsigned char *) adapted_alloc( 32 , _V1*_O2*32 );
     unsigned char * t3 = (unsigned char *) adapted_alloc( 32 , _O1*_O2*32 );
+#else
+    unsigned char _ALIGN_(32) t1[_V1*_O1*32];
+    unsigned char _ALIGN_(32) t4[_V1*_O2*32];
+    unsigned char _ALIGN_(32) t3[_O1*_O2*32];
+#endif
     gfv_generate_multab( t1 , Ts->t1 , _V1*_O1 );
     gfv_generate_multab( t4 , Ts->t4 , _V1*_O2 );
     gfv_generate_multab( t3 , Ts->t3 , _O1*_O2 );
@@ -220,9 +236,11 @@ void calculate_F_from_Q_simd( sk_t * Fs , const sk_t * Qs , sk_t * Ts )
     memset( t1 , 0 , _V1*_O1*32 );
     memset( t4 , 0 , _V1*_O2*32 );
     memset( t3 , 0 , _O1*_O2*32 );
+#if defined(_MALLOC_)
     free( t1 );
     free( t4 );
     free( t3 );
+#endif
 }
 
 
@@ -236,20 +254,26 @@ void calculate_Q_from_F_cyclic_simd( cpk_t * Qs, const sk_t * Fs , const sk_t * 
     Q_pk.l1_F5s[i] = UT( T1tr* (F1 * T1 + F2) )
 */
     // the size might be large
+#if defined(_MALLOC_)
     unsigned char * t1 = (unsigned char *) adapted_alloc( 32 , _V1*_O1*32 );
     unsigned char * t2 = (unsigned char *) adapted_alloc( 32 , _V1*_O2*32 );
     unsigned char * t3 = (unsigned char *) adapted_alloc( 32 , _O1*_O2*32 );
+#else
+    unsigned char _ALIGN_(32) t1[_V1*_O1*32];
+    unsigned char _ALIGN_(32) t2[_V1*_O2*32];
+    unsigned char _ALIGN_(32) t3[_O1*_O2*32];
+#endif
     gfv_generate_multab( t1 , Ts->t1 , _V1*_O1 );
     gfv_generate_multab( t2 , Ts->t4 , _V1*_O2 );
     gfv_generate_multab( t3 , Ts->t3 , _O1*_O2 );
 
 
-#define _SIZE_BUFFER_F2 (_O1_BYTE * _V1 * _O1)
+#define _SIZE_BUFFER_F2 (_O2_BYTE * _V1 * _O2)
     unsigned char _ALIGN_(32) buffer_F2[_SIZE_BUFFER_F2];
     memcpy( buffer_F2 , Fs->l1_F2 , _O1_BYTE * _V1 * _O1 );
     batch_trimat_madd_multab( buffer_F2 , Fs->l1_F1 , t1 , _V1, _V1_BYTE , _O1, _O1_BYTE );    /// F1*T1 + F2
 
-#define _SIZE_BUFFER_F3 (_O1_BYTE * _V1 * _O2)
+#define _SIZE_BUFFER_F3 (_O2_BYTE * _V1 * _O2)
     unsigned char _ALIGN_(32) buffer_F3[_SIZE_BUFFER_F3];
     memset( buffer_F3 , 0 , _O1_BYTE * _V1 * _O2 );
     batch_matTr_madd_multab( buffer_F3 , t1 , _V1, _V1_BYTE, _O1, buffer_F2, _O1, _O1_BYTE );  //// T1tr*(F1*T1 + F2)
@@ -313,9 +337,11 @@ error: incorrect buffer size.
     memset( t1 , 0 , _V1*_O1*32 );
     memset( t2 , 0 , _V1*_O2*32 );
     memset( t3 , 0 , _O1*_O2*32 );
+#if defined(_MALLOC_)
     free( t1 );
     free( t2 );
     free( t3 );
+#endif
 }
 
 
