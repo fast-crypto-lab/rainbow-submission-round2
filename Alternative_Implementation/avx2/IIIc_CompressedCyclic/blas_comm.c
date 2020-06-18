@@ -171,7 +171,11 @@ unsigned gf256mat_gauss_elim_ref( uint8_t * mat , unsigned h , unsigned w )
     for(unsigned i=0;i<h;i++) {
         uint8_t * ai = mat + w*i;
         //unsigned i_start = i&(~0x3);
+#if defined( _BLAS_UINT64_ )
+        unsigned i_start = i-(i&7);
+#else
         unsigned i_start = i-(i&3);
+#endif
 
         for(unsigned j=i+1;j<h;j++) {
             uint8_t * aj = mat + w*j;
