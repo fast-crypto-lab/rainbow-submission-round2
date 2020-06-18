@@ -192,8 +192,8 @@ int _rainbow_verify( const uint8_t * digest , const uint8_t * salt , const unsig
 int rainbow_verify( const uint8_t * digest , const uint8_t * signature , const pk_t * pk )
 {
     unsigned char digest_ck[_PUB_M_BYTE];
-    // public_map( digest_ck , pk , signature ); Evaluating the quadratic public polynomials.
-    batch_quad_trimat_eval_simd( digest_ck , pk->pk , signature , _PUB_N , _PUB_M_BYTE );
+    public_map( digest_ck , pk->pk , signature ); //Evaluating the quadratic public polynomials.
+    //batch_quad_trimat_eval_simd( digest_ck , pk->pk , signature , _PUB_N , _PUB_M_BYTE );
 
     return _rainbow_verify( digest , signature+_PUB_N_BYTE , digest_ck );
 }

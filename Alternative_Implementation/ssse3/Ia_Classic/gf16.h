@@ -193,6 +193,12 @@ static inline uint32_t gf16v_squ_u32(uint32_t a) {
     return a2 ^ gf4v_mul_2_u32((a2 >> 2) & 0x33333333);
 }
 
+static inline uint32_t gf16v_mul_4_u32(uint32_t a) {
+    uint32_t a1 = a & 0xcccccccc;
+    uint32_t a0 = (a << 2) & 0xcccccccc;
+    return a0 ^ a1 ^ gf4v_mul_2_u32(a1 >> 2);
+}
+
 static inline uint32_t gf16v_mul_8_u32(uint32_t a) {
     uint32_t a1 = a & 0xcccccccc;
     uint32_t a0 = (a << 2) & 0xcccccccc;
@@ -274,6 +280,36 @@ static inline uint32_t gf256v_squ_u32(uint32_t a) {
 
 static inline uint32_t gf256v_mul_gf16_u32(uint32_t a, uint8_t gf16_b) {
     return gf16v_mul_u32(a, gf16_b);
+}
+
+
+// gf256 := gf16[X]/X^2+X+xy
+static inline uint32_t gf256v_mul_0x10_u32(uint32_t a) {
+    uint32_t a0 = a&0x0f0f0f0f;
+    uint32_t a1 = a&0xf0f0f0f0;
+    uint32_t a1x = gf16v_mul_8_u32(a1>>4);
+    return (a0<<4)^a1^a1x;
+}
+
+static inline uint32_t gf256v_mul_0x20_u32(uint32_t a) {
+    uint32_t a0 = gf4v_mul_2_u32(a&0x0f0f0f0f);
+    uint32_t a1 = gf4v_mul_2_u32(a&0xf0f0f0f0);
+    uint32_t a1x = gf16v_mul_8_u32(a1>>4);
+    return (a0<<4)^a1^a1x;
+}
+
+static inline uint32_t gf256v_mul_0x40_u32(uint32_t a) {
+    uint32_t a0 = gf16v_mul_4_u32(a&0x0f0f0f0f);
+    uint32_t a1 = gf16v_mul_4_u32(a&0xf0f0f0f0);
+    uint32_t a1x = gf16v_mul_8_u32(a1>>4);
+    return (a0<<4)^a1^a1x;
+}
+
+static inline uint32_t gf256v_mul_0x80_u32(uint32_t a) {
+    uint32_t a0 = gf16v_mul_8_u32(a&0x0f0f0f0f);
+    uint32_t a1 = gf16v_mul_8_u32(a&0xf0f0f0f0);
+    uint32_t a1x = gf16v_mul_8_u32(a1>>4);
+    return (a0<<4)^a1^a1x;
 }
 
 #endif // _GF16_H_

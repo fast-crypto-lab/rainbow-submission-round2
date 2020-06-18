@@ -30,6 +30,7 @@ extern  "C" {
 
 static inline
 void _gf256v_add_u64( uint8_t * accu_b, const uint8_t * a , unsigned _num_byte ) {
+	if( ((size_t)accu_b&7)||((size_t)a&7) ){ _gf256v_add_u32(accu_b,a,_num_byte); return; }
 	unsigned n_u64 = _num_byte >> 3;
 	uint64_t * b_u64 = (uint64_t *)accu_b;
 	const uint64_t * a_u64 = (const uint64_t *)a;
@@ -38,12 +39,13 @@ void _gf256v_add_u64( uint8_t * accu_b, const uint8_t * a , unsigned _num_byte )
 	a += (n_u64<<3);
 	accu_b += (n_u64<<3);
 	unsigned rem = _num_byte & 7;
-	if( rem ) _gf256v_add_u32( accu_b , a , rem );
+	if( rem )_gf256v_add_u32( accu_b , a , rem );
 }
 
 
 static inline
 void _gf256v_predicated_add_u64( uint8_t * accu_b, uint8_t predicate , const uint8_t * a , unsigned _num_byte ) {
+	if( ((size_t)accu_b&7)||((size_t)a&7) ){ _gf256v_predicated_add_u32(accu_b,predicate,a,_num_byte); return; }
 	uint64_t pr_u64 = ((uint64_t)0)-((uint64_t)predicate);
 
 	unsigned n_u64 = _num_byte >> 3;
@@ -65,6 +67,7 @@ void _gf256v_predicated_add_u64( uint8_t * accu_b, uint8_t predicate , const uin
 
 static inline
 void _gf16v_mul_scalar_u64( uint8_t * a, uint8_t b , unsigned _num_byte ) {
+	if( (size_t)a&7 ) { _gf16v_mul_scalar_u32(a,b,_num_byte); return; }
 	unsigned _num = _num_byte>>3;
 	uint64_t * a64 = (uint64_t*) a;
 	for(unsigned i=0;i<_num;i++) {
@@ -80,6 +83,7 @@ void _gf16v_mul_scalar_u64( uint8_t * a, uint8_t b , unsigned _num_byte ) {
 
 static inline
 void _gf256v_mul_scalar_u64( uint8_t *a, uint8_t b, unsigned _num_byte ) {
+	if( (size_t)a&7 ) { _gf256v_mul_scalar_u32(a,b,_num_byte); return; }
 	unsigned _num = _num_byte>>3;
 	uint64_t * a64 = (uint64_t*) a;
 	for(unsigned i=0;i<_num;i++) {
@@ -95,6 +99,7 @@ void _gf256v_mul_scalar_u64( uint8_t *a, uint8_t b, unsigned _num_byte ) {
 
 static inline
 void _gf16v_madd_u64( uint8_t * accu_c, const uint8_t * a , uint8_t b, unsigned _num_byte ) {
+	if( ((size_t)a&7)||((size_t)accu_c&7) ) { _gf16v_madd_u32(accu_c,a,b,_num_byte); return; }
 	unsigned _num = _num_byte>>3;
 	const uint64_t * a64 = (const uint64_t*) a;
 	uint64_t * c64 = (uint64_t*) accu_c;
@@ -111,6 +116,7 @@ void _gf16v_madd_u64( uint8_t * accu_c, const uint8_t * a , uint8_t b, unsigned 
 
 static inline
 void _gf256v_madd_u64( uint8_t * accu_c, const uint8_t * a , uint8_t b, unsigned _num_byte ) {
+	if( ((size_t)a&7)||((size_t)accu_c&7) ) { _gf256v_madd_u32(accu_c,a,b,_num_byte); return; }
 	unsigned _num = _num_byte>>3;
 	const uint64_t * a64 = (const uint64_t*) a;
 	uint64_t * c64 = (uint64_t*) accu_c;
