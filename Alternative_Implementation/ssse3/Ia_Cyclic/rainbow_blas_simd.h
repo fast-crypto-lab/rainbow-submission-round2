@@ -22,8 +22,6 @@ error here.
 #define gfmat_prod_multab              gf16mat_prod_multab_sse
 #define batch_quad_trimat_eval_multab  batch_quad_trimat_eval_multab_gf16_sse
 
-#define batch_quad_trimat_eval_simd         batch_quad_trimat_eval_gf16
-
 #define batch_trimat_madd_multab    batch_trimat_madd_multab_gf16_sse
 #define batch_trimatTr_madd_multab  batch_trimatTr_madd_multab_gf16_sse
 #define batch_2trimat_madd_multab   batch_2trimat_madd_multab_gf16_sse
@@ -36,8 +34,6 @@ error here.
 #define gfv_generate_multab            gf256v_generate_multab_sse
 #define gfmat_prod_multab              gf256mat_prod_multab_sse
 #define batch_quad_trimat_eval_multab  batch_quad_trimat_eval_multab_gf256_sse
-
-#define batch_quad_trimat_eval_simd         batch_quad_trimat_eval_gf256
 
 #define batch_trimat_madd_multab    batch_trimat_madd_multab_gf256_sse
 #define batch_trimatTr_madd_multab  batch_trimatTr_madd_multab_gf256_sse

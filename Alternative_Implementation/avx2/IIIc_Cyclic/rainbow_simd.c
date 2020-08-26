@@ -192,8 +192,7 @@ int _rainbow_verify( const uint8_t * digest , const uint8_t * salt , const unsig
 int rainbow_verify( const uint8_t * digest , const uint8_t * signature , const pk_t * pk )
 {
     unsigned char digest_ck[_PUB_M_BYTE];
-    public_map( digest_ck , pk->pk , signature ); //Evaluating the quadratic public polynomials.
-    //batch_quad_trimat_eval_simd( digest_ck , pk->pk , signature , _PUB_N , _PUB_M_BYTE );
+    rainbow_publicmap( digest_ck , pk->pk , signature );
 
     return _rainbow_verify( digest , signature+_PUB_N_BYTE , digest_ck );
 }
@@ -215,13 +214,11 @@ int rainbow_sign_cyclic( uint8_t * signature , const csk_t * csk , const uint8_t
     return r;
 }
 
-int rainbow_verify_cyclic( const uint8_t * digest , const uint8_t * signature , const cpk_t * inp_pk )
+int rainbow_verify_cyclic( const uint8_t * digest , const uint8_t * signature , const cpk_t * pk )
 {
-    pk_t _pk;
-    pk_t * pk = &_pk;
-    cpk_to_pk( pk , inp_pk );         // generating classic public key.
+    unsigned char digest_ck[_PUB_M_BYTE];
+    rainbow_publicmap_cpk( digest_ck , pk , signature );
 
-    return rainbow_verify( digest , signature , pk );
+    return _rainbow_verify( digest , signature+_PUB_N_BYTE , digest_ck );
 }
-
 

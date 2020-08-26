@@ -13,8 +13,6 @@
 #include "rainbow_config.h"
 
 
-void public_map( uint8_t * z , const uint8_t *pk , const uint8_t * x );
-
 
 #ifdef _USE_GF16
 

@@ -163,15 +163,6 @@ int generate_secretkey_cyclic( sk_t* sk, const unsigned char *pk_seed , const un
 
 
 ///
-/// @brief Public-key evaluatuion for cyclic rainbow.
-///
-/// @param[out] z         - results of the evluation of public polynomials at the w.
-/// @param[in]  pk        - the cyclic public key.
-/// @param[in]  w         - the input vector w.
-///
-void rainbow_evaluate_cpk( unsigned char * z, const cpk_t * pk, const unsigned char *w );
-
-///
 /// @brief converting formats of public keys : from cyclic version to classic key
 ///
 /// @param[out] pk       - the classic public key.
@@ -181,6 +172,27 @@ int cpk_to_pk( pk_t * pk , const cpk_t * cpk );
 
 
 
+////////////////////////////////////
+
+
+///
+/// @brief Public-key evaluattion
+///
+/// @param[out] z         - results of the evluation of public polynomials at the w.
+/// @param[in]  pk        - the classic public key.
+/// @param[in]  w         - the input vector w.
+///
+void rainbow_publicmap( unsigned char * z , const unsigned char *pk , const unsigned char * w );
+
+
+///
+/// @brief Public-key evaluation for cyclic rainbow.
+///
+/// @param[out] z         - results of the evluation of public polynomials at the w.
+/// @param[in]  pk        - the cyclic public key.
+/// @param[in]  w         - the input vector w.
+///
+void rainbow_publicmap_cpk( unsigned char * z, const cpk_t * pk, const unsigned char *w );
 
 
 
