@@ -21,7 +21,6 @@
 #define gfv_madd        gf16v_madd
 
 #define gfmat_prod      gf16mat_prod
-#define gfmat_inv       gf16mat_inv
 
 #define batch_trimat_madd    batch_trimat_madd_gf16
 #define batch_trimatTr_madd  batch_trimatTr_madd_gf16
@@ -40,7 +39,6 @@
 #define gfv_madd        gf256v_madd
 
 #define gfmat_prod      gf256mat_prod
-#define gfmat_inv       gf256mat_inv
 
 #define batch_trimat_madd    batch_trimat_madd_gf256
 #define batch_trimatTr_madd  batch_trimatTr_madd_gf256
@@ -52,6 +50,28 @@
 #define batch_quad_trimat_eval batch_quad_trimat_eval_gf256
 #define batch_quad_recmat_eval batch_quad_recmat_eval_gf256
 
+#endif
+
+
+
+
+#if defined( _RAINBOW16_36_32_32 )
+
+#define gfmat_inv       gf16mat_inv_32x32
+#define gfmat_solve_linear_eq       gf16mat_solve_linear_eq_32x32
+
+#elif defined( _RAINBOW256_68_32_48 )
+
+#define gfmat_inv       gf256mat_inv_32x32
+#define gfmat_solve_linear_eq       gf256mat_solve_linear_eq_48x48
+
+#elif defined( _RAINBOW256_96_36_64 )
+
+#define gfmat_inv       gf256mat_inv_36x36
+#define gfmat_solve_linear_eq       gf256mat_solve_linear_eq_64x64
+
+#else
+error here.
 #endif
 
 

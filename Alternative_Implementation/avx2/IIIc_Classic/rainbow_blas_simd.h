@@ -15,6 +15,7 @@ error here.
 
 #include "gf16_avx2.h"
 #include "blas_avx2.h"
+#include "blas_matrix_avx2.h"
 
 #include "parallel_matrix_op_avx2.h"
 

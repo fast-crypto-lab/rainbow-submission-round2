@@ -37,7 +37,6 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
     // allocate temporary storage.
     uint8_t mat_l1[_O1*_O1_BYTE];
     uint8_t mat_l2[_O2*_O2_BYTE];
-    uint8_t mat_buffer[2*_MAX_O*_MAX_O_BYTE];
 
     // setup PRNG
     prng_t prng_sign;
@@ -58,7 +57,7 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
         if( MAX_ATTEMPT_FRMAT <= n_attempt ) break;
         prng_gen( &prng_sign , vinegar , _V1_BYTE );                       // generating vinegars
         gfmat_prod( mat_l1 , sk->l1_F2 , _O1*_O1_BYTE , _V1 , vinegar );   // generating the linear equations for layer 1
-        l1_succ = gfmat_inv( mat_l1 , mat_l1 , _O1 , mat_buffer );         // check if the linear equation solvable
+        l1_succ = gfmat_inv( mat_l1 , mat_l1 );         // check if the linear equation solvable
         n_attempt ++;
     }
 
@@ -89,7 +88,7 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
         if( MAX_ATTEMPT_FRMAT <= n_attempt ) break;
         // The computation:  H(digest||salt)  -->   z   --S-->   y  --C-map-->   x   --T-->   w
 
-        prng_gen( &prng_sign , salt , _SALT_BYTE );                        // roll the salt
+        prng_gen( &prng_sign , salt , _SALT_BYTE );                        // generate the salt
         hash_msg( _z , _PUB_M_BYTE , digest_salt , _HASH_LEN+_SALT_BYTE ); // H(digest||salt)
 
         //  y = S^-1 * z
@@ -114,8 +113,8 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
         // generate the linear equations of the 2nd layer
         gfmat_prod( mat_l2 , sk->l2_F6 , _O2*_O2_BYTE , _O1 , x_o1 );   // F6
         gf256v_add( mat_l2 , mat_l2_F3 , _O2*_O2_BYTE);                 // F3
-        succ = gfmat_inv( mat_l2 , mat_l2 , _O2 , mat_buffer );
-        gfmat_prod( x_o2 , mat_l2 , _O2_BYTE , _O2 , temp_o );         // solve l2 eqs
+
+        succ = gfmat_solve_linear_eq( x_o2 , mat_l2 , temp_o );
 
         n_attempt ++;
     };
@@ -139,7 +138,6 @@ int rainbow_sign( uint8_t * signature , const sk_t * sk , const uint8_t * _diges
     // clean
     memset( mat_l1 , 0 , _O1*_O1_BYTE );
     memset( mat_l2 , 0 , _O2*_O2_BYTE );
-    memset( mat_buffer , 0 , 2*_MAX_O*_MAX_O_BYTE );
     memset( &prng_sign , 0 , sizeof(prng_t) );
     memset( vinegar , 0 , _V1_BYTE );
     memset( r_l1_F1 , 0 , _O1_BYTE );

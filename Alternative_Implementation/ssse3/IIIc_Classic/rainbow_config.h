@@ -1,8 +1,8 @@
 /// @file rainbow_config.h
 /// @brief Defining the parameters of the Rainbow and the corresponding constants.
 ///
-/// Defining one of the 3 parameter _RAINBOW16_32_32_32 , _RAINBOW256_68_36_36 , or _RAINBOW256_92_48_48
-/// for (GF16,32,32,32) (GF256,68,36,36) (GF256,92,48,48) in this file.
+/// Defining one of the 3 parameter _RAINBOW16_36_32_32 , _RAINBOW256_68_32_48 , or _RAINBOW256_96_36_64
+/// for (GF16,36,32,32) (GF256,68,32,48) (GF256,96,32,64) in this file.
 ///
 ///
 

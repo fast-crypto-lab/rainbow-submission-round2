@@ -12,6 +12,7 @@ error here.
 
 #include "gf16_sse.h"
 #include "blas_sse.h"
+#include "blas_matrix_sse.h"
 
 #include "parallel_matrix_op_sse.h"
 

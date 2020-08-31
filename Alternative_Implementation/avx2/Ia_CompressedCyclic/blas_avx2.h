@@ -178,68 +178,6 @@ void gf256v_madd_avx2( uint8_t * accu_c, const uint8_t * a , uint8_t _b, unsigne
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-
-
-
-static inline
-uint8_t gf16v_dot_avx2( const uint8_t * a , const uint8_t * b , unsigned n_byte )
-{
-	uint8_t v1[32] __attribute__((aligned(32)));
-	uint8_t v2[32] __attribute__((aligned(32)));
-	uint8_t v3[32] __attribute__((aligned(32)));
-
-	unsigned n_xmm = n_byte>>4;
-	unsigned n_rem = n_byte&15;
-	__m256i r = _mm256_setzero_si256();
-	for(unsigned i=0;i<n_xmm;i++) {
-		__m128i inp1 = _mm_loadu_si128(  (__m128i*)(a+i*16) );
-		__m128i inp2 = _mm_loadu_si128(  (__m128i*)(b+i*16) );
-		gf16v_split_16to32_sse( (__m128i *)v1 , inp1 );
-		gf16v_split_16to32_sse( (__m128i *)v2 , inp2 );
-		r ^= tbl32_gf16_mul( _mm256_load_si256( (__m256i*)(v1) ) , _mm256_load_si256( (__m256i*)(v2) ) );
-	}
-	if( n_rem ) {
-		_mm_store_si128( (__m128i*)(v3) , _mm_setzero_si128() );
-		for(unsigned i=0;i<n_rem;i++) v3[i] = a[n_xmm*16+i];
-		__m128i inp1 = _mm_load_si128(  (__m128i*)(v3) );
-		for(unsigned i=0;i<n_rem;i++) v3[i] = b[n_xmm*16+i];
-		__m128i inp2 = _mm_load_si128(  (__m128i*)(v3) );
-		gf16v_split_16to32_sse( (__m128i *)v1 , inp1 );
-		gf16v_split_16to32_sse( (__m128i *)v2 , inp2 );
-		r ^= tbl32_gf16_mul( _mm256_load_si256( (__m256i*)(v1) ) , _mm256_load_si256( (__m256i*)(v2) ) );
-	}
-	__m128i rr = _mm256_extracti128_si256(r, 1)^_mm256_castsi256_si128(r);
-	rr ^= _mm_srli_si128(rr,8);
-	rr ^= _mm_srli_si128(rr,4);
-	rr ^= _mm_srli_si128(rr,2);
-	rr ^= _mm_srli_si128(rr,1);
-	rr ^= _mm_srli_epi16(rr,4);
-	return _mm_extract_epi16(rr,0)&0xf;
-}
-
-
-
-//////////////////////////  matrix multiplications  /////////////////////////////////////////////////
-
-
-
-void gf16mat_prod_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * multab );
-
-void gf16mat_prod_avx2( uint8_t * c , const uint8_t * mat_a , unsigned a_h_byte , unsigned a_w , const uint8_t * b );
-
-void gf256mat_prod_multab_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * multab );
-
-void gf256mat_prod_avx2( uint8_t * c , const uint8_t * matA , unsigned n_A_vec_byte , unsigned n_A_width , const uint8_t * b );
-
-
-
-/////////////////////////  gaussian elimination   /////////////////////////////////////////////
-
-
-unsigned gf16mat_solve_linear_eq_avx2( uint8_t * sol , const uint8_t * inp_mat , const uint8_t * c_terms , unsigned n );
-
-
 
 
 #ifdef  __cplusplus

@@ -16,9 +16,11 @@
 #include "blas_config.h"
 
 
-
-
 #ifdef _BLAS_AVX2_
+
+#ifndef _BLAS_UNIT_LEN_
+#define _BLAS_UNIT_LEN_ 32
+#endif
 
 #include "blas_avx2.h"
 
@@ -33,11 +35,7 @@
 
 
 #include "blas_u64.h"
-#define gf256v_predicated_add	_gf256v_predicated_add_u64
-
-/// faster
-#define gf16v_dot	gf16v_dot_sse
-//#define gf16v_dot	gf16v_dot_avx2
+#define gf256v_conditional_add	_gf256v_conditional_add_u64
 
 #else
 error here.
@@ -46,6 +44,8 @@ error here.
 
 
 #include "blas_comm.h"
+#include "blas_matrix.h"
+#include "blas_matrix_avx2.h"
 
 
 
