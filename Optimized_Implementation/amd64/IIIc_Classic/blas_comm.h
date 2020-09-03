@@ -6,6 +6,8 @@
 
 #include <stdint.h>
 
+//IF_CRYPTO_CORE:define CRYPTO_NAMESPACE
+
 
 /// @brief get an element from GF(16) vector .
 ///

@@ -304,6 +304,26 @@ int generate_keypair( pk_t * rpk, sk_t* sk, const unsigned char *sk_seed )
 /////////////////////   Cyclic   //////////////////////////////////
 
 
+#include <rng.h> // the macro _SUPERCOP_ might be defined in rng.h
+
+#if defined(_SUPERCOP_)
+
+#if defined( _RAINBOW16_36_32_32 )
+#include "crypto_core_rainbowcalsecret363232.h"
+#define calculate_F_from_Q(a,b,c)  crypto_core_rainbowcalsecret363232((unsigned char*)a,(unsigned char*)b,(unsigned char*)c,NULL)
+#elif defined( _RAINBOW256_68_32_48 )
+#include "crypto_core_rainbowcalsecret683248.h"
+#define calculate_F_from_Q(a,b,c)  crypto_core_rainbowcalsecret683248((unsigned char*)a,(unsigned char*)b,(unsigned char*)c,NULL)
+#elif defined( _RAINBOW256_96_36_64 )
+#include "crypto_core_rainbowcalsecret963664.h"
+#define calculate_F_from_Q(a,b,c)  crypto_core_rainbowcalsecret963664((unsigned char*)a,(unsigned char*)b,(unsigned char*)c,NULL)
+#else
+error.
+#endif
+#endif
+
+
+
 
 int generate_secretkey_cyclic( sk_t* sk, const unsigned char *pk_seed , const unsigned char *sk_seed )
 {

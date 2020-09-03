@@ -232,7 +232,7 @@ error: incorrect buffer size.
 /////////////////////////////////////////////////////
 
 static
-void calculate_F_from_Q_ref( sk_t * Fs , const sk_t * Qs , sk_t * Ts )
+void calculate_F_from_Q_ref( sk_t * Fs , const sk_t * Qs , const sk_t * Ts )
 {
     // Layer 1
     // F_sk.l1_F1s[i] = Q_pk.l1_F1s[i]
@@ -393,10 +393,39 @@ void calculate_Q_from_F( ext_cpk_t * Qs, const sk_t * Fs , const sk_t * Ts )
     calculate_Q_from_F_impl( Qs , Fs , Ts );
 }
 
-void calculate_F_from_Q( sk_t * Fs , const sk_t * Qs , sk_t * Ts )
+
+#if defined(_SUPERCOP_)
+
+
+static inline
+void _calculate_F_from_Q( sk_t * Fs , const sk_t * Qs , const sk_t * Ts )
+{
+    sk_t _Qs;
+    memcpy( &_Qs , Qs , sizeof(sk_t) );
+    if( Fs != Ts ) memcpy( Fs , Ts , sizeof(Ts->sk_seed)+sizeof(Ts->s1)+sizeof(Ts->t1)+sizeof(Ts->t4)+sizeof(Ts->t3));
+    calculate_F_from_Q_impl( Fs , &_Qs , Ts );
+    memset( &_Qs , 0 , sizeof(sk_t) );
+}
+
+//IF_CRYPTO_CORE:#include "crypto_core.h"
+
+// exported calculate_F_from_Q_impl()
+int crypto_core(unsigned char *outbytes,const unsigned char *inbytes,const unsigned char *kbytes,const unsigned char *cbytes)
+{
+    (void) cbytes;
+    _calculate_F_from_Q( (sk_t*)outbytes , (const sk_t*)inbytes , (const sk_t*) kbytes );
+    return 0;
+}
+
+#else
+
+void calculate_F_from_Q( sk_t * Fs , const sk_t * Qs , const sk_t * Ts )
 {
     calculate_F_from_Q_impl( Fs , Qs , Ts );
 }
+
+#endif
+
 
 void calculate_Q_from_F_cyclic( cpk_t * Qs, const sk_t * Fs , const sk_t * Ts )
 {

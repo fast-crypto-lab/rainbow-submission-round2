@@ -155,7 +155,7 @@ error: incorrect buffer size.
 /////////////////////////////////////////////////////
 
 
-void calculate_F_from_Q_simd( sk_t * Fs , const sk_t * Qs , sk_t * Ts )
+void calculate_F_from_Q_simd( sk_t * Fs , const sk_t * Qs , const sk_t * Ts )
 {
     // the size might be large.
 #if defined(_MALLOC_)
