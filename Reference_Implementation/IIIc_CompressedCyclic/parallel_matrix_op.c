@@ -233,6 +233,7 @@ void batch_mat_madd_gf256( unsigned char * bC , const unsigned char* bA , unsign
 
 
 
+//IF_CRYPTO_CORE:EOF
 
 ////////////////////  Section: "quadratric" matrix evaluation  ///////////////////////////////
 

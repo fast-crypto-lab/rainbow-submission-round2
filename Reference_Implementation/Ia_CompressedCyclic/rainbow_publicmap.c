@@ -3,6 +3,12 @@
 #include "rainbow_blas.h"
 
 
+//
+//  The file implements the idea of (publicly) evaluating MQ
+//  come from Tung Chou(https://www.win.tue.nl/~tchou/).
+//
+
+
 #define _MAX_N 256
 
 #if _PUB_N > _MAX_N

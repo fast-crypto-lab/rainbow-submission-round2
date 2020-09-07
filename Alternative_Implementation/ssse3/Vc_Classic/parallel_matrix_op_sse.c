@@ -231,8 +231,9 @@ void batch_mat_madd_multab_gf256_sse( unsigned char * bC , const unsigned char* 
 
 
 
-////////////////////  "quadratric" matrix evaluation  ///////////////////////////////
+//IF_CRYPTO_CORE:EOF
 
+////////////////////  "quadratric" matrix evaluation  ///////////////////////////////
 
 
 
