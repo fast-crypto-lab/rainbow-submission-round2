@@ -27,12 +27,12 @@
 #define CRYPTO_SECRETKEYBYTES sizeof(sk_t)
 #define CRYPTO_PUBLICKEYBYTES sizeof(pk_t)
 
-#elif defined _RAINBOW_CYCLIC
+#elif defined _RAINBOW_CIRCUMZENITHAL
 
 #define CRYPTO_SECRETKEYBYTES sizeof(sk_t)
 #define CRYPTO_PUBLICKEYBYTES sizeof(cpk_t)
 
-#elif defined _RAINBOW_CYCLIC_COMPRESSED
+#elif defined _RAINBOW_COMPRESSED
 
 #define CRYPTO_SECRETKEYBYTES sizeof(csk_t)
 #define CRYPTO_PUBLICKEYBYTES sizeof(cpk_t)

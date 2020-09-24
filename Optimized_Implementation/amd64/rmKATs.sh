@@ -13,11 +13,11 @@ rm_kats()
 echo " ================ rm KATs ================"
 
 rm_kats Ia_Classic
-rm_kats Ia_Cyclic
-rm_kats Ia_CompressedCyclic
+rm_kats Ia_Circumzenithal
+rm_kats Ia_Compressed
 rm_kats IIIc_Classic
-rm_kats IIIc_Cyclic
-rm_kats IIIc_CompressedCyclic
+rm_kats IIIc_Circumzenithal
+rm_kats IIIc_Compressed
 rm_kats Vc_Classic
-rm_kats Vc_Cyclic
-rm_kats Vc_CompressedCyclic
+rm_kats Vc_Circumzenithal
+rm_kats Vc_Compressed

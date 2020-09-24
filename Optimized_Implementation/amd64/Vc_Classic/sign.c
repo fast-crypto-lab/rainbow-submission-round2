@@ -30,14 +30,14 @@ crypto_sign_keypair(unsigned char *pk, unsigned char *sk)
 
     int r = generate_keypair( (pk_t*) pk , (sk_t*) sk , sk_seed );
 
-#elif defined _RAINBOW_CYCLIC
+#elif defined _RAINBOW_CIRCUMZENITHAL
 
     unsigned char pk_seed[LEN_PKSEED] = {0};
     randombytes( pk_seed , LEN_PKSEED );
     int r = generate_keypair_cyclic( (cpk_t*) pk , (sk_t*) sk , pk_seed , sk_seed );
 
     for(int i=0;i<LEN_PKSEED;i++) pk_seed[i]=0;
-#elif defined _RAINBOW_CYCLIC_COMPRESSED
+#elif defined _RAINBOW_COMPRESSED
 
     unsigned char pk_seed[LEN_PKSEED] = {0};
     randombytes( pk_seed , LEN_PKSEED );
@@ -67,11 +67,11 @@ crypto_sign(unsigned char *sm, unsigned long long *smlen, const unsigned char *m
 
 	r = rainbow_sign( sm + mlen , (const sk_t*)sk , digest );
 
-#elif defined _RAINBOW_CYCLIC
+#elif defined _RAINBOW_CIRCUMZENITHAL
 
 	r = rainbow_sign( sm + mlen , (const sk_t*)sk , digest );
 
-#elif defined _RAINBOW_CYCLIC_COMPRESSED
+#elif defined _RAINBOW_COMPRESSED
 
 	r = rainbow_sign_cyclic( sm + mlen , (const csk_t*)sk , digest );
 
@@ -103,11 +103,11 @@ crypto_sign_open(unsigned char *m, unsigned long long *mlen,const unsigned char 
 
 	r = rainbow_verify( digest , sm + smlen-_SIGNATURE_BYTE , (const pk_t *)pk );
 
-#elif defined _RAINBOW_CYCLIC
+#elif defined _RAINBOW_CIRCUMZENITHAL
 
 	r = rainbow_verify_cyclic( digest , sm + smlen-_SIGNATURE_BYTE , (const cpk_t *)pk );
 
-#elif defined _RAINBOW_CYCLIC_COMPRESSED
+#elif defined _RAINBOW_COMPRESSED
 
 	r = rainbow_verify_cyclic( digest , sm + smlen-_SIGNATURE_BYTE , (const cpk_t *)pk );
 

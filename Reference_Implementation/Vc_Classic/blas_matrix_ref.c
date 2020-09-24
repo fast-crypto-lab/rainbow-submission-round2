@@ -88,7 +88,8 @@ unsigned gf16mat_gauss_elim_ref(uint8_t *mat, unsigned h, unsigned w) {
 
     unsigned r8 = 1;
     for (unsigned i = 0; i < h; i++) {
-        unsigned i_start = ((i>>1)&(~(_BLAS_UNIT_LEN_-1)));
+        //unsigned i_start = ((i>>1)&(~(_BLAS_UNIT_LEN_-1)));
+        unsigned i_start = (i>>1);
         uint8_t *ai = mat + i*w_byte;
         for (unsigned j = i + 1; j < h; j++) {
             uint8_t *aj = mat + j*w_byte;
@@ -118,7 +119,8 @@ unsigned gf256mat_gauss_elim_ref( uint8_t * mat , unsigned h , unsigned w )
 
     for(unsigned i=0;i<h;i++) {
         uint8_t * ai = mat + w*i;
-        unsigned i_start = i-(i&(_BLAS_UNIT_LEN_-1));
+        //unsigned i_start = i-(i&(_BLAS_UNIT_LEN_-1));
+        unsigned i_start = i;
 
         for(unsigned j=i+1;j<h;j++) {
             uint8_t * aj = mat + w*j;

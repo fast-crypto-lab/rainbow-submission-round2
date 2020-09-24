@@ -8,6 +8,8 @@ by
 
 Jintai Ding,
 Ming-Shing Chen, 
+Matthias Kannwischer,
+Jean Jacques Patarin,
 Albrecht Petzoldt,
 Dieter Schmidt and
 Bo-Yin Yang.

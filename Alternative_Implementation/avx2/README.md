@@ -11,9 +11,9 @@ Rainbow Signature system.
    It will build the codes in the `Ia_Classic' folder only.
 
    The default variant is `Ia_Classic' and all possiable variants are 
-   `Ia_Classic',   `Ia_Cyclic',       `Ia_CompressedCyclic', 
-   `IIIc_Classic', `IIIc_Cyclic',     `IIIc_CompressedCyclic',
-   `Vc_Classic',   `Vc_Cyclic',   and `Vc_CompressedCyclic'.
+   `Ia_Classic',   `Ia_Circumzenithal',       `Ia_Compressed', 
+   `IIIc_Classic', `IIIc_Circumzenithal',     `IIIc_Compressed',
+   `Vc_Classic',   `Vc_Circumzenithal',   and `Vc_Compressed'.
 
    The $PROJ_DIR can be setted either in the makefile explictly or in command-line. 
    No code changes have to be made.
@@ -21,8 +21,8 @@ Rainbow Signature system.
 
 1. Make for 3 executables: rainbow-genkey, rainbow-sign, and rainbow-verify .
 
-   Example 1: build the Ia_Cyclic variant, type:
-   make PROJ_DIR=Ia_Cyclic
+   Example 1: build the Ia_Compressed variant, type:
+   make PROJ_DIR=Ia_Compressed
 
    Example 2: build the Vc_Classic variant, type:
    make PROJ_DIR=Vc_Classic

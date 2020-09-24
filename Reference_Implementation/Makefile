@@ -16,14 +16,14 @@ LD=    gcc
 
 ifndef PROJ_DIR
 PROJ_DIR = Ia_Classic
-#PROJ_DIR = Ia_Cyclic
-#PROJ_DIR = Ia_CompressedCyclic
+#PROJ_DIR = Ia_Circumzenithal
+#PROJ_DIR = Ia_Compressed
 #PROJ_DIR = IIIc_Classic
-#PROJ_DIR = IIIc_Cyclic
-#PROJ_DIR = IIIc_CompressedCyclic
+#PROJ_DIR = IIIc_Circumzenithal
+#PROJ_DIR = IIIc_Compressed
 #PROJ_DIR = Vc_Classic
-#PROJ_DIR = Vc_Cyclic
-#PROJ_DIR = Vc_CompressedCyclic
+#PROJ_DIR = Vc_Circumzenithal
+#PROJ_DIR = Vc_Compressed
 endif
 
 

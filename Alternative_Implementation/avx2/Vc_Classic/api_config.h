@@ -10,19 +10,19 @@
 
 
 
-#if (!defined(_RAINBOW_CLASSIC))&&(!defined(_RAINBOW_CYCLIC))&&(!defined(_RAINBOW_CYCLIC_COMPRESSED))
+#if (!defined(_RAINBOW_CLASSIC))&&(!defined(_RAINBOW_CIRCUMZENITHAL))&&(!defined(_RAINBOW_COMPRESSED))
 #define _RAINBOW_CLASSIC
-//#define _RAINBOW_CYCLIC
-//#define _RAINBOW_CYCLIC_COMPRESSED
+//#define _RAINBOW_CIRCUMZENITHAL
+//#define _RAINBOW_COMPRESSED
 #endif
 
 
 #if defined _RAINBOW_CLASSIC
 #define _SUFFIX " - classic"
-#elif defined _RAINBOW_CYCLIC
-#define _SUFFIX " - cyclic"
-#elif defined _RAINBOW_CYCLIC_COMPRESSED
-#define _SUFFIX " - cyclic compressed"
+#elif defined _RAINBOW_CIRCUMZENITHAL
+#define _SUFFIX " - circumzenithal"
+#elif defined _RAINBOW_COMPRESSED
+#define _SUFFIX " - compressed"
 #else
 error here
 #endif

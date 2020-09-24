@@ -16,27 +16,32 @@ LD=    gcc
 
 ifndef PROJ_DIR
 PROJ_DIR = Ia_Classic
-#PROJ_DIR = Ia_Cyclic
-#PROJ_DIR = Ia_CompressedCyclic
+#PROJ_DIR = Ia_Circumzenithal
+#PROJ_DIR = Ia_Compressed
 #PROJ_DIR = IIIc_Classic
-#PROJ_DIR = IIIc_Cyclic
-#PROJ_DIR = IIIc_CompressedCyclic
+#PROJ_DIR = IIIc_Circumzenithal
+#PROJ_DIR = IIIc_Compressed
 #PROJ_DIR = Vc_Classic
-#PROJ_DIR = Vc_Cyclic
-#PROJ_DIR = Vc_CompressedCyclic
+#PROJ_DIR = Vc_Circumzenithal
+#PROJ_DIR = Vc_Compressed
 endif
 
 
-CFLAGS= -O3 -mssse3 -std=c11 -Wall -Wextra -fno-omit-frame-pointer
+CFLAGS= -O3 -std=c11 -Wall -Wextra -fno-omit-frame-pointer
 INCPATH= -I/usr/local/include -I/opt/local/include -I/usr/include -I$(PROJ_DIR)
 LDFLAGS=
 LIBPATH= -L/usr/local/lib -L/opt/local/lib -L/usr/lib
 LIBS=    -lcrypto
 
 
-ifeq ($(PROJ_DIR),avx2)
+ifeq ($(shell pwd | tail -c 5),avx2)
 CFLAGS += -mavx2
 CXXFLAGS += -mavx2
+endif
+
+ifeq ($(shell pwd | tail -c 6),ssse3)
+CFLAGS += -mssse3
+CXXFLAGS += -mssse3
 endif
 
 
