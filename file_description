@@ -1,4 +1,4 @@
-.:
+./:
 Alternative_Implementation
 Optimized_Implementation
 Reference_Implementation
@@ -8,6 +8,7 @@ avx2
 ssse3
 
 ./Alternative_Implementation/avx2:
+cpKATs.sh
 genKATs.sh		-- Shell script for generating KATs.
 Ia_Circumzenithal
 Ia_Classic
@@ -43,7 +44,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -97,7 +97,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -151,7 +150,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -205,7 +203,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -259,7 +256,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -313,7 +309,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -367,7 +362,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -421,7 +415,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -475,7 +468,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -514,6 +506,7 @@ utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
 ./Alternative_Implementation/ssse3:
+cpKATs.sh
 genKATs.sh		-- Shell script for generating KATs.
 Ia_Circumzenithal
 Ia_Classic
@@ -546,7 +539,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -596,7 +588,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -646,7 +637,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -696,7 +686,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -746,7 +735,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -796,7 +784,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -846,7 +833,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -896,7 +882,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -946,7 +931,6 @@ blas_matrix_ref.c
 blas_matrix_ref.h
 blas_matrix_sse.c
 blas_matrix_sse.h
-blas_matrix_vartime.h
 blas_sse.h		-- Basic Linear Algebra functions, for ssse3 instruction set.
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
@@ -987,6 +971,7 @@ utils_prng.h		-- Internal interfaces for PRNG.
 amd64
 
 ./Optimized_Implementation/amd64:
+cpKATs.sh
 genKATs.sh		-- Shell script for generating KATs.
 Ia_Circumzenithal
 Ia_Classic
@@ -1017,7 +1002,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
@@ -1056,7 +1040,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
@@ -1095,7 +1078,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
@@ -1134,7 +1116,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
@@ -1173,7 +1154,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
@@ -1212,7 +1192,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
@@ -1251,7 +1230,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
@@ -1290,7 +1268,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
@@ -1329,7 +1306,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 blas_u64.h		-- Basic Linear Algebra functions, for 64 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
@@ -1358,6 +1334,7 @@ utils_prng.c		-- The interfaces for PRNG.
 utils_prng.h		-- Internal interfaces for PRNG.
 
 ./Reference_Implementation:
+cpKATs.sh
 genKATs.sh		-- Shell script for generating KATs.
 Ia_Circumzenithal
 Ia_Classic
@@ -1387,7 +1364,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
@@ -1423,7 +1399,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
@@ -1459,7 +1434,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
@@ -1495,7 +1469,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
@@ -1531,7 +1504,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
@@ -1567,7 +1539,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
@@ -1603,7 +1574,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
@@ -1639,7 +1609,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
@@ -1675,7 +1644,6 @@ blas_matrix.c
 blas_matrix.h
 blas_matrix_ref.c
 blas_matrix_ref.h
-blas_matrix_vartime.h
 blas_u32.h		-- Basic Linear Algebra functions, for 32 bits architecture.
 gf16.h		-- Library for arithmetics in GF(16) and GF(256)
 hash_len_config.h		-- Configure file for defining length of output of the hash function.
